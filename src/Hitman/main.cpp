@@ -14,9 +14,8 @@ static const DWORD dword_407044 = 0x8BEEAD10;
 
 int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, LPSTR p_lpCmdLine, int p_nShowCmd)
 {
-    char l_iniBuffer[4];        // [esp+4h] [ebp-210h] BYREF
-    char l_filePath[260];       // [esp+8h] [ebp-20Ch] BYREF
-    char l_filePathBuffer[263]; // [esp+10Dh] [ebp-107h] BYREF
+    char l_filePath[264];   // [esp+8h] [ebp-20Ch] BYREF
+    char l_fileBuffer[264]; // [esp+10Dh] [ebp-107h] BYREF
 
     CreateMutexA(0, 0, "Hitboy");
 
@@ -39,31 +38,33 @@ int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, LPSTR p_lpCmdLine, 
 
         if (strlen(p_lpCmdLine) < 2)
         {
-            GetModuleFileNameA(p_hInstance, l_filePath, 260u);
+            GetModuleFileNameA(p_hInstance, l_filePath, sizeof(l_filePath));
 
-            strcpy(&l_iniBuffer[strlen(l_filePath)], ".ini");
+            strcpy(&l_filePath[strlen(l_filePath) - 4], ".ini");
 
             HANDLE l_iniFile = CreateFileA(l_filePath, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
+            MessageBoxA(0, l_filePath, "INI File", 0);
+
             if (l_iniFile == (HANDLE)-1)
             {
+                // Fallback to @main.ini
                 l_cmdLinePtr = "@main.ini";
             }
             else
             {
                 CloseHandle(l_iniFile);
 
-                char l_atSymbol = '@';
+                // Adds a '@' to the beginning of the string.
+                l_fileBuffer[0] = '@';
+                strcpy(&l_fileBuffer[1], l_filePath);
 
-                strcpy(l_filePathBuffer, l_filePath);
-
-                l_cmdLinePtr = &l_atSymbol;
+                l_cmdLinePtr = l_fileBuffer;
             }
         }
 
-        g_pSysInterface->Func40(l_cmdLinePtr);
-
         //(*(void(__thiscall **)(struct ZSysInterface *, LPSTR))(*(_DWORD *)g_pSysInterface + 160))(g_pSysInterface, l_cmdLinePtr);
+        g_pSysInterface->Func40(l_cmdLinePtr);
 
         FreeLibrary(l_systemLib);
 
@@ -71,9 +72,7 @@ int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, LPSTR p_lpCmdLine, 
         // In the original code these two variables are never written to/or passed into anything.
         // When putting a breakpoint on them, it never gets hit.
 
-        if (!dword_40703C)
-        {
-        }
+        // if (!dword_40703C)
         // dword_407044();
     }
 

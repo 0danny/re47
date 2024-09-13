@@ -2,14 +2,12 @@
 
 #include <windows.h>
 
-class ZSysInterface
+// Virtual base class for the ZSysInterface
+class ZSysInterfaceBase
 {
 public:
-    ZSysInterface();
-
-    // Function stubs corresponding to the vtable offsets
-    virtual int Func0();                    // VTABLE 0x0 0xFFA9890
-    virtual int Func1();                    // VTABLE 0x4 0xFFAB3A0
+    int Func1();                            // VTABLE 0x0 0xFFA9890
+    ~ZSysInterfaceBase();                   // VTABLE 0x4 0xFFA9290
     virtual int Func2();                    // VTABLE 0x8 0xFFAB510
     virtual int Func3();                    // VTABLE 0xC 0xFFB0B50
     virtual int Func4();                    // VTABLE 0x10 0xFFB0BF0
@@ -49,33 +47,106 @@ public:
     virtual int Func38();                   // VTABLE 0x98 0xFFB1230
     virtual int Func39();                   // VTABLE 0x9C 0xFFB1310
     virtual void Func40(LPSTR commandLine); // VTABLE 0xA0 0xFFAD290
-    virtual int Func41();                   // VTABLE 0xA4
-    virtual int Func42();                   // VTABLE 0xA8
-    virtual int Func43();                   // VTABLE 0xAC
-    virtual int Func44();                   // VTABLE 0xB0
-    virtual int Func45();                   // VTABLE 0xB4
-    virtual int Func46();                   // VTABLE 0xB8
-    virtual int Func47();                   // VTABLE 0xBC
-    virtual int Func48();                   // VTABLE 0xC0
-    virtual int Func49();                   // VTABLE 0xC4
-    virtual int Func50();                   // VTABLE 0xC8
-    virtual int Func51();                   // VTABLE 0xCC
-    virtual int Func52();                   // VTABLE 0xD0
-    virtual int Func53();                   // VTABLE 0xD4
-    virtual int Func54();                   // VTABLE 0xD8
-    virtual int Func55();                   // VTABLE 0xDC
-    virtual int Func56();                   // VTABLE 0xE0
-    virtual int Func57();                   // VTABLE 0xE4
-    virtual int Func58();                   // VTABLE 0xE8
-    virtual int Func59();                   // VTABLE 0xEC
-    virtual int Func60();                   // VTABLE 0xF0
-    virtual int Func61();                   // VTABLE 0xF4
-    virtual int Func62();                   // VTABLE 0xF8
-    virtual int Func63();                   // VTABLE 0xFC
-    virtual int Func64();                   // VTABLE 0x100
-    virtual int Func65();                   // VTABLE 0x104
-    virtual int Func66();                   // VTABLE 0x108
-    virtual int Func67();                   // VTABLE 0x10C
-    virtual int Func68();                   // VTABLE 0x110
-    virtual int Func69();                   // VTABLE 0x114
+    virtual int Func41();                   // VTABLE 0xA4 0xFFAD1F0
+    virtual int NullSub1();                 // VTABLE 0xA8 0xNULLSUB
+    virtual int NullSub2();                 // VTABLE 0xAC 0xNULLSUB
+    virtual int Func44();                   // VTABLE 0xB0 0xFFB0950
+    virtual int NullSub3();                 // VTABLE 0xB4 0xNULLSUB
+    virtual int Func46();                   // VTABLE 0xB8 0xFFB0990
+    virtual int Func47();                   // VTABLE 0xBC 0xFFB1370
+    virtual int Func48();                   // VTABLE 0xC0 0xFFB1330
+    virtual int Func49();                   // VTABLE 0xC4 0xFFAD510
+    virtual int NullSub4();                 // VTABLE 0xC8 0xNULLSUB
+    virtual int Func51();                   // VTABLE 0xCC 0xFFB1730
+    int Func52();                           // VTABLE 0xD0 0xFFA95E0
+    virtual int Func53();                   // VTABLE 0xD4 0xFFB07F0
+    virtual int Func54();                   // VTABLE 0xD8 0xFFB0860
+    virtual int Func55();                   // VTABLE 0xDC 0xFFB08E0
+    int Func56();                           // VTABLE 0xE0 0xFFAA720
+    int Func57();                           // VTABLE 0xE4 0xFFAA750
+    int Func58();                           // VTABLE 0xE8 0xFFAA780
+    int Func59();                           // VTABLE 0xEC 0xFFA9B20
+    int Func60();                           // VTABLE 0xF0 0xFFAA660
+    int Func61();                           // VTABLE 0xF4 0xFFAA690
+    int Func62();                           // VTABLE 0xF8 0xFFAA6C0
+    int Func63();                           // VTABLE 0xFC 0xFFAA6F0
+    int Func64();                           // VTABLE 0x100 0xFFA9690
+    int Func65();                           // VTABLE 0x104 0xFFA98C0
+    int Func66();                           // VTABLE 0x108 0xFFA9CF0
+    virtual int Func67();                   // VTABLE 0x10C 0xFFB17A0
+    int Func68();                           // VTABLE 0x110 0xFFA9600
+    int Func69();                           // VTABLE 0x114 0xFFA9D40
+    int Func70();                           // VTABLE 0x118 0xFFA9F80
+    int Func71();                           // VTABLE 0x11C 0xFFAA1F0
+    int Func72();                           // VTABLE 0x120 0xFFAA3D0
+    int Func73();                           // VTABLE 0x124 0xFFAA5C0
+    virtual int Func74();                   // VTABLE 0x128 0xFFB1740
 };
+
+class ZSysInterface : public ZSysInterfaceBase
+{
+public:
+    ZSysInterface();
+
+    // Override all of the virtual functions
+    int Func2() override;                    // VTABLE 0x8
+    int Func3() override;                    // VTABLE 0xC
+    int Func4() override;                    // VTABLE 0x10
+    int Func5() override;                    // VTABLE 0x14
+    int Func6() override;                    // VTABLE 0x18
+    int Func7() override;                    // VTABLE 0x1C
+    int Func8() override;                    // VTABLE 0x20
+    int Func9() override;                    // VTABLE 0x24
+    void Func10() override;                  // VTABLE 0x28
+    int Func11() override;                   // VTABLE 0x2C
+    int Func12() override;                   // VTABLE 0x30
+    int Func13() override;                   // VTABLE 0x34
+    int Func14() override;                   // VTABLE 0x38
+    int Func15() override;                   // VTABLE 0x3C
+    int Func16() override;                   // VTABLE 0x40
+    int Func17() override;                   // VTABLE 0x44
+    int Func18() override;                   // VTABLE 0x48
+    int Func19() override;                   // VTABLE 0x4C
+    int Func20() override;                   // VTABLE 0x50
+    int Func21() override;                   // VTABLE 0x54
+    int Func22() override;                   // VTABLE 0x58
+    int Func23() override;                   // VTABLE 0x5C
+    int Func24() override;                   // VTABLE 0x60
+    int Func25() override;                   // VTABLE 0x64
+    int Func26() override;                   // VTABLE 0x68
+    int Func27() override;                   // VTABLE 0x6C
+    int Func28() override;                   // VTABLE 0x70
+    int Func29() override;                   // VTABLE 0x74
+    int Func30() override;                   // VTABLE 0x78
+    int Func31() override;                   // VTABLE 0x7C
+    int Func32() override;                   // VTABLE 0x80
+    int Func33() override;                   // VTABLE 0x84
+    int Func34() override;                   // VTABLE 0x88
+    int Func35() override;                   // VTABLE 0x8C
+    int Func36() override;                   // VTABLE 0x90
+    int Func37() override;                   // VTABLE 0x94
+    int Func38() override;                   // VTABLE 0x98
+    int Func39() override;                   // VTABLE 0x9C
+    void Func40(LPSTR commandLine) override; // VTABLE 0xA0
+    int Func41() override;                   // VTABLE 0xA4
+    int NullSub1() override;                 // VTABLE 0xA8
+    int NullSub2() override;                 // VTABLE 0xAC
+    int Func44() override;                   // VTABLE 0xB0
+    int NullSub3() override;                 // VTABLE 0xB4
+    int Func46() override;                   // VTABLE 0xB8
+    int Func47() override;                   // VTABLE 0xBC
+    int Func48() override;                   // VTABLE 0xC0
+    int Func49() override;                   // VTABLE 0xC4
+    int NullSub4() override;                 // VTABLE 0xC8
+    int Func51() override;                   // VTABLE 0xCC
+
+    int Func53() override; // VTABLE 0xD4
+    int Func54() override; // VTABLE 0xD8
+    int Func55() override; // VTABLE 0xDC
+    int Func67() override; // VTABLE 0x10C
+    int Func74() override; // VTABLE 0x128
+
+    ~ZSysInterface(); // VTABLE 0x12C 0xFFADFD0
+};
+
+extern __declspec(dllimport) ZSysInterface *g_pSysInterface;

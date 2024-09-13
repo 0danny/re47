@@ -1,9 +1,7 @@
 #include <windows.h>
 #include <csignal>
 
-#include "System/ZSysInterface.h"
-
-extern __declspec(dllimport) ZSysInterface *g_pSysInterface;
+#include "System/zsysinterface.h"
 
 // Function prototypes
 void SignalHandler(int signal);
@@ -38,13 +36,11 @@ int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, LPSTR p_lpCmdLine, 
 
         if (strlen(p_lpCmdLine) < 2)
         {
+            // Overwrite the .exe extension with .ini
             GetModuleFileNameA(p_hInstance, l_filePath, sizeof(l_filePath));
-
             strcpy(&l_filePath[strlen(l_filePath) - 4], ".ini");
 
             HANDLE l_iniFile = CreateFileA(l_filePath, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-
-            MessageBoxA(0, l_filePath, "INI File", 0);
 
             if (l_iniFile == (HANDLE)-1)
             {

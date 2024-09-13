@@ -1,5 +1,5 @@
 #include <windows.h>
-#include "System/ZSysInterface.h"
+#include "System/zsysinterface.h"
 
 __declspec(dllexport) ZSysInterface *g_pSysInterface;
 

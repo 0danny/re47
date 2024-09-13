@@ -1,12 +1,16 @@
-#include "ZSysInterface.h"
+#include "zsysinterface.h"
 
 ZSysInterface::ZSysInterface()
 {
 }
 
-int ZSysInterface::Func0() { return 0; } // VTABLE 0x0 0xFFA9890
+ZSysInterface::~ZSysInterface()
+{
+}
 
-int ZSysInterface::Func1() { return 1; } // VTABLE 0x4 0xFFAB3A0
+ZSysInterfaceBase::~ZSysInterfaceBase()
+{
+}
 
 int ZSysInterface::Func2() { return 2; } // VTABLE 0x8 0xFFAB510
 
@@ -91,13 +95,13 @@ void ZSysInterface::Func40(LPSTR commandLine)
 
 int ZSysInterface::Func41() { return 41; } // VTABLE 0xA4
 
-int ZSysInterface::Func42() { return 42; } // VTABLE 0xA8
+int ZSysInterface::NullSub1() { return 42; } // VTABLE 0xA8
 
-int ZSysInterface::Func43() { return 43; } // VTABLE 0xAC
+int ZSysInterface::NullSub2() { return 43; } // VTABLE 0xAC
 
 int ZSysInterface::Func44() { return 44; } // VTABLE 0xB0
 
-int ZSysInterface::Func45() { return 45; } // VTABLE 0xB4
+int ZSysInterface::NullSub3() { return 45; } // VTABLE 0xB4
 
 int ZSysInterface::Func46() { return 46; } // VTABLE 0xB8
 
@@ -107,11 +111,9 @@ int ZSysInterface::Func48() { return 48; } // VTABLE 0xC0
 
 int ZSysInterface::Func49() { return 49; } // VTABLE 0xC4
 
-int ZSysInterface::Func50() { return 50; } // VTABLE 0xC8
+int ZSysInterface::NullSub4() { return 50; } // VTABLE 0xC8
 
 int ZSysInterface::Func51() { return 51; } // VTABLE 0xCC
-
-int ZSysInterface::Func52() { return 52; } // VTABLE 0xD0
 
 int ZSysInterface::Func53() { return 53; } // VTABLE 0xD4
 
@@ -119,30 +121,12 @@ int ZSysInterface::Func54() { return 54; } // VTABLE 0xD8
 
 int ZSysInterface::Func55() { return 55; } // VTABLE 0xDC
 
-int ZSysInterface::Func56() { return 56; } // VTABLE 0xE0
+int ZSysInterface::Func67()
+{
+    return 67;
+} // VTABLE 0x10C
 
-int ZSysInterface::Func57() { return 57; } // VTABLE 0xE4
-
-int ZSysInterface::Func58() { return 58; } // VTABLE 0xE8
-
-int ZSysInterface::Func59() { return 59; } // VTABLE 0xEC
-
-int ZSysInterface::Func60() { return 60; } // VTABLE 0xF0
-
-int ZSysInterface::Func61() { return 61; } // VTABLE 0xF4
-
-int ZSysInterface::Func62() { return 62; } // VTABLE 0xF8
-
-int ZSysInterface::Func63() { return 63; } // VTABLE 0xFC
-
-int ZSysInterface::Func64() { return 64; } // VTABLE 0x100
-
-int ZSysInterface::Func65() { return 65; } // VTABLE 0x104
-
-int ZSysInterface::Func66() { return 66; } // VTABLE 0x108
-
-int ZSysInterface::Func67() { return 67; } // VTABLE 0x10C
-
-int ZSysInterface::Func68() { return 68; } // VTABLE 0x110
-
-int ZSysInterface::Func69() { return 69; } // VTABLE 0x114
+int ZSysInterface::Func74()
+{
+    return 74;
+} // VTABLE 0x128

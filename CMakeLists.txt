@@ -33,8 +33,17 @@ set(RESOURCE_FILE "resources/hitman.rc")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Add System DLL
-add_library(System SHARED src/System/dllmain.cpp src/System/ZSysInterface.cpp src/System/ZSysInterface.h)
-set_target_properties(System PROPERTIES OUTPUT_NAME "system")
+add_library(System SHARED src/System/dllmain.cpp 
+src/System/zsysinterface.cpp
+src/System/zsysinterface.h 
+src/System/zsysmem.cpp 
+src/System/zsysmem.h 
+src/System/zsysfile.cpp 
+src/System/zsysfile.h 
+src/System/zsyscom.cpp 
+src/System/zsyscom.h)
+
+#set_target_properties(System PROPERTIES OUTPUT_NAME "system")
 
 # Add Globals DLL
 add_library(Globals SHARED src/Globals/dllmain.cpp)
@@ -44,4 +53,4 @@ target_link_libraries(Globals System)
 add_executable(Hitman WIN32 src/Hitman/main.cpp ${RESOURCE_FILE})
 target_link_libraries(Hitman Globals)
 
-set_target_properties(Hitman PROPERTIES OUTPUT_NAME "hitman")
+#set_target_properties(Hitman PROPERTIES OUTPUT_NAME "hitman")

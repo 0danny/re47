@@ -2,6 +2,10 @@
 
 This repository contains the decompilation project for Hitman Codename 47 (2000). The goal is to reconstruct the source code from the original game binaries in a way that it can be compiled into a working executable. This project is an effort for game preservation.
 
+## Socials
+
+Join the discord server and track the progress! - https://discord.gg/fnYg2sM3uV
+
 ## Status
 Below each of the files in the decomp is discussed along with a percentage indicator of the progress.
 
@@ -41,10 +45,6 @@ This project is in very early stages and currently I am the only person working 
 IDA Pro is being used to reverse the games executables and dlls, an IDA server could be something that is used to allow collaboration in the future. Currently it is just a guess that Hitman CN47 actually uses Visual Studio 6 for compilation. 
 I can confirm it is MSVC, however which version and what flags were used during the compilation remains a mystery. A byte-accurate decomp would be nice, however that is a very timely process. The GOG version of the game is being used for the decomp as the original
 contains SafeDisc V2.0 DRM.
-
-## Socials
-
-There is currently no discord or anything setup, however if you would like to message me, you can at 0.dan on discord.
 
 ## Contributing
 

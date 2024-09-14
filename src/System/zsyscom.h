@@ -54,10 +54,12 @@ public:
     HWND m_unkHwnd;   // 0x22
     void *m_unkPtr2;  // 0x26
 
+    // Overrides
     int FormatString(char *p_resultBuffer, char *p_format, ...);
 
     ~ZSysCom();
 
+    // Overrides
     HWND ProcessDebugWnd(HWND p_hWnd);
     void SendDebugMsg(int p_wParam, LPARAM p_lParam, bBool p_sendMessage);
     int UnkFunc2(int p_unkInt, unsigned int p_unkUint, HWND p_atom);

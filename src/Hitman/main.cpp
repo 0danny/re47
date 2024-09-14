@@ -7,9 +7,6 @@
 void SignalHandler(int signal);
 BOOL DoAlwaysNoConv(HINSTANCE instance);
 
-static const DWORD dword_40703C = 0xE4E46A01;
-static const DWORD dword_407044 = 0x8BEEAD10;
-
 int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, LPSTR p_lpCmdLine, int p_nShowCmd)
 {
     char l_filePath[264];   // [esp+8h] [ebp-20Ch] BYREF
@@ -59,14 +56,9 @@ int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, LPSTR p_lpCmdLine, 
             }
         }
 
-        //(*(void(__thiscall **)(struct ZSysInterface *, LPSTR))(*(_DWORD *)g_pSysInterface + 160))(g_pSysInterface, l_cmdLinePtr);
         g_pSysInterface->Func40(l_cmdLinePtr);
 
         FreeLibrary(l_systemLib);
-
-        // Ive got next to no idea, what this doing.
-        // In the original code these two variables are never written to/or passed into anything.
-        // When putting a breakpoint on them, it never gets hit.
 
         // if (!dword_40703C)
         // dword_407044();

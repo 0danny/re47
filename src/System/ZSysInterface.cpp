@@ -8,10 +8,6 @@ ZSysInterface::~ZSysInterface()
 {
 }
 
-ZSysInterfaceBase::~ZSysInterfaceBase()
-{
-}
-
 int ZSysInterface::Func2() { return 2; } // VTABLE 0x8 0xFFAB510
 
 int ZSysInterface::Func3() { return 3; } // VTABLE 0xC 0xFFB0B50
@@ -130,3 +126,102 @@ int ZSysInterface::Func74()
 {
     return 74;
 } // VTABLE 0x128
+
+int ZSysInterfaceBase::Func1()
+{
+    return 0;
+}
+
+ZSysInterfaceBase::~ZSysInterfaceBase()
+{
+}
+
+int ZSysInterfaceBase::Func52()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func56()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func57()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func58()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func59()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func60()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func61()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func62()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func63()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func64()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func65()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func66()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func68()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func69()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func70()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func71()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func72()
+{
+    return 0;
+}
+
+int ZSysInterfaceBase::Func73()
+{
+    return 0;
+}

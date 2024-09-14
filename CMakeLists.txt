@@ -26,7 +26,6 @@ set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
 set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
 # Sort out the resource file
-set(RESOURCE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/resources/hitman.rc")
 set(CMAKE_RC_FLAGS "/I\"${CMAKE_CURRENT_SOURCE_DIR}/resources\"")
 set(RESOURCE_FILE "resources/hitman.rc")
 
@@ -42,12 +41,12 @@ src/System/zsysfile.cpp
 src/System/zsysfile.h 
 src/System/zsyscom.cpp 
 src/System/zsyscom.h)
+target_link_libraries(System Globals)
 
 #set_target_properties(System PROPERTIES OUTPUT_NAME "system")
 
 # Add Globals DLL
 add_library(Globals SHARED src/Globals/dllmain.cpp)
-target_link_libraries(Globals System)
 
 # Add the hitman executable
 add_executable(Hitman WIN32 src/Hitman/main.cpp ${RESOURCE_FILE})

@@ -1,5 +1,9 @@
 @echo off
-set VS6_BIN_PATH=C:\VS6\bin
+
+if "%VS6_BIN_PATH%"=="" (
+    echo VS6_BIN_PATH is not set
+    exit /b 1
+)
 
 cd /d %VS6_BIN_PATH%
 

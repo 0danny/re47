@@ -3,7 +3,6 @@
 This repository contains the decompilation project for Hitman Codename 47 (2000). The goal is to reconstruct the source code from the original game binaries in a way that it can be compiled into a working executable. This project is an effort for game preservation.
 
 ## Socials
-
 Join the discord server and track the progress! - https://discord.gg/fnYg2sM3uV
 
 ## Status
@@ -38,7 +37,7 @@ To build and run the decompiled version of Hitman Codename 47, you will need:
    ```
 3. **Run build.bat**
 
-This project is in very early stages and currently I am the only person working on it, a more streamlined build process is a future task.
+This project is in very early stages, a more streamlined build process is a future task.
 
 ## Reversing
 
@@ -50,13 +49,22 @@ contains SafeDisc V2.0 DRM.
 
 Contributions to the Hitman Codename 47 decompilation project are welcome (and needed)! Here's how you can contribute:
 
+### Naming Rules
+* Functions: `PascalCase`
+* Variables: `lower_case_underscored. Prefix with g_ if global or m_ for member variables.`
+* Classes: `PascalCase`
+* Files and Directories: `lower_case_underscored`
+* Namespaces: `PascalCase`
+
+Please try to match the functionality as closely as possible to the original game. This is currently not a byte-accurate decomp. Also do not introduce any external dependencies into the project without consulting someone first.
+
 **Reporting bugs**: Use the Issues tab to report any bugs or inconsistencies.
 
 **Submitting fixes**: Submit pull requests with descriptions of the problem and solution.
 
 **Enhancing documentation**: Improvements to README, code comments etc are much appreciated.
 
-It is currently just me working on this project, any help is needed.
+Join the discord for more information.
 
 ## Disclaimer
 This project is for educational purposes only. The repository does not contain any game assets or proprietary code from the original game.

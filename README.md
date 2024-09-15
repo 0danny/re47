@@ -19,9 +19,9 @@ These are the only files being reversed as of now. Currently the plan is to get 
 
 To build and run the decompiled version of Hitman Codename 47, you will need:
 
-- CMake (version 3.5 or higher)
-- The portable version of Visual Studio 6 (See build.bat) - https://github.com/itsmattkc/MSVC600
-- Visual Studio Code
+- CMake
+- The portable version of Visual Studio 6 - https://github.com/itsmattkc/MSVC600
+- Visual Studio Code or an equivalent
 
 ## Building the Project
 
@@ -30,20 +30,21 @@ To build and run the decompiled version of Hitman Codename 47, you will need:
    git clone https://github.com/<your-username>/hitman-codename-47.git
    cd hitman-codename-47
    ```
-2. **Set your VS6/Bin path inside of build.bat**
-   ```bash
-   @echo off
-   set VS6_BIN_PATH=C:\VS6\bin <-- HERE
-   ```
-3. **Run build.bat**
+2. **Set the VS6_BIN_PATH Environment Variable:**
+   
+   On windows navigate to "Edit the system environment variables" in the start menu. Click "Environment Variables" and under "System Variables" add a new entry with the name "VS6_BIN_PATH" and a value of your bin folder location (e.g. C:\VS6\bin)
+   
+4. **Run build.bat**
+
+   The output files should be written to the "build" folder at the root directory.
 
 This project is in very early stages, a more streamlined build process is a future task.
 
 ## Reversing
 
-IDA Pro is being used to reverse the games executables and dlls, an IDA server could be something that is used to allow collaboration in the future. Currently it is just a guess that Hitman CN47 actually uses Visual Studio 6 for compilation. 
-I can confirm it is MSVC, however which version and what flags were used during the compilation remains a mystery. A byte-accurate decomp would be nice, however that is a very timely process. The GOG version of the game is being used for the decomp as the original
-contains SafeDisc V2.0 DRM.
+IDA Pro is being used to reverse the games executables and dlls, an IDA server could be something that is used to allow collaboration in the future. Currently it is just a guess that Hitman CN47 actually uses Visual Studio 6 for compilation given the time period. 
+It is MSVC, however which version and what flags were used during the compilation remains a mystery. A byte-accurate decomp would be nice, however that is a very timely process. The GOG version of the game is being used for the decomp as the original
+contains SafeDisc V2.0 DRM and GOG is DRM free. We don't have access to any debug symbols at this current point in time.
 
 ## Contributing
 
@@ -56,7 +57,11 @@ Contributions to the Hitman Codename 47 decompilation project are welcome (and n
 * Files and Directories: `lower_case_underscored`
 * Namespaces: `PascalCase`
 
-Please try to match the functionality as closely as possible to the original game. This is currently not a byte-accurate decomp. Also do not introduce any external dependencies into the project without consulting someone first.
+### Rules/Notes
+
+1. Please try to match the functionality as closely as possible to the original game. This is currently not a byte-accurate decomp so you don't have to go overboard if something doesn't match exactly.
+2. Do not introduce any external dependencies into the project without consulting someone first.
+3. Do not include any retail resources from the original game in your pull requests.
 
 **Reporting bugs**: Use the Issues tab to report any bugs or inconsistencies.
 
@@ -67,4 +72,4 @@ Please try to match the functionality as closely as possible to the original gam
 Join the discord for more information.
 
 ## Disclaimer
-This project is for educational purposes only. The repository does not contain any game assets or proprietary code from the original game.
+This project is for educational and game preservation purposes only. The repository does not contain any game assets/retail resources or proprietary code from the original game.

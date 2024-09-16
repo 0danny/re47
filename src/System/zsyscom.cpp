@@ -49,12 +49,50 @@ ZSysCom::~ZSysCom()
 {
 }
 
-HWND ZSysCom::ProcessDebugWnd(HWND p_hWnd)
+void ZSysCom::ProcessDebugWnd(HWND p_hWnd)
 {
-    return HWND();
+    struct tagMSG l_msg;
+
+    this->m_debugHwnd = p_hWnd;
+    this->SendDebugMsg(9, (WPARAM)p_hWnd, 0);
+
+    HWND l_findWnd = FindWindowA(0, "ZDebug");
+
+    if (l_findWnd)
+    {
+        int l_count = 0;
+
+        while (1)
+        {
+            while (PeekMessageA(&l_msg, p_hWnd, 0, 0, 0))
+            {
+                if (!GetMessageA(&l_msg, p_hWnd, 0, 0))
+                    break;
+
+                TranslateMessage(&l_msg);
+                DispatchMessageA(&l_msg);
+            }
+
+            if (this->m_unkHwnd)
+                break;
+
+            Sleep(5);
+
+            if (++l_count >= 200)
+            {
+                break;
+            }
+        }
+
+        this->m_unkBool3 = 1;
+    }
+    else
+    {
+        this->m_unkBool3 = 1;
+    }
 }
 
-void ZSysCom::SendDebugMsg(int p_wParam, LPARAM p_lParam, bBool p_sendMessage)
+void ZSysCom::SendDebugMsg(WPARAM p_wParam, LPARAM p_lParam, bBool p_sendMessage)
 {
     HWND l_unkHwnd = this->m_unkHwnd;
 
@@ -72,7 +110,7 @@ void ZSysCom::SendDebugMsg(int p_wParam, LPARAM p_lParam, bBool p_sendMessage)
     }
 }
 
-int ZSysCom::UnkFunc2(int p_unkInt, unsigned int p_unkUint, HWND p_atom)
+int ZSysCom::ForwardWndProc(UINT p_msg, WPARAM p_wParam, LPARAM p_lParam)
 {
     return 0;
 }
@@ -93,8 +131,8 @@ void ZSysCom::ThrowFatal(char *p_format, ...)
 
 void ZSysCom::DataToDebug(char *p_format, ...)
 {
-    char l_buffer[1024]; // [esp+8h] [ebp-400h] BYREF
-    va_list l_argList;   // [esp+414h] [ebp+Ch] BYREF
+    char l_buffer[1024];
+    va_list l_argList;
 
     va_start(l_argList, p_format);
 
@@ -134,8 +172,40 @@ void ZSysCom::UnkFunc5(int p_unkInt, char *p_format, ...)
 {
 }
 
-void ZSysCom::UnkFunc6(char *p_format, ...)
+void ZSysCom::MsgUnkHwnd(char *p_format, ...)
 {
+    COPYDATASTRUCT l_copyData;
+    char l_buffer[1024];
+    va_list l_argList;
+
+    va_start(l_argList, p_format);
+
+    if (!this->m_unkBool2)
+    {
+        this->m_unkBool2 = 1;
+
+        vsprintf(l_buffer, p_format, l_argList);
+
+        if (!l_buffer[0] || *((byte *)&l_copyData.lpData + strlen(l_buffer) + 3) != '\n')
+            strcat(l_buffer, "\n");
+
+        HWND l_unkHwnd = this->m_unkHwnd;
+
+        if (l_unkHwnd)
+        {
+            l_copyData.cbData = strlen(l_buffer) + 1;
+            l_copyData.dwData = 0;
+            l_copyData.lpData = l_buffer;
+
+            SendMessageA(l_unkHwnd, WM_COPYDATA, 0, (LPARAM)&l_copyData);
+        }
+        else
+        {
+            MessageBoxA(0, l_buffer, "ZSystem Default Output", MB_TOPMOST);
+        }
+
+        this->m_unkBool2 = 0;
+    }
 }
 
 void ZSysCom::UnkFunc7(char *p_format, ...)

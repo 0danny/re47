@@ -9,8 +9,8 @@ BOOL DoAlwaysNoConv(HINSTANCE instance);
 
 int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, LPSTR p_lpCmdLine, int p_nShowCmd)
 {
-    char l_filePath[264];   // [esp+8h] [ebp-20Ch] BYREF
-    char l_fileBuffer[264]; // [esp+10Dh] [ebp-107h] BYREF
+    char l_filePath[264];
+    char l_fileBuffer[264];
 
     CreateMutexA(0, 0, "Hitboy");
 

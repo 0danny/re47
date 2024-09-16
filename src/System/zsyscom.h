@@ -29,15 +29,15 @@ public:
     int GetUnkInt1();
     UINT GetMsgID();
 
-    virtual HWND ProcessDebugWnd(HWND p_hWnd) = 0;
-    virtual void SendDebugMsg(int p_wParam, LPARAM p_lParam, bBool p_sendMessage) = 0;
-    virtual int UnkFunc2(int p_unkInt, unsigned int p_unkUint, HWND p_atom) = 0;
+    virtual void ProcessDebugWnd(HWND p_hWnd) = 0;
+    virtual void SendDebugMsg(WPARAM p_wParam, LPARAM p_lParam, bBool p_sendMessage) = 0;
+    int ForwardWndProc(UINT p_msg, WPARAM p_wParam, LPARAM p_lParam);
     virtual ZSysCom *SetPathAndLine(char *p_filePath, int p_lineNum) = 0;
     virtual void ThrowFatal(char *p_format, ...) = 0;
     virtual void DataToDebug(char *p_format, ...) = 0;
     virtual void UnkFunc4(char *p_format, ...) = 0;
     virtual void UnkFunc5(int p_unkInt, char *p_format, ...) = 0;
-    virtual void UnkFunc6(char *p_format, ...) = 0;
+    virtual void MsgUnkHwnd(char *p_format, ...) = 0;
     virtual void UnkFunc7(char *p_format, ...) = 0;
     virtual void *UnkFunc8(char *p_unkChar) = 0;
     virtual void UnkFunc9() = 0;
@@ -62,15 +62,15 @@ public:
     ~ZSysCom();
 
     // Overrides
-    HWND ProcessDebugWnd(HWND p_hWnd);
-    void SendDebugMsg(int p_wParam, LPARAM p_lParam, bBool p_sendMessage);
-    int UnkFunc2(int p_unkInt, unsigned int p_unkUint, HWND p_atom);
+    void ProcessDebugWnd(HWND p_hWnd);
+    void SendDebugMsg(WPARAM p_wParam, LPARAM p_lParam, bBool p_sendMessage);
+    int ForwardWndProc(UINT p_msg, WPARAM p_wParam, LPARAM p_lParam);
     ZSysCom *SetPathAndLine(char *p_filePath, int p_lineNum);
     void ThrowFatal(char *p_format, ...);
     void DataToDebug(char *p_format, ...);
     void UnkFunc4(char *p_format, ...);
     void UnkFunc5(int p_unkInt, char *p_format, ...);
-    void UnkFunc6(char *p_format, ...);
+    void MsgUnkHwnd(char *p_format, ...);
     void UnkFunc7(char *p_format, ...);
     void *UnkFunc8(char *p_unkChar);
     void UnkFunc9();

@@ -10,10 +10,17 @@ Below each of the files in the decomp is discussed along with a percentage indic
 
 ### Files
 1. **hitman.exe** (80%) - Imports ZSysInterface from Globals.dll and calls some sort of init function in WinMain.
-2. **Globals.dll** (20%) - Exports global instances of each class type used ZSysInterface, ZSysMem etc.
-3. **system.dll** (1%) - Responsible for building the window/drawing etc.
+2. **globals.dll** (100%) - Exports global instances of each class type used ZSysInterface, ZSysMem etc.
+3. **directplay.dll** (0%)
+4. **enginedata.dll** (0%)
+5. **locale.dll** (0%)
+6. **renderd3d.dll** (0%)
+7. **renderopengl.dll** (0%)
+6. **render3dfx.dll** (0%)
+6. **sound.dll** (0%)
+6. **systemprobedll.dll** (0%)
 
-These are the only files being reversed as of now. Currently the plan is to get hitman.exe working as original and stubbing all of the system.dll functions so that we can run our version with the original dlls in place to confirm functionality.
+Currently hitman.exe functions as original besides a couple of edge cases, globals.dll also acts exactly as original.
 
 ## Prerequisites
 
@@ -72,4 +79,4 @@ Contributions to the Hitman Codename 47 decompilation project are welcome (and n
 Join the discord for more information.
 
 ## Disclaimer
-This project is for educational and game preservation purposes only. The repository does not contain any game assets/retail resources or proprietary code from the original game.
+This project is for educational and game preservation purposes only and is not for commercial use. The repository does not contain any game assets/retail resources or proprietary code from the original game. The files built using this repository may only be utilized with assets provided by ownership of Hitman Codename 47 (2000). This project is in no way associated with or endorsed by IO Interactive.

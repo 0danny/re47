@@ -37,7 +37,7 @@ public:
     virtual void DataToDebug(char *p_format, ...) = 0;
     virtual void UnkFunc4(char *p_format, ...) = 0;
     virtual void UnkFunc5(int p_unkInt, char *p_format, ...) = 0;
-    virtual void MsgUnkHwnd(char *p_format, ...) = 0;
+    virtual void SendZMessage(char *p_format, ...) = 0;
     virtual void UnkFunc7(char *p_format, ...) = 0;
     virtual void *UnkFunc8(char *p_unkChar) = 0;
     virtual void UnkFunc9() = 0;
@@ -48,13 +48,13 @@ class ZSysCom : public ZSysComBase
 public:
     ZSysCom();
 
-    bBool m_unkBool2; // 0x11
-    bBool m_unkBool3; // 0x12
-    char *m_filePath; // 0x16
-    int m_lineNum;    // 0x1A
-    HWND m_debugHwnd; // 0x1E
-    HWND m_unkHwnd;   // 0x22
-    void *m_unkPtr2;  // 0x26
+    bBool m_sendingZMessage; // 0x11
+    bBool m_unkBool3;        // 0x12
+    char *m_filePath;        // 0x16
+    int m_lineNum;           // 0x1A
+    HWND m_debugHwnd;        // 0x1E
+    HWND m_unkHwnd;          // 0x22
+    void *m_unkPtr2;         // 0x26
 
     // Overrides
     int FormatString(char *p_resultBuffer, char *p_format, ...);
@@ -70,7 +70,7 @@ public:
     void DataToDebug(char *p_format, ...);
     void UnkFunc4(char *p_format, ...);
     void UnkFunc5(int p_unkInt, char *p_format, ...);
-    void MsgUnkHwnd(char *p_format, ...);
+    void SendZMessage(char *p_format, ...);
     void UnkFunc7(char *p_format, ...);
     void *UnkFunc8(char *p_unkChar);
     void UnkFunc9();

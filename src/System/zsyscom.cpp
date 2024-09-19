@@ -28,7 +28,7 @@ UINT ZSysComBase::GetMsgID()
 ZSysCom::ZSysCom()
 {
     this->m_unkPtr2 = 0;
-    this->m_unkBool2 = 0;
+    this->m_sendingZMessage = 0;
     this->m_filePath = 0;
     this->m_lineNum = 0;
     this->m_unkBool3 = 0;
@@ -172,7 +172,7 @@ void ZSysCom::UnkFunc5(int p_unkInt, char *p_format, ...)
 {
 }
 
-void ZSysCom::MsgUnkHwnd(char *p_format, ...)
+void ZSysCom::SendZMessage(char *p_format, ...)
 {
     COPYDATASTRUCT l_copyData;
     char l_buffer[1024];
@@ -180,9 +180,9 @@ void ZSysCom::MsgUnkHwnd(char *p_format, ...)
 
     va_start(l_argList, p_format);
 
-    if (!this->m_unkBool2)
+    if (!this->m_sendingZMessage)
     {
-        this->m_unkBool2 = 1;
+        this->m_sendingZMessage = 1;
 
         vsprintf(l_buffer, p_format, l_argList);
 
@@ -204,7 +204,7 @@ void ZSysCom::MsgUnkHwnd(char *p_format, ...)
             MessageBoxA(0, l_buffer, "ZSystem Default Output", MB_TOPMOST);
         }
 
-        this->m_unkBool2 = 0;
+        this->m_sendingZMessage = 0;
     }
 }
 

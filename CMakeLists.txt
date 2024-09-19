@@ -32,24 +32,20 @@ set(RESOURCE_FILE "resources/hitman.rc")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Add System DLL
-add_library(System SHARED src/System/dllmain.cpp 
-src/System/zsysinterface.cpp
-src/System/zsysinterface.h 
-src/System/zsysmem.cpp 
-src/System/zsysmem.h 
-src/System/zsysfile.cpp 
-src/System/zsysfile.h 
-src/System/zsyscom.cpp 
-src/System/zsyscom.h)
-target_link_libraries(System Globals)
-
-#set_target_properties(System PROPERTIES OUTPUT_NAME "system")
+add_library(system SHARED src/system/dllmain.cpp 
+src/system/zsysinterface.cpp
+src/system/zsysinterface.h 
+src/system/zsysmem.cpp 
+src/system/zsysmem.h 
+src/system/zsysfile.cpp 
+src/system/zsysfile.h 
+src/system/zsyscom.cpp 
+src/system/zsyscom.h)
+target_link_libraries(system globals)
 
 # Add Globals DLL
-add_library(Globals SHARED src/Globals/dllmain.cpp)
+add_library(globals SHARED src/globals/dllmain.cpp)
 
 # Add the hitman executable
-add_executable(Hitman WIN32 src/Hitman/main.cpp ${RESOURCE_FILE})
-target_link_libraries(Hitman Globals)
-
-#set_target_properties(Hitman PROPERTIES OUTPUT_NAME "hitman")
+add_executable(hitman WIN32 src/hitman/main.cpp ${RESOURCE_FILE})
+target_link_libraries(hitman globals)

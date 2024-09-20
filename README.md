@@ -3,7 +3,7 @@
 This repository contains the decompilation project for Hitman Codename 47 (2000). The goal is to reconstruct the source code from the original game binaries in a way that it can be compiled into a working executable. This project is an effort for game preservation.
 
 ## Socials
-Join the discord server and track the progress! - https://discord.gg/fnYg2sM3uV
+Join the discord server and track the progress! - https://discord.gg/bcaWWF9Tb5
 
 ## Status
 Below each of the files in the decomp is discussed along with a percentage indicator of the progress.

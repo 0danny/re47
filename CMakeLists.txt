@@ -32,15 +32,26 @@ set(RESOURCE_FILE "resources/hitman.rc")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Add System DLL
-add_library(system SHARED src/system/dllmain.cpp 
+add_library(system SHARED 
+src/system/dllmain.cpp 
+
 src/system/zsysinterface.cpp
 src/system/zsysinterface.h 
+
 src/system/zsysmem.cpp 
 src/system/zsysmem.h 
+
 src/system/zsysfile.cpp 
 src/system/zsysfile.h 
+
 src/system/zsyscom.cpp 
-src/system/zsyscom.h)
+src/system/zsyscom.h
+
+src/system/reftab/reftab.cpp
+src/system/reftab/reftab.h
+)
+
+
 target_link_libraries(system globals)
 
 # Add Globals DLL

@@ -11,11 +11,12 @@ Below each of the files in the decomp is discussed along with a percentage indic
 ### Files
 1. **hitman.exe** (80%) - Imports ZSysInterface from Globals.dll and calls some sort of init function in WinMain.
 2. **globals.dll** (100%) - Exports global instances of each class type used ZSysInterface, ZSysMem etc.
-3. **directplay.dll** (0%)
-4. **enginedata.dll** (0%)
-5. **locale.dll** (0%)
-6. **renderd3d.dll** (0%)
-7. **renderopengl.dll** (0%)
+3. **system.dll** (10%) - Implements each class type exported by globals.dll.
+4. **directplay.dll** (0%)
+5. **enginedata.dll** (0%)
+6. **locale.dll** (0%)
+7. **renderd3d.dll** (0%)
+8. **renderopengl.dll** (0%)
 6. **render3dfx.dll** (0%)
 6. **sound.dll** (0%)
 6. **systemprobedll.dll** (0%)

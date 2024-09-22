@@ -4,6 +4,7 @@
 
 #include "system/zsyscom.h"
 #include "system/zsysmem.h"
+#include "system/system.h"
 
 #include "typedefs.h"
 
@@ -62,23 +63,4 @@ public:
 
     virtual void DeleteBlock(LPVOID p_lpMem);
     virtual RefRun *NewBlock();
-
-    inline static void *operator new(size_t size)
-    {
-        if (g_pSysMem)
-            return nullptr; //(*(*g_pSysMem + 44))(g_pSysMem, 39);
-        else
-            return malloc(size);
-    }
-
-    inline static void operator delete(void *ptr)
-    {
-        if (g_pSysMem)
-        {
-            //(*(g_pSysMem->vtable + 13))(g_pSysMem, this);
-            return;
-        }
-
-        delete ptr;
-    }
 };

@@ -99,8 +99,8 @@ void *RefTab::DelRefPtr(UINT *refNum)
         return nullptr;
 
     RefRun refRun;
-    RunInitNextRef(&refRun);
-    int *result = RunNextRefPtr(&refRun);
+    RunInitNxtRef(&refRun);
+    int *result = RunNxtRefPtr(&refRun);
 
     while (result)
     {
@@ -111,7 +111,7 @@ void *RefTab::DelRefPtr(UINT *refNum)
             return result;
         }
 
-        result = RunNextRefPtr(&refRun);
+        result = RunNxtRefPtr(&refRun);
     }
 
     return nullptr;
@@ -123,15 +123,15 @@ bBool RefTab::Exists(UINT *refPtr)
         return false;
 
     RefRun refRun;
-    RunInitNextRef(&refRun);
-    int *nextRef = RunNextRefPtr(&refRun);
+    RunInitNxtRef(&refRun);
+    int *nextRef = RunNxtRefPtr(&refRun);
 
     while (nextRef)
     {
         if (reinterpret_cast<UINT *>(nextRef) == refPtr)
             return true;
 
-        nextRef = RunNextRefPtr(&refRun);
+        nextRef = RunNxtRefPtr(&refRun);
     }
 
     return false;
@@ -143,15 +143,15 @@ void *RefTab::Find(UINT id)
         return nullptr;
 
     RefRun refRun;
-    RunInitNextRef(&refRun);
-    UINT *result = reinterpret_cast<UINT *>(RunNextRefPtr(&refRun));
+    RunInitNxtRef(&refRun);
+    UINT *result = reinterpret_cast<UINT *>(RunNxtRefPtr(&refRun));
 
     while (result)
     {
         if (*result == id)
             return result;
 
-        result = reinterpret_cast<UINT *>(RunNextRefPtr(&refRun));
+        result = reinterpret_cast<UINT *>(RunNxtRefPtr(&refRun));
     }
 
     return nullptr;
@@ -196,15 +196,7 @@ void *RefTab::GetRefPtrNr(int refNum)
 void RefTab::PrintStatus()
 {
     // Allocate a buffer for formatting the output
-    char *buffer;
-    if (g_pSysMem)
-    {
-        // buffer = (*(g_pSysMem->vtable + 11))(g_pSysMem, 256);
-    }
-    else
-    {
-        buffer = (char *)malloc(256u);
-    }
+    char *buffer = static_cast<char *>(operator new(256));
 
     // Count the number of blocks in the linked list
     RefRun *currentBlock = m_head;
@@ -254,11 +246,7 @@ void RefTab::PrintStatus()
     }
 
     // Free the allocated buffer
-    if (g_pSysMem)
-        //(*(g_pSysMem->vtable + 13))(g_pSysMem, l_mallocPtr);
-        return;
-    else
-        free(buffer);
+    operator delete(buffer);
 }
 
 void RefTab::Remove(UINT refNumber)
@@ -276,8 +264,8 @@ bBool RefTab::RemoveIfExists(UINT refNumber)
         return false;
 
     RefRun refRun;
-    RunInitNextRef(&refRun);
-    int nextRef = RunNextRef(&refRun);
+    RunInitNxtRef(&refRun);
+    int nextRef = RunNxtRef(&refRun);
 
     while (refRun.prev)
     {
@@ -288,7 +276,7 @@ bBool RefTab::RemoveIfExists(UINT refNumber)
             return true;
         }
 
-        nextRef = RunNextRef(&refRun);
+        nextRef = RunNxtRef(&refRun);
     }
 
     return false;
@@ -344,7 +332,7 @@ void RefTab::RunDelRef(RefRun *refRun)
     }
 }
 
-void RefTab::RunInitNextRef(RefRun *refRun)
+void RefTab::RunInitNxtRef(RefRun *refRun)
 {
     refRun->usedUnits = 0;
     refRun->prev = m_head;
@@ -362,14 +350,14 @@ void RefTab::RunInitPrevRef(RefRun *refRun)
     m_poolSize &= ~0x80000000;
 }
 
-int RefTab::RunNextRef(RefRun *refRun)
+int RefTab::RunNxtRef(RefRun *refRun)
 {
-    int *result = RunNextRefPtr(refRun);
+    int *result = RunNxtRefPtr(refRun);
 
     return result ? *result : 0;
 }
 
-int *RefTab::RunNextRefPtr(RefRun *refRun)
+int *RefTab::RunNxtRefPtr(RefRun *refRun)
 {
     if (m_poolSize < 0)
     {
@@ -453,27 +441,12 @@ void *RefTab::RunToRefPtr(RefRun *refRun)
 
 void RefTab::DeleteBlock(void *mem)
 {
-    if (g_pSysMem)
-    {
-        // TODO: Implement proper deletion using g_pSysMem
-    }
-    else
-    {
-        free(mem);
-    }
+    operator delete(mem);
 }
 
 RefRun *RefTab::NewBlock()
 {
     int newSize = sizeof(RefRun) + sizeof(UINT) * m_blockCapacity;
 
-    if (g_pSysMem)
-    {
-        // TODO: Implement proper allocation using g_pSysMem
-        return nullptr;
-    }
-    else
-    {
-        return reinterpret_cast<RefRun *>(malloc(newSize));
-    }
+    return reinterpret_cast<RefRun *>(operator new(newSize));
 }

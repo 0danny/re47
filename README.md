@@ -1,9 +1,19 @@
-# Hitman Codename 47 (2000) Decompilation
+<div align="center">
+	<img src="https://github.com/user-attachments/assets/6caa9e4a-cc1c-4eb9-880c-17c982627205" alt="Re47 Logo">
+</div>
+
+<div align="center">
+  <h1>Re47</h1>
+</div>
+
+[![](https://dcbadge.limes.pink/api/server/https://discord.gg/bcaWWF9Tb5)](https://discord.gg/bcaWWF9Tb5)
+
+### Hitman Codename 47 (2000) - Decompilation
 
 This repository contains the decompilation project for Hitman Codename 47 (2000). The goal is to reconstruct the source code from the original game binaries in a way that it can be compiled into a working executable. This project is an effort for game preservation.
 
 ## Socials
-Join the discord server and track the progress! - https://discord.gg/bcaWWF9Tb5
+Join the discord server using the badge above to track the progress or if you just enjoy Hitman games in general!
 
 ## Status
 Below each of the files in the decomp is discussed along with a percentage indicator of the progress.
@@ -60,9 +70,9 @@ Contributions to the Hitman Codename 47 decompilation project are welcome (and n
 
 ### Naming Rules
 * Functions: `PascalCase`
-* Variables: `lower_case_underscored. Prefix with g_ if global or m_ for member variables.`
+* Variables: `camelCase. Prefix with g_ if global, m_ for member variables or p_ for parameters.`
 * Classes: `PascalCase`
-* Files and Directories: `lower_case_underscored`
+* Files and Directories: `lowercase`
 * Namespaces: `PascalCase`
 
 ### Rules/Notes

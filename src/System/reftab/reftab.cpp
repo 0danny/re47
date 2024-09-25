@@ -1,5 +1,6 @@
 #include "reftab.h"
 
+// MATCHED
 RefTab::RefTab(int p_poolSize, int p_size)
 {
     if (p_poolSize < 1)
@@ -7,12 +8,13 @@ RefTab::RefTab(int p_poolSize, int p_size)
 
     this->m_blockCapacity = p_poolSize * (p_size + 1);
     this->m_count = 0;
-    this->m_head = nullptr;
-    this->m_tail = nullptr;
+    this->m_head = 0;
+    this->m_tail = 0;
     this->m_size = p_size + 1;
     this->m_poolSize = p_poolSize;
 }
 
+// MATCHED
 RefTab::~RefTab()
 {
     RefRun *current = m_head;
@@ -20,21 +22,22 @@ RefTab::~RefTab()
 
     while (current)
     {
-        RefRun *next = current->next;
+        current = current->next;
+
         DeleteBlock(current);
-        current = next;
     }
 
     m_count = 0;
-    m_head = nullptr;
+    m_head = 0;
 }
 
-void *RefTab::Add(UINT refNum)
+// MATCHED
+UINT *RefTab::Add(UINT p_refNum)
 {
     if (!m_head || m_tail->usedUnits == m_blockCapacity)
     {
         RefRun *newBlock = NewBlock();
-        newBlock->next = nullptr;
+        newBlock->next = 0;
 
         if (m_head)
         {
@@ -44,34 +47,42 @@ void *RefTab::Add(UINT refNum)
         else
         {
             m_head = newBlock;
-            newBlock->prev = nullptr;
+
+            newBlock->prev = 0;
+            newBlock = m_head;
         }
 
         m_tail = newBlock;
+
         newBlock->usedUnits = 0;
     }
 
-    UINT *data = reinterpret_cast<UINT *>(m_tail + 1);
-    UINT *ptr = data + m_tail->usedUnits;
-    *ptr = refNum;
+    UINT *data = reinterpret_cast<UINT *>(&m_tail->data + m_tail->usedUnits);
+
+    *data = p_refNum;
 
     m_tail->usedUnits += m_size;
+
     ++m_count;
 
-    return ptr + 1;
+    // Return the ptr after the last data.
+    return data + 1;
 }
 
-void RefTab::AddUnique(UINT refNum)
+// MATCHED
+void RefTab::AddUnique(UINT p_refNum)
 {
-    if (!Find(refNum))
-        Add(refNum);
+    if (!Find(p_refNum))
+        Add(p_refNum);
 }
 
+// MATCHED
 void RefTab::Clear()
 {
     ClearThis();
 }
 
+// MATCHED
 void RefTab::ClearThis()
 {
     RefRun *current = m_head;
@@ -79,374 +90,431 @@ void RefTab::ClearThis()
 
     while (current)
     {
-        RefRun *next = current->next;
-        DeleteBlock(current);
-        current = next;
+        RefRun *next = current;
+        current = current->next;
+
+        DeleteBlock(next);
     }
 
     m_count = 0;
     m_head = nullptr;
 }
 
+// MATCHED
 int RefTab::GetCount()
 {
     return m_count;
 }
 
-void *RefTab::DelRefPtr(UINT *refNum)
+// MATCHED
+void RefTab::DelRefPtr(UINT *p_refNum)
 {
-    if (!this)
-        return nullptr;
+    RefRun l_refRun;
 
-    RefRun refRun;
-    RunInitNxtRef(&refRun);
-    int *result = RunNxtRefPtr(&refRun);
-
-    while (result)
+    if (this)
     {
-        if (reinterpret_cast<UINT *>(result) == refNum)
+        RunInitNxtRef(&l_refRun);
+        UINT *l_nextRef = (UINT *)RunNxtRefPtr(&l_refRun);
+
+        if (l_nextRef)
         {
-            RunDelRef(&refRun);
-            m_poolSize |= 0x80000000;
-            return result;
-        }
-
-        result = RunNxtRefPtr(&refRun);
-    }
-
-    return nullptr;
-}
-
-bBool RefTab::Exists(UINT *refPtr)
-{
-    if (!this)
-        return false;
-
-    RefRun refRun;
-    RunInitNxtRef(&refRun);
-    int *nextRef = RunNxtRefPtr(&refRun);
-
-    while (nextRef)
-    {
-        if (reinterpret_cast<UINT *>(nextRef) == refPtr)
-            return true;
-
-        nextRef = RunNxtRefPtr(&refRun);
-    }
-
-    return false;
-}
-
-void *RefTab::Find(UINT id)
-{
-    if (!this)
-        return nullptr;
-
-    RefRun refRun;
-    RunInitNxtRef(&refRun);
-    UINT *result = reinterpret_cast<UINT *>(RunNxtRefPtr(&refRun));
-
-    while (result)
-    {
-        if (*result == id)
-            return result;
-
-        result = reinterpret_cast<UINT *>(RunNxtRefPtr(&refRun));
-    }
-
-    return nullptr;
-}
-
-int RefTab::GetRefNr(int refNum)
-{
-    if (refNum >= m_count)
-        return 0;
-
-    int poolRes = m_poolSize & 0x7FFFFFFF;
-    RefRun *block = m_head;
-
-    while (refNum >= poolRes)
-    {
-        block = block->next;
-        refNum -= poolRes;
-    }
-
-    UINT *data = reinterpret_cast<UINT *>(block + 1);
-    return data[refNum * m_size];
-}
-
-void *RefTab::GetRefPtrNr(int refNum)
-{
-    if (refNum >= m_count)
-        return nullptr;
-
-    int poolRes = m_poolSize & 0x7FFFFFFF;
-    RefRun *block = m_head;
-
-    while (refNum >= poolRes)
-    {
-        block = block->next;
-        refNum -= poolRes;
-    }
-
-    UINT *data = reinterpret_cast<UINT *>(block + 1);
-    return &data[refNum * m_size];
-}
-
-void RefTab::PrintStatus()
-{
-    // Allocate a buffer for formatting the output
-    char *buffer = static_cast<char *>(operator new(256));
-
-    // Count the number of blocks in the linked list
-    RefRun *currentBlock = m_head;
-    int blockCount = 0;
-
-    while (currentBlock)
-    {
-        blockCount++;
-        currentBlock = currentBlock->next;
-    }
-
-    ZSysCom *sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 518);
-    sysCom->UnkFunc4("REFTAB::PrintStatus Nr %d\n", blockCount);
-
-    // Iterate over each block
-    for (currentBlock = m_head; currentBlock; currentBlock = currentBlock->next)
-    {
-        // Point to the data area after the RefRun structure
-        UINT *dataPtr = (UINT *)(currentBlock + 1);
-        int usedUnits = currentBlock->usedUnits;
-        char *bufferPtr = buffer;
-
-        if (usedUnits > 0)
-        {
-            // Iterate over each unit in the block
-            for (int i = 0; i < usedUnits; i++)
+            while (1)
             {
-                UINT *unitPtr = dataPtr + i * m_size;
+                if (l_nextRef == p_refNum)
+                    break;
 
-                // Convert the data to string and append to the buffer
-                sprintf(bufferPtr, "%u ", *unitPtr);
-                bufferPtr += strlen(bufferPtr);
+                l_nextRef = (UINT *)RunNxtRefPtr(&l_refRun);
+
+                if (!l_nextRef)
+                    return;
             }
 
-            // Remove the trailing space and null-terminate the string
-            if (bufferPtr != buffer)
-                *(bufferPtr - 1) = '\0';
+            RunDelRef(&l_refRun);
+
+            this->m_poolSize |= 0x80000000;
         }
-        else
+    }
+}
+
+// MATCHED
+bBool RefTab::Exists(UINT p_refNum)
+{
+    if (!this)
+        return 0;
+
+    RefRun l_refRun;
+
+    RunInitNxtRef(&l_refRun);
+    UINT l_nextRef = RunNxtRef(&l_refRun);
+
+    if (!l_refRun.prev)
+        return 0;
+
+    while (l_nextRef != p_refNum)
+    {
+        l_nextRef = RunNxtRef(&l_refRun);
+
+        if (!l_refRun.prev)
+            return 0;
+    }
+
+    return 1;
+}
+
+// MATCHED
+UINT *RefTab::Find(UINT p_refNum)
+{
+    RefRun l_refRun;
+
+    if (!this)
+        return 0;
+
+    RunInitNxtRef(&l_refRun);
+    UINT *result = RunNxtRefPtr(&l_refRun);
+
+    if (!result)
+        return 0;
+
+    while (*result != p_refNum)
+    {
+        result = RunNxtRefPtr(&l_refRun);
+
+        if (!result)
+            return 0;
+    }
+
+    return result;
+}
+
+// MATCHED
+UINT RefTab::GetRefNr(int p_refIndex)
+{
+    // Gets the reference by index
+    if (p_refIndex >= m_count)
+        return 0;
+
+    RefRun *i;
+
+    int poolRes = m_poolSize & 0x7FFFFFFF;
+
+    for (i = m_head; p_refIndex >= poolRes; p_refIndex -= poolRes)
+        i = i->next;
+
+    return *((UINT *)&i->data + p_refIndex * this->m_size);
+}
+
+// MATCHED
+UINT *RefTab::GetRefPtrNr(int p_refIndex)
+{
+    // Gets the reference by index
+    if (p_refIndex >= m_count)
+        return 0;
+
+    RefRun *i;
+
+    int poolRes = m_poolSize & 0x7FFFFFFF;
+
+    for (i = m_head; p_refIndex >= poolRes; p_refIndex -= poolRes)
+        i = i->next;
+
+    return ((UINT *)&i->data + p_refIndex * this->m_size);
+}
+
+// MATCHED
+void RefTab::PrintStatus()
+{
+    RefRun *currentBlock;
+    UINT *data;
+    int usedUnits = 0;
+    int l_count;
+
+    char *l_malloc = (char *)operator new(256);
+    char *l_mallocPtr = l_malloc;
+
+    RefRun *l_currentBlock = this->m_head;
+
+    int i;
+
+    for (i = 0; l_currentBlock; ++i)
+        l_currentBlock = l_currentBlock->next;
+
+    ZSysCom *com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 518);
+    com->UnkFunc4("REFTAB::PrintStatus Nr %d\n", i);
+
+    for (currentBlock = m_head; currentBlock; currentBlock = currentBlock->next)
+    {
+        data = (UINT *)&currentBlock->data;
+        l_count = 0;
+
+        if (currentBlock->usedUnits)
         {
-            *buffer = '\0';
+            for (int j = 0; j < currentBlock->usedUnits; j += m_size)
+            {
+                _ltoa(*data, l_mallocPtr, 10);
+
+                l_mallocPtr += strlen(l_mallocPtr);
+
+                data += m_size;
+                usedUnits = currentBlock->usedUnits;
+
+                l_count++;
+            }
+
+            l_mallocPtr = l_malloc;
         }
 
-        // Print the used units and the data in the current block
-        sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 534);
-        sysCom->UnkFunc4("RefBlk %d -> %s\n", usedUnits, buffer);
+        com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 534);
+        com->UnkFunc4("RefBlk %d -> %s\n", currentBlock->usedUnits, l_mallocPtr);
     }
 
     // Free the allocated buffer
-    operator delete(buffer);
+    operator delete(l_mallocPtr);
 }
 
-void RefTab::Remove(UINT refNumber)
+// MATCHED
+void RefTab::Remove(UINT p_refNum)
 {
-    if (!RemoveIfExists(refNumber))
+    if (!RemoveIfExists(p_refNum))
     {
-        ZSysCom *sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 290);
-        sysCom->UnkFunc4("WARNING: unable to remove REF %d\n", refNumber);
+        ZSysCom *com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 290);
+        com->UnkFunc4("WARNING: unable to remove REF %d\n", p_refNum);
     }
 }
 
-bBool RefTab::RemoveIfExists(UINT refNumber)
+// MATCHED
+bBool RefTab::RemoveIfExists(UINT p_refNum)
 {
+    RefRun l_refRun;
+
     if (!this)
-        return false;
+        return 0;
 
-    RefRun refRun;
-    RunInitNxtRef(&refRun);
-    int nextRef = RunNxtRef(&refRun);
+    RunInitNxtRef(&l_refRun);
+    UINT l_nextRef = RunNxtRef(&l_refRun);
 
-    while (refRun.prev)
+    if (!l_refRun.prev)
+        return 0;
+
+    while (1)
     {
-        if (nextRef == refNumber)
-        {
-            RunDelRef(&refRun);
-            m_poolSize |= 0x80000000;
-            return true;
-        }
+        if (l_nextRef == p_refNum)
+            break;
 
-        nextRef = RunNxtRef(&refRun);
+        l_nextRef = RunNxtRef(&l_refRun);
+
+        if (!l_refRun.prev)
+            return 0;
     }
 
-    return false;
+    RunDelRef(&l_refRun);
+
+    m_poolSize |= 0x80000000;
+
+    return 1;
 }
 
-void RefTab::RunDelRef(RefRun *refRun)
+// MATCHED
+void RefTab::RunDelRef(RefRun *p_refRun)
 {
-    RefRun *tailBlock = m_tail;
-    int unitSize = m_size;
+    RefRun *l_tail = m_tail;
+    int l_size = m_size;
 
     --m_count;
-    tailBlock->usedUnits -= unitSize;
 
-    if (refRun->usedUnits > 0)
+    l_tail->usedUnits -= l_size;
+
+    if (p_refRun->usedUnits > 0)
     {
-        refRun->usedUnits -= unitSize;
+        l_size = m_size;
 
-        if (refRun->usedUnits < 0)
+        bBool l_less0 = (int)p_refRun->next - l_size < 0;
+        p_refRun->next = (RefRun *)((char *)p_refRun->next - l_size);
+
+        if (l_less0)
         {
-            refRun->usedUnits = m_blockCapacity - m_size;
-            refRun->prev = refRun->prev->prev;
+            p_refRun->next = (RefRun *)(m_blockCapacity - m_size);
+            p_refRun->prev = p_refRun->prev->prev;
         }
     }
 
     if (m_count)
     {
-        UINT *tailData = reinterpret_cast<UINT *>(tailBlock + 1) + tailBlock->usedUnits;
-        UINT *refData = reinterpret_cast<UINT *>(refRun->prev + 1) + refRun->usedUnits;
+        UINT *l_flag = (UINT *)(&m_tail->data + m_tail->usedUnits);
+        UINT *l_flag2 = (UINT *)(&p_refRun->prev->data + (int)p_refRun->next);
 
-        if (tailData != refData)
-            memcpy(refData, tailData, sizeof(UINT) * m_size);
+        if (l_flag != l_flag2)
+            memcpy(l_flag2, l_flag, 4 * m_size);
     }
 
-    if (tailBlock->usedUnits == 0)
-    {
-        RefRun *prevBlock = tailBlock->prev;
-        m_tail = prevBlock;
+    RefRun *l_tail2 = m_tail;
 
-        if (prevBlock)
+    if (!l_tail2->usedUnits)
+    {
+        RefRun *l_prev = l_tail2->prev;
+        m_tail = l_tail2->prev;
+
+        if (l_tail2->prev == 0)
         {
-            prevBlock->next = nullptr;
-        }
-        else
-        {
-            m_head = nullptr;
-            refRun->prev = nullptr;
+            m_head = 0;
+            p_refRun->prev = 0;
 
             if (m_count)
                 g_pSysCom->ThrowFatal("RefPik\n");
-        }
 
-        DeleteBlock(tailBlock);
-    }
-}
-
-void RefTab::RunInitNxtRef(RefRun *refRun)
-{
-    refRun->usedUnits = 0;
-    refRun->prev = m_head;
-    m_poolSize &= ~0x80000000;
-}
-
-void RefTab::RunInitPrevRef(RefRun *refRun)
-{
-    refRun->usedUnits = -1;
-    refRun->prev = m_tail;
-
-    if (m_tail)
-        refRun->usedUnits = m_tail->usedUnits;
-
-    m_poolSize &= ~0x80000000;
-}
-
-int RefTab::RunNxtRef(RefRun *refRun)
-{
-    int *result = RunNxtRefPtr(refRun);
-
-    return result ? *result : 0;
-}
-
-int *RefTab::RunNxtRefPtr(RefRun *refRun)
-{
-    if (m_poolSize < 0)
-    {
-        ZSysCom *l_com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 373);
-        l_com->UnkFunc4("ERROR: Illegal operation inside REFTAB loop");
-
-        l_com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 374);
-        l_com->UnkFunc4("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 374);
-
-        DebugBreak();
-    }
-
-    if (refRun->usedUnits == m_blockCapacity)
-    {
-        refRun->usedUnits = 0;
-        refRun->prev = refRun->prev->next;
-    }
-
-    if (refRun->prev)
-    {
-        int usedUnits = refRun->usedUnits;
-
-        if (usedUnits != m_tail->usedUnits || refRun->prev->next)
-        {
-            refRun->usedUnits += m_size;
-            UINT *data = reinterpret_cast<UINT *>(refRun->prev + 1);
-            return reinterpret_cast<int *>(data + usedUnits);
+            DeleteBlock(l_tail2);
         }
         else
         {
-            refRun->prev = nullptr;
-            return nullptr;
+            if (l_tail2 == p_refRun->prev)
+            {
+                p_refRun->prev = l_prev;
+                p_refRun->next = (RefRun *)m_blockCapacity;
+            }
+
+            m_tail->next = 0;
+
+            DeleteBlock(l_tail2);
         }
     }
-
-    return nullptr;
 }
 
-int RefTab::RunPrevRef(RefRun *refRun)
+// MATCHED
+void RefTab::RunInitNxtRef(RefRun *p_refRun)
 {
-    int *result = RunPrevRefPtr(refRun);
+    p_refRun->next = 0;
+    p_refRun->usedUnits = 1;
+
+    p_refRun->prev = m_head;
+    m_poolSize &= ~0x80000000;
+}
+
+// MATCHED
+void RefTab::RunInitPrevRef(RefRun *p_refRun)
+{
+    p_refRun->usedUnits = -1;
+
+    p_refRun->prev = m_tail;
+    RefRun *l_tail = m_tail;
+
+    if (l_tail)
+        p_refRun->next = (RefRun *)l_tail->usedUnits;
+
+    m_poolSize &= ~0x80000000;
+}
+
+// MATCHED
+UINT RefTab::RunNxtRef(RefRun *p_refRun)
+{
+    UINT *result = RunNxtRefPtr(p_refRun);
+
     return result ? *result : 0;
 }
 
-int *RefTab::RunPrevRefPtr(RefRun *refRun)
+// MATCHED
+UINT *RefTab::RunNxtRefPtr(RefRun *p_refRun)
 {
     if (m_poolSize < 0)
     {
-        ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 424);
-        l_sysCom->UnkFunc4("ERROR: Illegal operation inside REFTAB loop");
+        ZSysCom *com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 373);
+        com->UnkFunc4("ERROR: Illegal operation inside REFTAB loop");
 
-        l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 425);
-        l_sysCom->UnkFunc4("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 425);
+        com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 374);
+        com->UnkFunc4("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 374);
 
         DebugBreak();
     }
 
-    if (!refRun->prev)
-        return nullptr;
-
-    refRun->usedUnits -= m_size;
-
-    if (refRun->usedUnits < 0)
+    if (p_refRun->next == (RefRun *)m_blockCapacity)
     {
-        refRun->prev = refRun->prev->prev;
-        if (!refRun->prev)
-            return nullptr;
+        RefRun *prevTmp = p_refRun->prev;
 
-        refRun->usedUnits = m_blockCapacity - m_size;
+        p_refRun->next = 0;
+        p_refRun->prev = prevTmp->next;
     }
 
-    UINT *data = reinterpret_cast<UINT *>(refRun->prev + 1);
-    return reinterpret_cast<int *>(data + refRun->usedUnits);
+    RefRun *prev = p_refRun->prev;
+
+    if (p_refRun->prev)
+    {
+        int next = (int)p_refRun->next;
+
+        if (next != m_tail->usedUnits || prev->next)
+        {
+            p_refRun->next = (RefRun *)(next + m_size);
+
+            return (UINT *)((char *)prev + sizeof(UINT) * next + 12);
+        }
+        else
+        {
+            p_refRun->prev = 0;
+            return 0;
+        }
+    }
+
+    return (UINT *)prev;
 }
 
-void *RefTab::RunToRefPtr(RefRun *refRun)
+// MATCHED
+UINT RefTab::RunPrevRef(RefRun *p_refRun)
 {
-    UINT *data = reinterpret_cast<UINT *>(refRun->prev + 1);
-    return data + refRun->usedUnits;
+    UINT *result = RunPrevRefPtr(p_refRun);
+    return result ? *result : 0;
 }
 
-void RefTab::DeleteBlock(void *mem)
+// MATCHED
+UINT *RefTab::RunPrevRefPtr(RefRun *p_refRun)
 {
-    operator delete(mem);
+    if (m_poolSize < 0)
+    {
+        ZSysCom *com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 424);
+        com->UnkFunc4("ERROR: Illegal operation inside REFTAB loop");
+
+        com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 425);
+        com->UnkFunc4("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 425);
+
+        DebugBreak();
+    }
+
+    RefRun *prev;
+
+    if (!p_refRun->prev)
+        return 0;
+
+    int l_size = m_size;
+
+    bBool l_flag = (int)p_refRun->next - l_size < 0;
+    p_refRun->next = (RefRun *)((char *)p_refRun->next - l_size);
+
+    if (l_flag)
+    {
+        prev = p_refRun->prev->prev;
+        p_refRun->prev = prev;
+
+        if (!prev)
+            return 0;
+
+        p_refRun->next = (RefRun *)(m_blockCapacity - m_size);
+    }
+
+    return (UINT *)(&p_refRun->prev->data + (int)p_refRun->next);
 }
 
+// MATCHED
+UINT *RefTab::RunToRefPtr(RefRun *p_refRun)
+{
+    return (UINT *)(&p_refRun->prev->data + (int)p_refRun->next);
+}
+
+// MATCHED
+void RefTab::DeleteBlock(void *p_lpMem)
+{
+    operator delete(p_lpMem);
+}
+
+// MATCHED
 RefRun *RefTab::NewBlock()
 {
-    int newSize = sizeof(RefRun) + sizeof(UINT) * m_blockCapacity;
+    int newSize = sizeof(UINT) * m_blockCapacity + 12;
 
     return reinterpret_cast<RefRun *>(operator new(newSize));
 }

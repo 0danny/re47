@@ -13,6 +13,7 @@ struct RefRun
     RefRun *prev;
     RefRun *next;
     int usedUnits;
+    UINT *data;
 };
 
 class RefTab
@@ -27,9 +28,10 @@ private:
 
 public:
     RefTab(int p_poolSize, int p_size);
-    ~RefTab();
 
-    virtual void *Add(UINT p_refNum);
+    virtual ~RefTab();
+
+    virtual UINT *Add(UINT p_refNum);
     virtual void AddUnique(UINT p_refNum);
 
     virtual void Clear();
@@ -37,30 +39,30 @@ public:
 
     virtual int GetCount();
 
-    virtual void *DelRefPtr(UINT *p_refNum);
-    virtual bBool Exists(UINT *p_refPtr);
-    virtual void *Find(UINT p_id);
+    virtual void DelRefPtr(UINT *p_refNum);
+    virtual bBool Exists(UINT p_refNum);
+    virtual UINT *Find(UINT p_refNum);
 
-    virtual int GetRefNr(int refNum);
-    virtual void *GetRefPtrNr(int refNum);
+    virtual UINT GetRefNr(int p_refIndex);
+    virtual UINT *GetRefPtrNr(int p_refIndex);
 
     virtual void PrintStatus();
 
-    virtual void Remove(UINT p_refNumber);
-    virtual bBool RemoveIfExists(UINT p_refNumber);
+    virtual void Remove(UINT p_refNum);
+    virtual bBool RemoveIfExists(UINT p_refNum);
 
-    virtual void RunDelRef(RefRun *refRun);
-    virtual void RunInitNxtRef(RefRun *refRun);
-    virtual void RunInitPrevRef(RefRun *refRun);
+    virtual void RunDelRef(RefRun *p_refRun);
+    virtual void RunInitNxtRef(RefRun *p_refRun);
+    virtual void RunInitPrevRef(RefRun *p_refRun);
 
-    virtual int RunNxtRef(RefRun *refRun);
-    virtual int *RunNxtRefPtr(RefRun *refRun);
+    virtual UINT RunNxtRef(RefRun *p_refRun);
+    virtual UINT *RunNxtRefPtr(RefRun *p_refRun);
 
-    virtual int RunPrevRef(RefRun *refRun);
-    virtual int *RunPrevRefPtr(RefRun *refRun);
+    virtual UINT RunPrevRef(RefRun *p_refRun);
+    virtual UINT *RunPrevRefPtr(RefRun *p_refRun);
 
-    virtual void *RunToRefPtr(RefRun *refRun);
+    virtual UINT *RunToRefPtr(RefRun *p_refRun);
 
-    virtual void DeleteBlock(LPVOID p_lpMem);
+    virtual void DeleteBlock(void *p_lpMem);
     virtual RefRun *NewBlock();
 };

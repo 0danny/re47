@@ -97,7 +97,7 @@ void RefTab::ClearThis()
     }
 
     m_count = 0;
-    m_head = nullptr;
+    m_head = 0;
 }
 
 // MATCHED

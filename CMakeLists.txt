@@ -3,65 +3,89 @@ project(HitmanC47 CXX RC)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-# Linker, compiler and resource flags
-# Copied straight from the Isle Decompilation project
-set(CMAKE_CXX_FLAGS "/W3 /GX /D \"WIN32\" /D \"_WINDOWS\"")
-set(CMAKE_CXX_FLAGS_DEBUG "/Gm /Zi /Od /D \"_DEBUG\"")
-set(CMAKE_CXX_FLAGS_RELEASE "/O2 /D \"NDEBUG\"")
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "/Zi /O2 /D \"NDEBUG\"")
-set(CMAKE_CXX_FLAGS_MINSIZEREL "/Os /D \"NDEBUG\"")
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src_main)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src_testing)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external_include)
 
-set(CMAKE_EXE_LINKER_FLAGS "/machine:I386")
-set(CMAKE_EXE_LINKER_FLAGS_DEBUG "/incremental:yes /debug")
-set(CMAKE_EXE_LINKER_FLAGS_RELEASE "/incremental:no")
-set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
-set(CMAKE_EXE_LINKER_FLAGS_MINSIZEREL "/incremental:no")
+if (MSVC_VERSION GREATER_EQUAL 1900)
+    message(STATUS "Using modern MSVC")
+   
+    # Build the testing dll(s)
+    add_library(impl_swap SHARED 
+    src_testing/impl_swap/dllmain.cpp
+    src_main/system/reftab/reftab.cpp
+    src_main/system/reftab/strreftab.cpp
+    )
 
-set(CMAKE_STATIC_LINKER_FLAGS "/machine:I386")
+    set_target_properties(impl_swap PROPERTIES
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED YES
+        CXX_EXTENSIONS NO
+    )
 
-set(CMAKE_SHARED_LINKER_FLAGS "/machine:I386")
-set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "/incremental:yes /debug")
-set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "/incremental:no")
-set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
-set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
+    target_link_directories(impl_swap PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external_libs)
+    target_link_libraries(impl_swap PRIVATE MinHook.x86 globals system)
 
-# Sort out the resource file
-set(CMAKE_RC_FLAGS "/I\"${CMAKE_CURRENT_SOURCE_DIR}/resources\"")
-set(RESOURCE_FILE "resources/hitman.rc")
+else ()
+    message(STATUS "Building using VS6")
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+    # Linker, compiler and resource flags
+    # Copied straight from the Isle Decompilation project
+    set(CMAKE_CXX_FLAGS "/W3 /GX /D \"WIN32\" /D \"_WINDOWS\"")
+    set(CMAKE_CXX_FLAGS_DEBUG "/Gm /Zi /Od /D \"_DEBUG\"")
+    set(CMAKE_CXX_FLAGS_RELEASE "/O2 /D \"NDEBUG\"")
+    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "/Zi /O2 /D \"NDEBUG\"")
+    set(CMAKE_CXX_FLAGS_MINSIZEREL "/Os /D \"NDEBUG\"")
 
-# Add System DLL
-add_library(system SHARED
-src/system/system.h
+    set(CMAKE_EXE_LINKER_FLAGS "/machine:I386")
+    set(CMAKE_EXE_LINKER_FLAGS_DEBUG "/incremental:yes /debug")
+    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "/incremental:no")
+    set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
+    set(CMAKE_EXE_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
-src/system/dllmain.cpp 
+    set(CMAKE_STATIC_LINKER_FLAGS "/machine:I386")
 
-src/system/zsysinterface.cpp
-src/system/zsysinterface.h 
+    set(CMAKE_SHARED_LINKER_FLAGS "/machine:I386")
+    set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "/incremental:yes /debug")
+    set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "/incremental:no")
+    set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
+    set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
-src/system/zsysmem.cpp 
-src/system/zsysmem.h 
+    # Sort out the resource file
+    set(CMAKE_RC_FLAGS "/I\"${CMAKE_CURRENT_SOURCE_DIR}/resources\"")
+    set(RESOURCE_FILE "resources/hitman.rc")
 
-src/system/zsysfile.cpp 
-src/system/zsysfile.h 
+    # Add System DLL
+    add_library(system SHARED
+    src_main/system/system.h
 
-src/system/zsyscom.cpp 
-src/system/zsyscom.h
+    src_main/system/dllmain.cpp 
 
-src/system/reftab/reftab.cpp
-src/system/reftab/reftab.h
+    src_main/system/zsysinterface.cpp
+    src_main/system/zsysinterface.h 
 
-src/system/reftab/strreftab.cpp
-src/system/reftab/strreftab.h
-)
+    src_main/system/zsysmem.cpp 
+    src_main/system/zsysmem.h 
 
+    src_main/system/zsysfile.cpp 
+    src_main/system/zsysfile.h 
 
-target_link_libraries(system globals)
+    src_main/system/zsyscom.cpp 
+    src_main/system/zsyscom.h
 
-# Add Globals DLL
-add_library(globals SHARED src/globals/dllmain.cpp)
+    src_main/system/reftab/reftab.cpp
+    src_main/system/reftab/reftab.h
 
-# Add the hitman executable
-add_executable(hitman WIN32 src/hitman/main.cpp ${RESOURCE_FILE})
-target_link_libraries(hitman globals)
+    src_main/system/reftab/strreftab.cpp
+    src_main/system/reftab/strreftab.h
+    )
+
+    target_link_libraries(system globals)
+
+    # Add Globals DLL
+    add_library(globals SHARED src_main/globals/dllmain.cpp)
+
+    # Add the hitman executable
+    add_executable(hitman WIN32 src_main/hitman/main.cpp ${RESOURCE_FILE})
+    target_link_libraries(hitman globals)
+endif ()

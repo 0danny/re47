@@ -6,12 +6,12 @@ RefTab::RefTab(int p_poolSize, int p_size)
     if (p_poolSize < 1)
         p_poolSize = 1;
 
-    this->m_blockCapacity = p_poolSize * (p_size + 1);
-    this->m_count = 0;
-    this->m_head = 0;
-    this->m_tail = 0;
-    this->m_size = p_size + 1;
-    this->m_poolSize = p_poolSize;
+    m_blockCapacity = p_poolSize * (p_size + 1);
+    m_count = 0;
+    m_head = 0;
+    m_tail = 0;
+    m_size = p_size + 1;
+    m_poolSize = p_poolSize;
 }
 
 // MATCHED
@@ -131,7 +131,7 @@ void RefTab::DelRefPtr(UINT *p_refNum)
 
             RunDelRef(&l_refRun);
 
-            this->m_poolSize |= 0x80000000;
+            m_poolSize |= 0x80000000;
         }
     }
 }
@@ -200,7 +200,7 @@ UINT RefTab::GetRefNr(int p_refIndex)
     for (i = m_head; p_refIndex >= poolRes; p_refIndex -= poolRes)
         i = i->next;
 
-    return *((UINT *)&i->data + p_refIndex * this->m_size);
+    return *((UINT *)&i->data + p_refIndex * m_size);
 }
 
 // MATCHED
@@ -217,7 +217,7 @@ UINT *RefTab::GetRefPtrNr(int p_refIndex)
     for (i = m_head; p_refIndex >= poolRes; p_refIndex -= poolRes)
         i = i->next;
 
-    return ((UINT *)&i->data + p_refIndex * this->m_size);
+    return ((UINT *)&i->data + p_refIndex * m_size);
 }
 
 // MATCHED
@@ -228,10 +228,10 @@ void RefTab::PrintStatus()
     int usedUnits = 0;
     int l_count;
 
-    char *l_malloc = (char *)System::Alloc(256);
+    char *l_malloc = (char *)System::AllocArr(256);
     char *l_mallocPtr = l_malloc;
 
-    RefRun *l_currentBlock = this->m_head;
+    RefRun *l_currentBlock = m_head;
 
     int i;
 

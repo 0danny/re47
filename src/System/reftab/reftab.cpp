@@ -228,7 +228,7 @@ void RefTab::PrintStatus()
     int usedUnits = 0;
     int l_count;
 
-    char *l_malloc = new char[256];
+    char *l_malloc = (char *)System::Alloc(256);
     char *l_mallocPtr = l_malloc;
 
     RefRun *l_currentBlock = this->m_head;

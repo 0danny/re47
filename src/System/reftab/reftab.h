@@ -18,7 +18,7 @@ struct RefRun
 
 class RefTab
 {
-private:
+public:
     RefRun *m_head;
     RefRun *m_tail;
     int m_poolSize;
@@ -26,7 +26,6 @@ private:
     int m_count;
     int m_size;
 
-public:
     RefTab(int p_poolSize, int p_size);
 
     virtual ~RefTab();

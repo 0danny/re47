@@ -1,22 +1,49 @@
+#include <new>
+#include <cstdlib>
+
 #include "zsysmem.h"
 
-inline static void *operator new(size_t size)
+namespace System
 {
-    // TODO: Add method
-    if (g_pSysMem)
-        return nullptr; //(*(*g_pSysMem + 44))(g_pSysMem, 39);
-    else
-        return malloc(size);
-}
-
-inline static void operator delete(void *ptr)
-{
-    // TODO: Add method
-    if (g_pSysMem)
+    inline void *Alloc(size_t size)
     {
-        //(*(g_pSysMem->vtable + 13))(g_pSysMem, this);
-        return;
+        if (g_pSysMem)
+            // TODO: Implement this when g_pSysMem is available
+            // return g_pSysMem->vtable->Alloc(size);
+            return nullptr;
+        else
+            return malloc(size);
     }
 
-    delete ptr;
+    inline void Free(void *ptr)
+    {
+        if (g_pSysMem)
+        {
+            // TODO: Implement this when g_pSysMem is available
+            // g_pSysMem->vtable->Free(ptr);
+            return;
+        }
+        free(ptr);
+    }
+
+    inline void *AllocArr(size_t size)
+    {
+        if (g_pSysMem)
+            // TODO: Implement this when g_pSysMem is available
+            // return g_pSysMem->vtable->Alloc(size);
+            return nullptr;
+        else
+            return malloc(size & 0x1FFFFFFF);
+    }
+
+    inline void FreeArr(void *ptr)
+    {
+        if (g_pSysMem)
+        {
+            // TODO: Implement this when g_pSysMem is available
+            // g_pSysMem->vtable->Free(ptr);
+            return;
+        }
+        free(ptr);
+    }
 }

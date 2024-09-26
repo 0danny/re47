@@ -51,6 +51,9 @@ src/system/zsyscom.h
 
 src/system/reftab/reftab.cpp
 src/system/reftab/reftab.h
+
+src/system/reftab/strreftab.cpp
+src/system/reftab/strreftab.h
 )
 
 

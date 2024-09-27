@@ -70,6 +70,7 @@ add_library(impl_swap SHARED
 src_testing/impl_swap/dllmain.cpp
 src_main/system/reftab/reftab.cpp
 src_main/system/reftab/strreftab.cpp
+src_main/system/reftab/equreftab.cpp
 )
     
 target_link_directories(impl_swap PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external_libs)

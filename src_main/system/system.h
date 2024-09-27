@@ -10,7 +10,7 @@ namespace System
         if (g_pSysMem)
             // TODO: Implement this when g_pSysMem is available
             // return g_pSysMem->vtable->Alloc(size);
-            return nullptr;
+            return malloc(size);
         else
             return malloc(size);
     }
@@ -21,6 +21,7 @@ namespace System
         {
             // TODO: Implement this when g_pSysMem is available
             // g_pSysMem->vtable->Free(ptr);
+            free(ptr);
             return;
         }
         free(ptr);
@@ -31,7 +32,7 @@ namespace System
         if (g_pSysMem)
             // TODO: Implement this when g_pSysMem is available
             // return g_pSysMem->vtable->Alloc(size);
-            return nullptr;
+            return malloc(size & 0x1FFFFFFF);
         else
             return malloc(size & 0x1FFFFFFF);
     }
@@ -42,6 +43,7 @@ namespace System
         {
             // TODO: Implement this when g_pSysMem is available
             // g_pSysMem->vtable->Free(ptr);
+            free(ptr);
             return;
         }
         free(ptr);

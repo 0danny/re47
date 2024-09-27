@@ -6,27 +6,26 @@
 
 #include "system/reftab/reftab.h"
 
-typedef RefTab *(__thiscall *RefTabConstructor)(RefTab *_this, int p_poolSize, int p_size);
-RefTabConstructor oRefTabConstructor = nullptr;
+typedef RefTab *(__fastcall *RefTabConstructor)(RefTab *_this, int p_poolSize, int p_size);
+RefTabConstructor oRefTabConstructor = 0;
 
 void OpenConsole()
 {
     AllocConsole();
 
-    FILE *f;
-    freopen_s(&f, "CONOUT$", "w", stdout);
-    freopen_s(&f, "CONOUT$", "w", stderr);
-    freopen_s(&f, "CONIN$", "r", stdin);
+    freopen("CONOUT$", "w", stdout);
+    freopen("CONOUT$", "w", stderr);
+    freopen("CONIN$", "r", stdin);
 
-    std::cout << "Console allocated successfully." << std::endl;
+    printf("Console allocated successfully.\n");
 }
 
 RefTab *__fastcall HookedRefTabConstructor(RefTab *_this, void *_EDX, int p_poolSize, int p_size)
 {
-    std::cout << "Hooked RefTab constructor called!" << std::endl;
-    std::cout << "p_poolSize: " << p_poolSize << ", p_size: " << p_size << std::endl;
+    printf("Hooked RefTab constructor called!\n");
+    printf("p_poolSize: %d, p_size: %d\n", p_poolSize, p_size);
 
-    return oRefTabConstructor(_this, p_poolSize, p_size);
+    return new RefTab(p_poolSize, p_size);
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
@@ -37,30 +36,28 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 
         if (MH_Initialize() != MH_OK)
         {
-            std::cout << "Failed to initialize MinHook." << std::endl;
+            printf("Failed to initialize MinHook.\n");
             return FALSE;
         }
 
         if (MH_CreateHook((LPVOID)0x0FFBED50, (LPVOID)&HookedRefTabConstructor, reinterpret_cast<LPVOID *>(&oRefTabConstructor)) != MH_OK)
         {
-            std::cout << "Failed to create hook." << std::endl;
+            printf("Failed to create hook.\n");
             return FALSE;
         }
 
         if (MH_EnableHook((LPVOID)0x0FFBED50) != MH_OK)
         {
-            std::cout << "Failed to enable hook." << std::endl;
+            printf("Failed to enable hook.\n");
             return FALSE;
         }
-
-        std::cout << "Hook installed successfully!" << std::endl;
     }
     else if (ul_reason_for_call == DLL_PROCESS_DETACH)
     {
         MH_DisableHook((LPVOID)0x0FFBED50);
         MH_Uninitialize();
 
-        std::cout << "Hook uninstalled successfully!" << std::endl;
+        printf("Hook uninstalled successfully.\n");
     }
 
     return TRUE;

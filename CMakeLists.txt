@@ -27,14 +27,28 @@ set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "/incremental:no")
 set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
 set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
-# Sort out the resource file
 set(CMAKE_RC_FLAGS "/I\"${CMAKE_CURRENT_SOURCE_DIR}/resources\"")
 set(RESOURCE_FILE "resources/hitman.rc")
 
-    # Add System DLL
-add_library(system SHARED
-    src_main/system/system.h
+#  Add common library (zstdlib)
+add_library(common STATIC 
+src_main/common.h
 
+src_main/zstdlib/reftab/reftab.cpp
+src_main/zstdlib/reftab/reftab.h
+
+src_main/zstdlib/reftab/strreftab.cpp
+src_main/zstdlib/reftab/strreftab.h
+
+src_main/zstdlib/reftab/equreftab.cpp
+src_main/zstdlib/reftab/equreftab.h
+
+src_main/zstdlib/zdynamicloader.cpp
+src_main/zstdlib/zdynamicloader.h
+)
+
+# Add System DLL
+add_library(system SHARED
     src_main/system/dllmain.cpp 
 
     src_main/system/zsysinterface.cpp
@@ -48,30 +62,21 @@ add_library(system SHARED
 
     src_main/system/zsyscom.cpp 
     src_main/system/zsyscom.h
-
-    src_main/system/reftab/reftab.cpp
-    src_main/system/reftab/reftab.h
-
-    src_main/system/reftab/strreftab.cpp
-    src_main/system/reftab/strreftab.h
 )
 
-target_link_libraries(system globals)
+target_link_libraries(system globals common)
 
 # Add Globals DLL
 add_library(globals SHARED src_main/globals/dllmain.cpp)
 
 # Add the hitman executable
 add_executable(hitman WIN32 src_main/hitman/main.cpp ${RESOURCE_FILE})
-target_link_libraries(hitman globals)
+target_link_libraries(hitman globals common)
 
 # Build the testing dll(s)
 add_library(impl_swap SHARED 
 src_testing/impl_swap/dllmain.cpp
-src_main/system/reftab/reftab.cpp
-src_main/system/reftab/strreftab.cpp
-src_main/system/reftab/equreftab.cpp
 )
     
 target_link_directories(impl_swap PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external_libs)
-target_link_libraries(impl_swap PRIVATE MinHook.x86 globals system kernel32)
+target_link_libraries(impl_swap PRIVATE MinHook.x86 globals system kernel32 common)

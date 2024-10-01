@@ -3,7 +3,6 @@
 #include "System/zsysinterface.h"
 #include "System/zsyscom.h"
 #include "System/zsysfile.h"
-#include "System/zsysmem.h"
 
 // Not sure what dll this class is implemented in.
 class ZSysInput;

@@ -1,6 +1,6 @@
-#include "system/reftab/reftab.h"
-#include "system/reftab/equreftab.h"
-#include "system/reftab/strreftab.h"
+#include "zstdlib/reftab/reftab.h"
+#include "zstdlib/reftab/equreftab.h"
+#include "zstdlib/reftab/strreftab.h"
 
 #include "MinHook.h"
 

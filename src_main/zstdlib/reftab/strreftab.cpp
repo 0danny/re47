@@ -17,7 +17,7 @@ void StrRefTab::Destroy()
 
         for (UINT i = RunNxtRef(&l_refRun); l_refRun.prev; i = RunNxtRef(&l_refRun))
         {
-            System::FreeArr((char *)i);
+            Common::FreeArr((char *)i);
         }
     }
 
@@ -65,7 +65,7 @@ void StrRefTab::ClearThis()
 
         for (UINT i = RunNxtRef(&l_refRun); l_refRun.prev; i = RunNxtRef(&l_refRun))
         {
-            System::FreeArr((char *)i);
+            Common::FreeArr((char *)i);
         }
     }
 
@@ -113,7 +113,7 @@ void StrRefTab::RunDelRef(RefRun *p_refRun)
         l_dataPtr = (char *)*(&l_prev->data + l_dataOffset);
     }
 
-    System::FreeArr(l_dataPtr);
+    Common::FreeArr(l_dataPtr);
 
     RefTab::RunDelRef(p_refRun);
 }
@@ -154,7 +154,7 @@ char *StrRefTab::AddStr(char *const p_str)
 char *StrRefTab::AddAlways(char *const p_str)
 {
     int l_strLen = strlen(p_str) + 1;
-    char *l_malloc = (char *)System::AllocArr(l_strLen);
+    char *l_malloc = (char *)Common::AllocArr(l_strLen);
 
     strcpy(l_malloc, p_str);
 
@@ -220,7 +220,7 @@ void StrRefTab::Sort()
 {
     int l_mallocCount = sizeof(char *) * GetCount();
 
-    char **l_allocated = (char **)System::AllocArr(l_mallocCount);
+    char **l_allocated = (char **)Common::AllocArr(l_mallocCount);
 
     size_t l_numOfElements = 0;
 
@@ -269,7 +269,7 @@ void StrRefTab::Sort()
         {
             AddAlways(*l_allocPtr2);
 
-            System::FreeArr(*l_allocPtr2);
+            Common::FreeArr(*l_allocPtr2);
 
             ++l_allocPtr2;
             --l_numOfElements;
@@ -277,7 +277,7 @@ void StrRefTab::Sort()
         } while (l_numOfElements);
     }
 
-    System::FreeArr(l_allocated);
+    Common::FreeArr(l_allocated);
 }
 
 int Compare(const void *p_a, const void *p_b)

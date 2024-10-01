@@ -2,8 +2,7 @@
 
 #include <windows.h>
 #include <stdio.h>
-
-#include "typedefs.h"
+#include "common.h"
 
 // 0x27 in size
 #pragma pack(push, 1)

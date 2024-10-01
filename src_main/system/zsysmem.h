@@ -3,8 +3,6 @@
 #include <windows.h>
 #include <stdio.h>
 
-#include "typedefs.h"
-
 #pragma pack(push, 1)
 
 class ZSysMem;

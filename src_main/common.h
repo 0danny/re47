@@ -1,9 +1,13 @@
+#pragma once
+
 #include <new>
 #include <cstdlib>
+#include "system/zsysmem.h"
 
-#include "zsysmem.h"
+// Typedefs
+typedef byte bBool;
 
-namespace System
+namespace Common
 {
     inline void *Alloc(size_t size)
     {

@@ -228,7 +228,7 @@ void RefTab::PrintStatus()
     int usedUnits = 0;
     int l_count;
 
-    char *l_malloc = (char *)Common::AllocArr(256);
+    char *l_malloc = new char[256];
     char *l_mallocPtr = l_malloc;
 
     RefRun *l_currentBlock = m_head;
@@ -268,7 +268,7 @@ void RefTab::PrintStatus()
     }
 
     // Free the allocated buffer
-    Common::FreeArr(l_mallocPtr);
+    delete[] l_mallocPtr;
 }
 
 // MATCHED
@@ -508,7 +508,7 @@ UINT *RefTab::RunToRefPtr(RefRun *p_refRun)
 // MATCHED
 void RefTab::DeleteBlock(void *p_lpMem)
 {
-    Common::Free(p_lpMem);
+    delete p_lpMem;
 }
 
 // MATCHED
@@ -516,5 +516,5 @@ RefRun *RefTab::NewBlock()
 {
     int newSize = sizeof(UINT) * m_blockCapacity + 12;
 
-    return reinterpret_cast<RefRun *>(Common::Alloc(newSize));
+    return reinterpret_cast<RefRun *>(operator new(newSize));
 }

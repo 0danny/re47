@@ -1,4 +1,3 @@
-#include "zstdlib/reftab/reftab.h"
 #include "zstdlib/reftab/equreftab.h"
 #include "zstdlib/reftab/strreftab.h"
 

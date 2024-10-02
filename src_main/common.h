@@ -7,49 +7,26 @@
 // Typedefs
 typedef byte bBool;
 
-namespace Common
+// return malloc(size & 0x1FFFFFFF);
+
+inline static void *operator new(size_t size)
 {
-    inline void *Alloc(size_t size)
-    {
-        if (g_pSysMem)
-            // TODO: Implement this when g_pSysMem is available
-            // return g_pSysMem->vtable->Alloc(size);
-            return malloc(size);
-        else
-            return malloc(size);
-    }
+    if (g_pSysMem)
+        // TODO: Implement this when g_pSysMem is available
+        // return g_pSysMem->vtable->Alloc(size);
+        return malloc(size);
+    else
+        return malloc(size);
+}
 
-    inline void Free(void *ptr)
+inline static void operator delete(void *ptr)
+{
+    if (g_pSysMem)
     {
-        if (g_pSysMem)
-        {
-            // TODO: Implement this when g_pSysMem is available
-            // g_pSysMem->vtable->Free(ptr);
-            free(ptr);
-            return;
-        }
+        // TODO: Implement this when g_pSysMem is available
+        // g_pSysMem->vtable->Free(ptr);
         free(ptr);
+        return;
     }
-
-    inline void *AllocArr(size_t size)
-    {
-        if (g_pSysMem)
-            // TODO: Implement this when g_pSysMem is available
-            // return g_pSysMem->vtable->Alloc(size);
-            return malloc(size & 0x1FFFFFFF);
-        else
-            return malloc(size & 0x1FFFFFFF);
-    }
-
-    inline void FreeArr(void *ptr)
-    {
-        if (g_pSysMem)
-        {
-            // TODO: Implement this when g_pSysMem is available
-            // g_pSysMem->vtable->Free(ptr);
-            free(ptr);
-            return;
-        }
-        free(ptr);
-    }
+    free(ptr);
 }

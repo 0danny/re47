@@ -66,6 +66,19 @@ add_library(system SHARED
 
 target_link_libraries(system globals common)
 
+# Add DirectPlay DLL
+add_library(directplay SHARED
+    src_main/directplay/dllmain.cpp
+
+    src_main/directplay/directplayproxy.cpp
+    src_main/directplay/directplayproxy.h
+
+    src_main/directplay/directplay.cpp
+    src_main/directplay/directplay.h
+)
+target_link_directories(directplay PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external_libs)
+target_link_libraries(directplay globals common)
+
 # Add Globals DLL
 add_library(globals SHARED src_main/globals/dllmain.cpp)
 

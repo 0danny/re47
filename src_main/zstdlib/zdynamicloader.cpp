@@ -8,19 +8,19 @@ ZDynamicLoader::ZDynamicLoader()
 
 ZDynamicLoader::~ZDynamicLoader()
 {
-    Common::FreeArr(m_libName);
+    delete[] m_libName;
 }
 
 void ZDynamicLoader::NewLibrary(HMODULE p_hModule, const char *p_libName)
 {
     if (m_libName)
     {
-        Common::FreeArr(m_libName);
+        delete[] m_libName;
     }
 
     int l_strLen = strlen(p_libName) + 1;
 
-    char *l_strMalloc = (char *)Common::AllocArr(l_strLen);
+    char *l_strMalloc = new char[l_strLen];
 
     m_libName = l_strMalloc;
 

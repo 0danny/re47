@@ -89,6 +89,12 @@ target_link_libraries(hitman globals common)
 # Build the testing dll(s)
 add_library(impl_swap SHARED 
 src_testing/impl_swap/dllmain.cpp
+
+src_testing/impl_swap/constructors.cpp
+src_testing/impl_swap/constructors.h
+
+src_testing/impl_swap/wnd_patches.cpp
+src_testing/impl_swap/wnd_patches.h
 )
     
 target_link_directories(impl_swap PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external_libs)

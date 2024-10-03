@@ -1,9 +1,10 @@
 #include <windows.h>
 #include <iostream>
 #include <fstream>
-
 #include <MinHook.h>
-#include "constructors.cpp"
+
+#include "constructors.h"
+#include "wnd_patches.h"
 
 void OpenConsole();
 void CreateHooks();
@@ -21,6 +22,7 @@ void OpenConsole()
 
 void CreateHooks()
 {
+    WndPatches::CreateHooks();
     Constructors::CreateHooks();
 }
 

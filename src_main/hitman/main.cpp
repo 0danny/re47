@@ -72,7 +72,7 @@ BOOL DoAlwaysNoConv(HINSTANCE instance)
     return 1;
 }
 
-// TODO: Handle these correctly.
+// TODO: Handle these correctly, see functions in IDA
 void SignalHandler(int signal)
 {
     // Show a messagebox.

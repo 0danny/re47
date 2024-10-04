@@ -30,6 +30,9 @@ set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 set(CMAKE_RC_FLAGS "/I\"${CMAKE_CURRENT_SOURCE_DIR}/resources\"")
 set(RESOURCE_FILE "resources/hitman.rc")
 
+# Export all symbols
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 #  Add common library (zstdlib)
 add_library(common STATIC 
 src_main/common.h
@@ -45,6 +48,9 @@ src_main/zstdlib/reftab/equreftab.h
 
 src_main/zstdlib/zdynamicloader.cpp
 src_main/zstdlib/zdynamicloader.h
+
+src_main/zstdlib/zconsole/zconsolecommand.cpp
+src_main/zstdlib/zconsole/zconsolecommand.h
 )
 
 # Add System DLL
@@ -95,6 +101,11 @@ src_testing/impl_swap/constructors.h
 
 src_testing/impl_swap/wnd_patches.cpp
 src_testing/impl_swap/wnd_patches.h
+
+src_testing/impl_swap/loader.cpp
+src_testing/impl_swap/loader.h
+
+src_testing/impl_swap/utilities.h
 )
     
 target_link_directories(impl_swap PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external_libs)

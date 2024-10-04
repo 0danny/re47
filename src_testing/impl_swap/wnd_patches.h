@@ -11,6 +11,7 @@ namespace WndPatches
     typedef HWND(WINAPI *CreateWindowExA_t)(DWORD dwExStyle, LPCSTR lpClassName, LPCSTR lpWindowName,
                                             DWORD dwStyle, int x, int y, int nWidth, int nHeight,
                                             HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
+    typedef LRESULT(WINAPI *SendMessageA_t)(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
     static CreateWindowExA_t originalCreateWindowExA = 0;
 

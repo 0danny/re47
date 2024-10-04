@@ -569,15 +569,15 @@ typedef BOOL(FAR PASCAL *LPDPENUMCONNECTIONSCALLBACK)(
 #define DirectPlayEnumerate DirectPlayEnumerateA
 #endif // UNICODE
 
-HRESULT WINAPI DirectPlayEnumerateA(LPDPENUMDPCALLBACKA, LPVOID)
+static HRESULT WINAPI DirectPlayEnumerateA(LPDPENUMDPCALLBACKA, LPVOID)
 {
     return E_ABORT;
 }
-HRESULT WINAPI DirectPlayEnumerateW(LPDPENUMDPCALLBACK, LPVOID)
+static HRESULT WINAPI DirectPlayEnumerateW(LPDPENUMDPCALLBACK, LPVOID)
 {
     return E_ABORT;
 }
-HRESULT WINAPI DirectPlayCreate(LPGUID lpGUID, LPDIRECTPLAY *lplpDP, IUnknown *pUnk)
+static HRESULT WINAPI DirectPlayCreate(LPGUID lpGUID, LPDIRECTPLAY *lplpDP, IUnknown *pUnk)
 {
     return E_ABORT;
 }

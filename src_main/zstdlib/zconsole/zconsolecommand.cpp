@@ -233,15 +233,11 @@ bBool ZConsoleCommand::UnkFunc4(char *p_cmd, char *p_cmdValue)
 
 void ZConsoleCommand::PrintStatus(char *p_cmdValue)
 {
-    ZCmdStruct *i;       // esi
-    char *l_commandsStr; // edi
-    ZSysCom *l_sysCom;   // eax
-
-    for (i = this->m_cmdStruct; i; i = i->cmdStruct1)
+    for (ZCmdStruct *i = m_cmdStruct; i; i = i->cmdStruct1)
     {
-        l_commandsStr = i->cmdClass->m_commandsStr;
+        char *l_commandsStr = i->cmdClass->m_commandsStr;
 
-        l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\ConsoleCommand.cpp", 284);
+        ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\ConsoleCommand.cpp", 284);
         l_sysCom->UnkFunc4("%s", l_commandsStr);
     }
 }

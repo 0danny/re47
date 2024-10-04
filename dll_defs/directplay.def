@@ -1,0 +1,4 @@
+LIBRARY directplay
+
+EXPORTS
+    Create   @1

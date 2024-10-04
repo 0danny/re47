@@ -1,0 +1,9 @@
+LIBRARY system
+
+EXPORTS
+    ?GlobalEngineVersion@@3JA    @1
+    ?g_pSysCom@@3PAVZSysCom@@A    @2
+    ?g_pSysFile@@3PAVZSysFile@@A    @3
+    ?g_pSysInput@@3PAVZSysInput@@A    @4
+    ?g_pSysInterface@@3PAVZSysInterface@@A    @5
+    ?g_pSysMem@@3PAVZSysMem@@A    @6

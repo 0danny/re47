@@ -30,9 +30,6 @@ set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 set(CMAKE_RC_FLAGS "/I\"${CMAKE_CURRENT_SOURCE_DIR}/resources\"")
 set(RESOURCE_FILE "resources/hitman.rc")
 
-# Export all symbols
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-
 #  Add common library (zstdlib)
 add_library(common STATIC 
 src_main/common.h
@@ -70,6 +67,7 @@ add_library(system SHARED
     src_main/system/zsyscom.h
 )
 
+target_sources(system PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dll_defs/system.def)
 target_link_libraries(system globals common)
 
 # Add DirectPlay DLL
@@ -82,11 +80,15 @@ add_library(directplay SHARED
     src_main/directplay/directplay.cpp
     src_main/directplay/directplay.h
 )
+
+target_sources(directplay PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dll_defs/directplay.def)
 target_link_directories(directplay PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external_libs)
 target_link_libraries(directplay globals common)
 
 # Add Globals DLL
 add_library(globals SHARED src_main/globals/dllmain.cpp)
+
+target_sources(globals PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dll_defs/globals.def)
 
 # Add the hitman executable
 add_executable(hitman WIN32 src_main/hitman/main.cpp ${RESOURCE_FILE})

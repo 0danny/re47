@@ -1,0 +1,19 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: 'MSVC 6.0'
+    runs-on: 'windows-latest'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          path: msvc600
+          repository: 'itsmattkc/MSVC600'
+      - name: 'build.bat'
+        shell: cmd
+        run: |
+          set VS6_BIN_PATH=${{ github.workspace }}\msvc600\VC98\Bin
+          build.bat

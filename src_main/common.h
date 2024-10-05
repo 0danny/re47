@@ -13,6 +13,7 @@ typedef unsigned int uint32_t;
 typedef unsigned short uint16_t;
 
 static char *g_emptyArray = new char[264];
+static char *g_emptyDelimiter = new char[4];
 
 inline static void *operator new(size_t size)
 {

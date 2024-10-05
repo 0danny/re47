@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "loader.h"
+#include "utilities.h"
 
 #include <MinHook.h>
 
@@ -17,7 +18,7 @@ void OpenConsole()
 
     printf("[DLL_MAIN]: Impl_Swap Loaded.\n");
 
-    SetConsoleTitleA("Implementation Swap - 0.0.1");
+    SetConsoleTitleA(Utilities::TITLE);
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)

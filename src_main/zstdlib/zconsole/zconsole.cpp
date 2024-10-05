@@ -5,72 +5,74 @@ ZConsole::ZConsole()
 {
     m_consoleCmd = *new ZConsoleCommand();
 
-    unkFloat1 = 0.0;
-    unkFloat2 = 0.2;
-    unkByte1 = 0;
-    unkByte3 = 0;
+    m_visiblityProgress = 0.0;
+    m_visibilitySpeed = 0.2;
+    m_isVisible = 0;
+    m_isAnimating = 0;
 
-    strcpy(m_textBox, ">");
+    strcpy(m_inputBuffer, ">");
 
-    m_txtBoxLen = 1;
-    unkInt7 = 0;
-    unkByte5 = 0;
-    m_prevCmdIndex = 0;
-    unkInt3 = 0;
-    unkByte2 = 0;
+    m_inputLength = 1;
+    m_unkInt1 = 0;
+    m_isAutoCompleting = 0;
+    m_outputIndex = 0;
+    m_outputScrollOffset = 0;
+    m_shiftPressed = 0;
 
     for (int i = 0; i < 1000; i++)
     {
         m_outputBox[i] = new char[150];
     }
 
-    memset(m_prevCmds, 0, sizeof(m_prevCmds));
+    memset(m_commandHistory, 0, sizeof(m_commandHistory));
 
-    m_cmdCount2 = 0;
-    m_cmdCount = 0;
+    m_historyCount = 0;
+    m_historyIndex = 0;
 
     ZConsoleStruct *l_consoleStruct = new ZConsoleStruct();
 
     if (l_consoleStruct)
     {
-        l_consoleStruct->m_consoleStruct1 = 0;
-        l_consoleStruct->unkInt1 = 0;
+        l_consoleStruct->consoleStruct = 0;
+        l_consoleStruct->commandArray = 0;
+
         l_consoleStruct->unkInt2 = 32;
         l_consoleStruct->unkInt3 = 0;
     }
 
     m_consoleStruct = l_consoleStruct;
 
-    m_zConsoleUnk = new ZConsoleUnk(m_consoleStruct);
+    m_consoleUnk = new ZConsoleUnk(m_consoleStruct);
 }
 
-bBool ZConsole::UnkFunc0()
+bBool ZConsole::UpdateConsoleVisibility()
 {
-    if (unkByte1)
+    if (m_isVisible)
     {
-        double l_unkFloat2 = unkFloat2;
+        double l_m_visibilitySpeed = m_visibilitySpeed;
 
-        unkByte3 = 1;
+        m_isAnimating = 1;
 
-        double l_add = l_unkFloat2 + unkFloat1;
+        double l_add = l_m_visibilitySpeed + m_visiblityProgress;
 
-        unkFloat1 = l_add;
+        m_visiblityProgress = l_add;
 
         if (l_add >= 1.0)
         {
-            unkFloat1 = 1.0;
+            m_visiblityProgress = 1.0;
             return 1;
         }
     }
     else
     {
-        double l_sub = unkFloat1 - unkFloat2;
-        unkFloat1 = l_sub;
+        double l_sub = m_visiblityProgress - m_visibilitySpeed;
+
+        m_visiblityProgress = l_sub;
 
         if (l_sub <= 0.0)
         {
-            unkFloat1 = 0.0;
-            unkByte3 = 0;
+            m_visiblityProgress = 0.0;
+            m_isAnimating = 0;
             return 1;
         }
     }
@@ -91,32 +93,37 @@ void ZConsole::AddCmdText(const char *p_format, ...)
     if (!l_bracketOccurence)
         l_bracketOccurence = l_buffer;
 
-    strncpy(m_outputBox[m_prevCmdIndex], l_bracketOccurence + 1, 149u);
+    strncpy(m_outputBox[m_outputIndex], l_bracketOccurence + 1, 149u);
 
-    m_outputBox[m_prevCmdIndex][149] = '\0';
+    m_outputBox[m_outputIndex][149] = '\0';
 
-    int l_newIndex = m_prevCmdIndex + 1;
+    int l_newIndex = m_outputIndex + 1;
 
-    m_prevCmdIndex = l_newIndex;
+    m_outputIndex = l_newIndex;
 
     if (l_newIndex == 1000)
-        m_prevCmdIndex = 0;
+        m_outputIndex = 0;
 }
 
-char *ZConsole::UnkFunc2(int p_unkInt)
+// Im not a million percent sure about the name
+char *ZConsole::GetOutputLine(int p_offset)
 {
-    if (!p_unkInt)
-        return m_textBox;
+    if (!p_offset)
+        return m_inputBuffer;
 
-    int l_unkInt3 = unkInt3;
+    int l_offset = m_outputScrollOffset;
 
-    if (l_unkInt3 + p_unkInt > 1000)
+    if (l_offset + p_offset > 1000)
+    {
         return g_emptyArray;
+    }
 
-    if (l_unkInt3 + p_unkInt < -1000)
+    if (l_offset + p_offset < -1000)
+    {
         return g_emptyArray;
+    }
 
-    int l_index = p_unkInt + l_unkInt3 + m_prevCmdIndex;
+    int l_index = p_offset + l_offset + m_outputIndex;
 
     if (l_index < 0)
         l_index += 1000 * ((999 - l_index) / 1000u);
@@ -127,180 +134,140 @@ char *ZConsole::UnkFunc2(int p_unkInt)
     return m_outputBox[l_index];
 }
 
-uint8_t ZConsole::UnkFunc3()
+uint8_t ZConsole::IsAnimating()
 {
-    return unkByte3;
+    return m_isAnimating;
 }
 
-void ZConsole::UnkFunc4(int p_identifier, char *p_cmdName)
+// I've got no idea what this second parameter is - danny
+void ZConsole::HandleInput(int p_keyCode, int p_lparam)
 {
-    uint16_t l_cmdName;               // eax
-    int l_identifier;                 // ebx
-    int v6;                           // ecx
-    int v7;                           // eax
-    int v8;                           // ecx
-    int m_txtBoxLen;                  // eax
-    int v10;                          // eax
-    int v11;                          // eax
-    int v12;                          // eax
-    ZConsoleStruct *l_zConsoleStruct; // esi
-    ZConsoleStruct *i;                // edi
-    ZCmdNode *j;                      // ebx
-    unsigned int unkInt3;             // ecx
-    int v17;                          // edx
-    ZConsoleStruct *v18;              // eax
-    ZConsoleStruct *v19;              // edi
-    ZConsoleStruct *v20;              // eax
-    ZConsoleStruct *v21;              // edi
-    ZConsoleStruct *v22;              // eax
-    const char *v23;                  // eax
-    ZConsoleUnk *m_zConsoleUnk;       // ebx
-    ZConsoleStruct *m_consoleStruct;  // edx
-    unsigned int v26;                 // ecx
-    ZConsoleStruct *m_consoleStruct1; // eax
-    unsigned int unkInt2;             // edx
-    const char *v29;                  // esi
-    ZConsoleUnk *v30;                 // esi
-    int v31;                          // eax
-    unsigned int v32;                 // ecx
-    ZConsoleStruct *v33;              // edx
-    ZConsoleStruct *v34;              // eax
-    unsigned int v35;                 // edx
-    const char *v36;                  // ebx
-    int v37;                          // ecx
-    int v38;                          // eax
-    int v39;                          // esi
-    int v40;                          // eax
-    int p_unkInt1a;                   // [esp+14h] [ebp+4h]
+    uint16_t l_lparam = (uint16_t)(p_lparam);
 
-    l_cmdName = (uint16_t)(p_cmdName);
+    if (!p_lparam)
+        l_lparam = 1;
 
-    if (!p_cmdName)
-        l_cmdName = 1;
-
-    l_identifier = p_identifier;
-
-    if (p_identifier != 9 && p_identifier != 16)
+    if (p_keyCode != VK_TAB && p_keyCode != VK_SHIFT)
     {
-        unkByte5 = 0;
-        unkInt7 = 0;
+        m_isAutoCompleting = 0;
+        m_unkInt1 = 0;
     }
 
-    switch (p_identifier)
+    switch (p_keyCode)
     {
     case VK_BACK:
     case VK_DELETE:
 
-        v6 = l_cmdName;
-        v7 = l_cmdName - 1;
-
-        if (v6)
+        if (l_lparam)
         {
-            v8 = v7 + 1;
+            int l_deleteCount = (l_lparam - 1) + 1;
 
             do
             {
-                m_txtBoxLen = m_txtBoxLen;
-
-                if (m_txtBoxLen > 1)
+                if (m_inputLength > 1)
                 {
-                    v10 = m_txtBoxLen - 1;
-                    m_txtBoxLen = v10;
-                    m_textBox[v10] = '\0';
+                    int newLength = (m_inputLength - 1);
+
+                    m_inputLength = newLength;
+                    m_inputBuffer[newLength] = '\0';
                 }
 
-                --v8;
-            } while (v8);
+                --l_deleteCount;
+            } while (l_deleteCount);
         }
         return;
+        return;
+
     case VK_TAB:
-        // TODO: Implement logic.
-        ++v30->unkInt3;
-        unkByte5 = 1;
+        // TODO: Implement auto-completion (0x0FFC5AE0).
+        m_isAutoCompleting = 1;
         return;
+
     case VK_RETURN:
-        UnkFunc6();
+        ExecuteCommand();
         return;
+
     case VK_SHIFT:
-        unkByte2 = 1;
+        m_shiftPressed = 1;
         return;
+
     case VK_ESCAPE:
-        m_txtBoxLen = 1;
-        m_textBox[1] = '\0';
+        m_inputLength = 1;
+        m_inputBuffer[1] = '\0';
         return;
+
     case VK_PRIOR:
-        v12 = unkInt3;
-
-        if (v12 > -1000)
-            unkInt3 = v12 - 1;
+        if (m_outputScrollOffset > -1000)
+            m_outputScrollOffset = m_outputScrollOffset - 1;
 
         return;
+
     case VK_NEXT:
-        v11 = unkInt3;
-
-        if (v11)
-            unkInt3 = v11 + 1;
+        if (m_outputScrollOffset)
+            m_outputScrollOffset = m_outputScrollOffset + 1;
 
         return;
+
     case VK_UP:
         GoPrevCmd(0);
         return;
+
     case VK_DOWN:
         GoPrevCmd(1);
         return;
-    default:
-        v37 = l_cmdName;
-        v38 = l_cmdName - 1;
 
-        if (v37)
+    default: // If any other keys are pressed
+        if (l_lparam)
         {
-            v39 = v38 + 1;
+            int l_defaultCount = (l_lparam - 1) + 1;
 
             do
             {
-                switch (l_identifier)
+                switch (p_keyCode)
                 {
                 case 189:
-                    l_identifier = '_';
+                    p_keyCode = '_';
                     break;
                 case 190:
-                    l_identifier = '.';
+                    p_keyCode = '.';
                     break;
                 case 191:
-                    l_identifier = '*';
+                    p_keyCode = '*';
                     break;
                 }
 
-                if (isalnum(l_identifier) || l_identifier == '_' || l_identifier == ' ' || l_identifier == '.' || l_identifier == '*')
+                if (isalnum(p_keyCode) || p_keyCode == '_' || p_keyCode == ' ' || p_keyCode == '.' || p_keyCode == '*')
                 {
-                    m_textBox[m_txtBoxLen] = l_identifier;
-                    v40 = m_txtBoxLen + 1;
-                    m_txtBoxLen = v40;
-                    m_textBox[v40] = 0;
+                    m_inputBuffer[m_inputLength] = p_keyCode;
+
+                    int newLen = m_inputLength + 1;
+
+                    m_inputLength = newLen;
+                    m_inputBuffer[newLen] = 0;
                 }
 
-                --v39;
+                --l_defaultCount;
 
-            } while (v39);
+            } while (l_defaultCount);
         }
         return;
     }
 }
 
-void ZConsole::UnkFunc5(int p_unkInt1, int p_unkInt2)
+void ZConsole::HandleKeyRelease(int p_keyCode, int p_unused)
 {
-    if (p_unkInt1 == 16)
-        unkByte2 = 0;
+    if (p_keyCode == VK_SHIFT)
+        m_shiftPressed = 0;
 }
 
-void ZConsole::UnkFunc6()
+void ZConsole::ExecuteCommand()
 {
-    char *l_txtBox = &m_textBox[1];
+    char *l_txtBox = &m_inputBuffer[1];
 
-    if (m_textBox[1])
-        UnkFunc12(&m_textBox[1]);
+    if (m_inputBuffer[1])
+        AddToHistory(&m_inputBuffer[1]);
 
-    unkInt3 = 0;
+    m_outputScrollOffset = 0;
 
     char *l_subStr = strtok(l_txtBox, " ");
 
@@ -308,19 +275,19 @@ void ZConsole::UnkFunc6()
 
     if (l_subStr && *l_subStr)
     {
-        char *l_cmdValue = strtok(0, 0); // Uses the same string as the previous strtok call
+        char *l_cmdValue = strtok(0, g_emptyDelimiter); // Uses the same string as the previous strtok call
 
-        if (m_consoleCmd.FindCommandAlt(l_cmd, l_cmdValue))
+        if (m_consoleCmd.ExecuteCommand(l_cmd, l_cmdValue))
         {
             AddCmdText("%s %s", l_cmd, l_cmdValue);
-            m_txtBoxLen = 1;
+            m_inputLength = 1;
             *l_txtBox = 0;
         }
         else
         {
             AddCmdText("%s - Unknown command - use <commands> to display list", l_cmd);
             *l_txtBox = 0;
-            m_txtBoxLen = 1;
+            m_inputLength = 1;
         }
     }
 }
@@ -335,80 +302,82 @@ void ZConsole::UnregisterCommand(ZCmdHandler *p_handler)
     m_consoleCmd.UnregisterCommand(p_handler);
 }
 
-void ZConsole::UnkFunc9(const char *p_str)
+// Probably debug, because it doesn't update the input buffer length
+void ZConsole::ExecuteCommandString(const char *p_cmd)
 {
-    sprintf(m_textBox, ">%s", p_str);
+    sprintf(m_inputBuffer, ">%s", p_cmd);
 
-    UnkFunc6();
+    ExecuteCommand();
 }
 
-void ZConsole::UnkFunc10()
+void ZConsole::ToggleVisibility()
 {
-    unkByte1 = unkByte1 == 0;
+    m_isVisible = m_isVisible == 0;
 }
 
 void ZConsole::GoPrevCmd(bBool p_forwards)
 {
-    if (m_prevCmds[0])
+    if (m_commandHistory[0])
     {
         if (p_forwards)
         {
             do
             {
-                int l_cmdCount = m_cmdCount2 + 1;
-                m_cmdCount2 = l_cmdCount;
+                int l_cmdCount = m_historyCount + 1;
+                m_historyCount = l_cmdCount;
 
                 if (l_cmdCount == 20)
-                    m_cmdCount2 = 0;
+                    m_historyCount = 0;
 
-            } while (!m_prevCmds[m_cmdCount2]);
+            } while (!m_commandHistory[m_historyCount]);
         }
         else
         {
             do
             {
-                if (m_cmdCount2-- == 0)
-                    m_cmdCount2 = 19;
+                if (m_historyCount-- == 0)
+                    m_historyCount = 19;
 
-            } while (!m_prevCmds[m_cmdCount2]);
+            } while (!m_commandHistory[m_historyCount]);
         }
 
-        char *l_newCmd = m_prevCmds[m_cmdCount2];
+        char *l_newCmd = m_commandHistory[m_historyCount];
 
         if (l_newCmd)
         {
-            strcpy(&m_textBox[1], l_newCmd);
-            m_txtBoxLen = strlen(m_textBox);
+            strcpy(&m_inputBuffer[1], l_newCmd);
+
+            m_inputLength = strlen(m_inputBuffer);
         }
     }
 }
 
-void ZConsole::UnkFunc12(const char *p_str)
+void ZConsole::AddToHistory(const char *p_command)
 {
-    char *l_prevCmd = m_prevCmds[m_cmdCount];
+    char *l_prevCmd = m_commandHistory[m_historyIndex];
 
     if (l_prevCmd)
     {
         delete[] l_prevCmd;
     }
 
-    m_prevCmds[m_cmdCount] = new char[strlen(p_str) + 1];
-    strcpy(m_prevCmds[m_cmdCount], p_str);
+    m_commandHistory[m_historyIndex] = new char[strlen(p_command) + 1];
+    strcpy(m_commandHistory[m_historyIndex], p_command);
 
-    int l_newCmdCount = m_cmdCount + 1;
-    bool l_check = m_cmdCount - 19 < 0;
+    int l_newCmdCount = m_historyIndex + 1;
+    bool l_check = m_historyIndex - 19 < 0;
 
-    m_cmdCount = l_newCmdCount;
+    m_historyIndex = l_newCmdCount;
 
     if (l_check == l_newCmdCount > 20)
-        m_cmdCount = 0;
+        m_historyIndex = 0;
 
-    m_cmdCount2 = m_cmdCount;
+    m_historyCount = m_historyIndex;
 }
 
-double ZConsole::UnkFunc13()
+double ZConsole::GetVisibilityProgress()
 {
-    return unkFloat1;
+    return m_visiblityProgress;
 }
 
 /* ----------------- ZConsoleUnk ----------------- */

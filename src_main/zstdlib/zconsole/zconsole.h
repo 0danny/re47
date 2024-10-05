@@ -7,8 +7,8 @@ class ZConsoleUnk;
 
 struct ZConsoleStruct
 {
-    ZConsoleStruct *m_consoleStruct1;
-    ZConsoleStruct *unkInt1;
+    ZConsoleStruct *consoleStruct;
+    char **commandArray;
     int unkInt2;
     int unkInt3;
 };
@@ -18,41 +18,56 @@ struct ZConsoleStruct
 class ZConsole
 {
 public:
-    uint8_t unkByte1;
-    uint8_t unkByte2;
-    uint8_t unkByte3;
-    float unkFloat1;
-    float unkFloat2;
+    // Visibility stuff
+    uint8_t m_isVisible;
+    uint8_t m_shiftPressed;
+    uint8_t m_isAnimating;
+    float m_visiblityProgress;
+    float m_visibilitySpeed;
+
+    // Output box
     char *m_outputBox[1000];
-    int m_prevCmdIndex;
-    int unkInt3;
-    char *m_prevCmds[20];
-    char m_textBox[200];
-    int m_txtBoxLen;
-    int m_cmdCount;
-    int m_cmdCount2;
+    int m_outputIndex;
+    int m_outputScrollOffset;
+
+    // Command history
+    char *m_commandHistory[20];
+    char m_inputBuffer[200];
+    int m_inputLength;
+
+    int m_historyIndex;
+    int m_historyCount;
+
     ZConsoleCommand m_consoleCmd;
-    int unkInt7;
-    uint8_t unkByte5;
+
+    int m_unkInt1;
+    uint8_t m_isAutoCompleting;
+
     ZConsoleStruct *m_consoleStruct;
-    ZConsoleUnk *m_zConsoleUnk;
+    ZConsoleUnk *m_consoleUnk;
 
     ZConsole();
 
-    virtual bBool UnkFunc0();
+    virtual bBool UpdateConsoleVisibility();
+
     virtual void AddCmdText(const char *p_format, ...);
-    virtual char *UnkFunc2(int p_unkInt);
-    virtual uint8_t UnkFunc3();
-    virtual void UnkFunc4(int p_identifier, char *p_cmdName);
-    virtual void UnkFunc5(int p_unkInt1, int p_unkInt2);
-    virtual void UnkFunc6();
+    virtual char *GetOutputLine(int p_offset);
+
+    virtual uint8_t IsAnimating();
+
+    virtual void HandleInput(int p_identifier, int p_lparam);
+    virtual void HandleKeyRelease(int p_keyCode, int p_unused);
+
+    virtual void ExecuteCommand();
     virtual ZCmdNode *RegisterCommand(ZCmdHandler *p_handler);
     virtual void UnregisterCommand(ZCmdHandler *p_handler);
-    virtual void UnkFunc9(const char *p_str);
-    virtual void UnkFunc10();
+
+    virtual void ExecuteCommandString(const char *p_cmd);
+    virtual void ToggleVisibility();
+
     virtual void GoPrevCmd(bBool p_forwards);
-    virtual void UnkFunc12(const char *p_str);
-    virtual double UnkFunc13();
+    virtual void AddToHistory(const char *p_command);
+    virtual double GetVisibilityProgress();
 };
 
 #pragma pack(pop)

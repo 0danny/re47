@@ -1,5 +1,8 @@
 #include "constructors.h"
 
+// Hooks constructors so that we can test our implementations.
+// This causes a slight mem leak because the original allocated ptrs are not free'd when the constructors are hooked.
+
 namespace Constructors
 {
     void CreateHooks()
@@ -54,7 +57,10 @@ namespace Constructors
 
         ZConsole *res = new ZConsole();
 
-        res->AddCmdText("ZConsole broken intooooooo!!!!");
+        res->AddCmdText("-----------------------------------");
+        res->AddCmdText("[IMPLEMENTATION SWAP] - Loaded");
+        res->AddCmdText(" ** Re47 Project **");
+        res->AddCmdText("-----------------------------------");
 
         return res;
     }

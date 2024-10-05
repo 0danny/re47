@@ -198,7 +198,7 @@ ZCmdNode *ZConsoleCommand::FindCommand(char *p_commandName, bBool p_searchForwar
     return l_cmdStruct;
 }
 
-bBool ZConsoleCommand::FindCommandAlt(char *p_cmd, char *p_cmdValue)
+bBool ZConsoleCommand::ExecuteCommand(char *p_cmd, char *p_cmdValue)
 {
     ZCmdNode *l_cmdStruct = FindCommand(p_cmd, 1, 1, 0);
 

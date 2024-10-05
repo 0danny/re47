@@ -3,6 +3,7 @@
 #include "zstdlib/reftab/equreftab.h"
 #include "zstdlib/reftab/strreftab.h"
 #include "zstdlib/zconsole/zconsole.h"
+#include "utilities.h"
 
 #include "MinHook.h"
 

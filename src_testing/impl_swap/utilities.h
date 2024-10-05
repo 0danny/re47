@@ -1,7 +1,11 @@
+#pragma once
+
 #include <windows.h>
 
 namespace Utilities
 {
+    static const char *TITLE = "Implementation Swap - 0.0.1";
+
     static char *GetFileName(LPCSTR filePath)
     {
         const char *lastSlash = strrchr(filePath, '\\');

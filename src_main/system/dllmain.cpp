@@ -1,5 +1,4 @@
 #include <windows.h>
-#include "zstdlib/reftab/reftab.h"
 
 // TODO: Implement this
 extern "C" __declspec(dllexport) int RunEngine(int p_unkInt)

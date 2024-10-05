@@ -1,153 +1,279 @@
-#pragma once
-
 #include <windows.h>
+#include "common.h"
 
-// Virtual base class for the ZSysInterface
-
-class ZSysInterfaceBase
+class ZSysInterface
 {
 public:
-    int Func1();                                // VTABLE 0x0 0xFFA9890
-    ~ZSysInterfaceBase();                       // VTABLE 0x4 0xFFA9290
-    virtual int Func2() = 0;                    // VTABLE 0x8 0xFFAB510
-    virtual int Func3() = 0;                    // VTABLE 0xC 0xFFB0B50
-    virtual int Func4() = 0;                    // VTABLE 0x10 0xFFB0BF0
-    virtual int Func5() = 0;                    // VTABLE 0x14 0xFFAB760
-    virtual int Func6() = 0;                    // VTABLE 0x18 0xFFB0270
-    virtual int Func7() = 0;                    // VTABLE 0x1C 0xFFADFF0
-    virtual int Func8() = 0;                    // VTABLE 0x20 0xFFAB8C0
-    virtual int Func9() = 0;                    // VTABLE 0x24 0xFFB09E0
-    virtual void Func10() = 0;                  // VTABLE 0x28 0xFFADEB0
-    virtual int Func11() = 0;                   // VTABLE 0x2C 0xFFACB20
-    virtual int Func12() = 0;                   // VTABLE 0x30 0xFFACB90
-    virtual int Func13() = 0;                   // VTABLE 0x34 0xFFACBE0
-    virtual int Func14() = 0;                   // VTABLE 0x38 0xFFAE010
-    virtual int Func15() = 0;                   // VTABLE 0x3C 0xFFACC50
-    virtual int Func16() = 0;                   // VTABLE 0x40 0xFFACCB0
-    virtual int Func17() = 0;                   // VTABLE 0x44 0xFFACD10
-    virtual int Func18() = 0;                   // VTABLE 0x48 0xFFACD70
-    virtual int Func19() = 0;                   // VTABLE 0x4C 0xFFACD90
-    virtual int Func20() = 0;                   // VTABLE 0x50 0xFFACDC0
-    virtual int Func21() = 0;                   // VTABLE 0x54 0xFFACDF0
-    virtual int Func22() = 0;                   // VTABLE 0x58 0xFFACE50
-    virtual int Func23() = 0;                   // VTABLE 0x5C 0xFFB0C50
-    virtual int Func24() = 0;                   // VTABLE 0x60 0xFFAE2D0
-    virtual int Func25() = 0;                   // VTABLE 0x64 0xFFAB910
-    virtual int Func26() = 0;                   // VTABLE 0x68 0xFFABBE0
-    virtual int Func27() = 0;                   // VTABLE 0x6C 0xFFABE10
-    virtual int Func28() = 0;                   // VTABLE 0x70 0xFFAC040
-    virtual int Func29() = 0;                   // VTABLE 0x74 0xFFAC270
-    virtual int Func30() = 0;                   // VTABLE 0x78 0xFFAC4A0
-    virtual int Func31() = 0;                   // VTABLE 0x7C 0xFFAC6D0
-    virtual int Func32() = 0;                   // VTABLE 0x80 0xFFADF10
-    virtual int Func33() = 0;                   // VTABLE 0x84 0xFFAD0D0
-    virtual int Func34() = 0;                   // VTABLE 0x88 0xFFAE300
-    virtual int Func35() = 0;                   // VTABLE 0x8C 0xFFB1010
-    virtual int Func36() = 0;                   // VTABLE 0x90 0xFFB10F0
-    virtual int Func37() = 0;                   // VTABLE 0x94 0xFFB1140
-    virtual int Func38() = 0;                   // VTABLE 0x98 0xFFB1230
-    virtual int Func39() = 0;                   // VTABLE 0x9C 0xFFB1310
-    virtual void Func40(LPSTR commandLine) = 0; // VTABLE 0xA0 0xFFAD290
-    virtual int Func41() = 0;                   // VTABLE 0xA4 0xFFAD1F0
-    virtual int NullSub1() = 0;                 // VTABLE 0xA8 0xNULLSUB
-    virtual int NullSub2() = 0;                 // VTABLE 0xAC 0xNULLSUB
-    virtual int Func44() = 0;                   // VTABLE 0xB0 0xFFB0950
-    virtual int NullSub3() = 0;                 // VTABLE 0xB4 0xNULLSUB
-    virtual int Func46() = 0;                   // VTABLE 0xB8 0xFFB0990
-    virtual int Func47() = 0;                   // VTABLE 0xBC 0xFFB1370
-    virtual int Func48() = 0;                   // VTABLE 0xC0 0xFFB1330
-    virtual int Func49() = 0;                   // VTABLE 0xC4 0xFFAD510
-    virtual int NullSub4() = 0;                 // VTABLE 0xC8 0xNULLSUB
-    virtual int Func51() = 0;                   // VTABLE 0xCC 0xFFB1730
-    int Func52();                               // VTABLE 0xD0 0xFFA95E0
-    virtual int Func53() = 0;                   // VTABLE 0xD4 0xFFB07F0
-    virtual int Func54() = 0;                   // VTABLE 0xD8 0xFFB0860
-    virtual int Func55() = 0;                   // VTABLE 0xDC 0xFFB08E0
-    int Func56();                               // VTABLE 0xE0 0xFFAA720
-    int Func57();                               // VTABLE 0xE4 0xFFAA750
-    int Func58();                               // VTABLE 0xE8 0xFFAA780
-    int Func59();                               // VTABLE 0xEC 0xFFA9B20
-    int Func60();                               // VTABLE 0xF0 0xFFAA660
-    int Func61();                               // VTABLE 0xF4 0xFFAA690
-    int Func62();                               // VTABLE 0xF8 0xFFAA6C0
-    int Func63();                               // VTABLE 0xFC 0xFFAA6F0
-    int Func64();                               // VTABLE 0x100 0xFFA9690
-    int Func65();                               // VTABLE 0x104 0xFFA98C0
-    int Func66();                               // VTABLE 0x108 0xFFA9CF0
-    virtual int Func67() = 0;                   // VTABLE 0x10C 0xFFB17A0
-    int Func68();                               // VTABLE 0x110 0xFFA9600
-    int Func69();                               // VTABLE 0x114 0xFFA9D40
-    int Func70();                               // VTABLE 0x118 0xFFA9F80
-    int Func71();                               // VTABLE 0x11C 0xFFAA1F0
-    int Func72();                               // VTABLE 0x120 0xFFAA3D0
-    int Func73();                               // VTABLE 0x124 0xFFAA5C0
-    virtual int Func74() = 0;                   // VTABLE 0x128 0xFFB1740
-};
+    virtual bBool UnkFunc0() = 0;
+    virtual ~ZSysInterface() = 0;
+    virtual int InitializeResources() = 0;
+    virtual bBool ProcessWindowMessages(HWND) = 0;
+    virtual void UnkFunc3() = 0;
+    virtual LRESULT DispatchAndAllocateMessage(WPARAM, const void *, int) = 0;
+    virtual char UnkFunc5(const char *, int) = 0;
+    virtual void ChangeDisplaySettings() = 0;
+    virtual char PrintStatus(char) = 0;
+    virtual int UnkFunc8() = 0;
+    virtual void UnkFunc9() = 0;
+    virtual void *InitActionMap() = 0;
+    virtual void FreeActionMap() = 0;
+    virtual uint8_t *UnkFunc12() = 0;
+    virtual void UnkFunc13() = 0;
+    virtual char UnkFunc14(int) = 0;
+    virtual char UnkFunc15(int) = 0;
+    virtual char UnkFunc16(int) = 0;
+    virtual bBool IsKeyPressed(int p_vKey) = 0;
+    virtual char UnkFunc18(int) = 0;
+    virtual char UnkFunc19(int) = 0;
+    virtual WORD UnkFunc20(UINT) = 0;
+    virtual char **UnkFunc21(char **, int) = 0;
+    virtual BOOL SetWindowTitle(const char *) = 0;
+    virtual int UnkFunc23(int) = 0;
+    virtual int UnkFunc24() = 0;
+    virtual void UnkFunc25(const char *) = 0;
+    virtual void UnkFunc26(const char *) = 0;
+    virtual void UnkFunc27(const char *) = 0;
+    virtual void UnkFunc28(const char *) = 0;
+    virtual void UnkFunc29(const char *) = 0;
+    virtual char **UnkFunc30(char **, int) = 0;
+    virtual int UnkFunc31() = 0;
+    virtual void GenerateUniqueFilename() = 0;
+    virtual void UnkFunc33() = 0;
+    virtual double UnkFunc34() = 0;
+    virtual int UnkFunc35() = 0;
+    virtual int64_t UnkFunc36() = 0;
+    virtual void UnkFunc37() = 0;
+    virtual void Sleep(DWORD p_milliseconds) = 0;
+    virtual void Init(char *p_cmdLineArgs) = 0;
+    virtual char Restart(int) = 0;
+    virtual void UnkFunc40(int, int, int) = 0;
+    virtual void UnkFunc41(int, int) = 0;
+    virtual int UnkFunc42(char *) = 0;
+    virtual char UnkFunc43(int) = 0;
+    virtual void UnkFunc44() = 0;
+    virtual int UnkFunc45(int, int) = 0;
+    virtual void UnkFunc46(int, int, int, int, char *, ...) = 0;
+    virtual void UnkFunc47(int, int, int, char *, ...) = 0;
+    virtual void UnkFunc48(int, char *, ...) = 0;
+    virtual int UnkFunc49(int) = 0;
+    virtual int UnkFunc50(int) = 0;
+    virtual int UnkFunc51(int) = 0;
+    virtual int GetConsole() = 0;
+    virtual int UnkFunc53(int, int, int) = 0;
+    virtual int UnkFunc54(int, int) = 0;
+    virtual double UnkFunc55(int, int) = 0;
+    virtual double UnkFunc56(int, int) = 0;
+    virtual int UnkFunc57(const void *, unsigned int, int, const char *, int) = 0;
+    virtual char UnkFunc58(char *, unsigned int, int, int, int) = 0;
+    virtual int UnkFunc59(int, int, int, int, int) = 0;
+    virtual int UnkFunc60(int, int) = 0;
+    virtual int UnkFunc61() = 0;
+    virtual void UnkFunc62(const char *) = 0;
+    virtual void UnkFunc63(const char *) = 0;
+    virtual void UnkFunc64() = 0;
+    virtual void UnkFunc65() = 0;
+    virtual ZSysInterface *UnkFunc66(const void *, signed int, int, int) = 0;
+    virtual uint64_t UnkFunc67(int, int) = 0;
+    virtual FARPROC UnkFunc68(int) = 0;
 
-class ZSysInterface : public ZSysInterfaceBase
-{
-public:
-    ZSysInterface();
-
-    // Override all of the virtual functions
-    int Func2();                    // VTABLE 0x8
-    int Func3();                    // VTABLE 0xC
-    int Func4();                    // VTABLE 0x10
-    int Func5();                    // VTABLE 0x14
-    int Func6();                    // VTABLE 0x18
-    int Func7();                    // VTABLE 0x1C
-    int Func8();                    // VTABLE 0x20
-    int Func9();                    // VTABLE 0x24
-    void Func10();                  // VTABLE 0x28
-    int Func11();                   // VTABLE 0x2C
-    int Func12();                   // VTABLE 0x30
-    int Func13();                   // VTABLE 0x34
-    int Func14();                   // VTABLE 0x38
-    int Func15();                   // VTABLE 0x3C
-    int Func16();                   // VTABLE 0x40
-    int Func17();                   // VTABLE 0x44
-    int Func18();                   // VTABLE 0x48
-    int Func19();                   // VTABLE 0x4C
-    int Func20();                   // VTABLE 0x50
-    int Func21();                   // VTABLE 0x54
-    int Func22();                   // VTABLE 0x58
-    int Func23();                   // VTABLE 0x5C
-    int Func24();                   // VTABLE 0x60
-    int Func25();                   // VTABLE 0x64
-    int Func26();                   // VTABLE 0x68
-    int Func27();                   // VTABLE 0x6C
-    int Func28();                   // VTABLE 0x70
-    int Func29();                   // VTABLE 0x74
-    int Func30();                   // VTABLE 0x78
-    int Func31();                   // VTABLE 0x7C
-    int Func32();                   // VTABLE 0x80
-    int Func33();                   // VTABLE 0x84
-    int Func34();                   // VTABLE 0x88
-    int Func35();                   // VTABLE 0x8C
-    int Func36();                   // VTABLE 0x90
-    int Func37();                   // VTABLE 0x94
-    int Func38();                   // VTABLE 0x98
-    int Func39();                   // VTABLE 0x9C
-    void Func40(LPSTR commandLine); // VTABLE 0xA0
-    int Func41();                   // VTABLE 0xA4
-    int NullSub1();                 // VTABLE 0xA8
-    int NullSub2();                 // VTABLE 0xAC
-    int Func44();                   // VTABLE 0xB0
-    int NullSub3();                 // VTABLE 0xB4
-    int Func46();                   // VTABLE 0xB8
-    int Func47();                   // VTABLE 0xBC
-    int Func48();                   // VTABLE 0xC0
-    int Func49();                   // VTABLE 0xC4
-    int NullSub4();                 // VTABLE 0xC8
-    int Func51();                   // VTABLE 0xCC
-
-    int Func53(); // VTABLE 0xD4
-    int Func54(); // VTABLE 0xD8
-    int Func55(); // VTABLE 0xDC
-    int Func67(); // VTABLE 0x10C
-    int Func74(); // VTABLE 0x128
-
-    ~ZSysInterface(); // VTABLE 0x12C 0xFFADFD0
+    uint8_t m_currentState;
+    uint8_t m_previousState;
+    uint8_t m_isPaused;
+    uint8_t unkByte4;
+    uint8_t m_disablePack;
+    uint8_t m_stereoView;
+    uint8_t m_antiAlias;
+    uint8_t m_disableDXT;
+    uint8_t m_disablePAL;
+    uint8_t m_disableWBuffer;
+    uint8_t m_disableMultiTexture;
+    uint8_t unkByte12;
+    uint8_t m_disableLight;
+    uint8_t m_trilinearFiltering;
+    uint8_t m_windowFlag;
+    uint8_t unkByte12_1;
+    uint8_t m_disableHWTnl;
+    uint8_t m_enableEMBM;
+    uint8_t m_enableTripleBuffering;
+    uint8_t m_debugVideo;
+    uint8_t unkByte12_3;
+    int m_resWidth;
+    int m_resHeight;
+    int unkInt3;
+    int unkInt4;
+    int m_colorDepth;
+    int unkInt6;
+    int m_refreshRate;
+    int unkInt6_1;
+    int m_startUpperPosX;
+    int m_startUpperPosY;
+    int m_backColor;
+    int m_anisotropy;
+    int m_shadowDetail;
+    uint8_t m_noBlood;
+    uint8_t m_pathFinderInof;
+    uint8_t m_enableScriptRTC;
+    uint8_t m_disableOptions;
+    int m_textureResolution;
+    int m_levelOfDetail;
+    int unkInt14;
+    int unkInt15;
+    int unkInt16;
+    int unkInt17;
+    uint8_t unkPad2[120];
+    int unkInt18;
+    int unkInt19;
+    uint8_t unkPad3[120];
+    int unkInt20;
+    int unkInt21;
+    uint8_t unkPad4[120];
+    int unkInt22;
+    int unkInt23;
+    uint8_t unkPad5[120];
+    int unkInt24;
+    int unkInt25;
+    uint8_t unkPad6[120];
+    int m_defaultScene;
+    int unkInt26;
+    uint8_t unkPad7[120];
+    int unkInt27;
+    int unkInt28;
+    uint8_t unkPad8[120];
+    int unkInt29;
+    int unkInt30;
+    uint8_t unkPad9[120];
+    int unkInt31;
+    int unkInt32;
+    uint8_t unkPad10[120];
+    int unkInt33;
+    int unkInt34;
+    uint8_t unkPad11[120];
+    int unkInt35;
+    int unkInt36;
+    uint8_t unkPad12[120];
+    int unkInt37;
+    int unkInt38;
+    uint8_t unkPad13[120];
+    int m_animFile;
+    int unkInt40;
+    uint8_t unkPad14[120];
+    int unkInt41;
+    int unkInt42;
+    uint8_t unkPad15[120];
+    int unkInt43;
+    int unkInt44;
+    uint8_t unkPad16[120];
+    int unkInt45;
+    int unkInt46;
+    uint8_t unkPad17[120];
+    int unkInt47;
+    int unkInt48;
+    uint8_t unkPad18[120];
+    int unkInt49;
+    int unkInt50;
+    uint8_t unkPad19[120];
+    int unkInt51;
+    int unkInt52;
+    uint8_t unkPad20[120];
+    int unkInt53;
+    int unkInt54;
+    uint8_t unkPad21[120];
+    int unkInt55;
+    int unkInt56;
+    int unkInt58;
+    int unkInt59;
+    float m_enableTimers;
+    float m_enableDebugOptions;
+    int m_info;
+    HWND m_dllHinst;
+    int unkInt63;
+    HWND m_messageWindow;
+    HWND m_mainHwnd;
+    int unkInt66;
+    int unkInt67;
+    int unkInt68;
+    int unkInt69;
+    int unkInt70;
+    int unkInt71;
+    int unkInt72;
+    int unkInt73;
+    int unkInt74;
+    uint8_t unkPad22[3840];
+    uint8_t unkPad23[7680];
+    int m_zInputActions;
+    int unkInt76;
+    int unkInt77;
+    int unkInt78;
+    int unkInt79;
+    int unkInt80;
+    int unkInt81;
+    int unkInt82;
+    int unkInt83;
+    uint8_t unkPad23_1[8];
+    int unkInt84;
+    int unkInt85;
+    int unkInt86;
+    uint32_t *m_engineResource;
+    int m_masterProject;
+    int unkInt89;
+    uint8_t unkPad24[120];
+    int unkInt90;
+    int unkInt91;
+    uint8_t unkPad25[120];
+    uint8_t unkByte22;
+    uint8_t m_disableTextures;
+    uint8_t unkByte25;
+    uint8_t m_isInitialized;
+    bBool m_isMessagingEnabled;
+    uint8_t m_disableConfig;
+    uint8_t unkByte27;
+    uint8_t unkByte28;
+    int unkInt92;
+    int unkInt93;
+    int unkInt94;
+    int unkInt95;
+    int unkInt96;
+    int unkInt97;
+    int unkInt98;
+    uint8_t unkPad26[120];
+    uint8_t m_scriptDebug;
+    uint8_t m_scriptDebugPrint;
+    uint8_t unkPad27[2];
+    float unkFloat1;
+    int unkInt99;
+    uint8_t unkByte30;
+    uint8_t unkPad28[128];
+    int unkInt100;
+    int unkInt101;
+    int unkInt102;
+    int unkInt103;
+    uint8_t m_saveRecordRuntime;
+    int unkInt104;
+    int unkInt105;
+    int unkInt106;
+    int unkInt107;
+    int unkInt108;
+    int m_consoleInstance;
+    uint8_t unkByte31_1;
+    int unkInt110;
+    uint8_t m_messageFlag;
+    int unkInt111;
+    int unkInt112;
+    uint8_t unkPad29[120];
+    uint8_t m_useTryCatchLoop;
+    int unkInt113;
+    int m_windowTitle;
+    int m_defaultTitle;
+    uint8_t unkPad30[120];
+    int m_emptyCharArray;
+    int unkInt117;
+    uint8_t unkPad31[120];
+    uint8_t m_reloadEngine;
+    int unkInt118;
+    int unkInt119;
+    float unkFloat2;
+    int unkInt120;
+    void *sub_FFAE110;
 };
 
 extern __declspec(dllimport) ZSysInterface *g_pSysInterface;

@@ -1,6 +1,6 @@
-#include "System/zsysinterface.h"
-#include "System/zsyscom.h"
-#include "System/zsysfile.h"
+#include "system/zsysinterface.h"
+#include "system/zsyscom.h"
+#include "system/zsysfile.h"
 
 // Not sure what dll this class is implemented in.
 class ZSysInput;

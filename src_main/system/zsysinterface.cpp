@@ -8,220 +8,295 @@ ZSysInterface::~ZSysInterface()
 {
 }
 
-int ZSysInterface::Func2() { return 2; } // VTABLE 0x8 0xFFAB510
-
-int ZSysInterface::Func3() { return 3; } // VTABLE 0xC 0xFFB0B50
-
-int ZSysInterface::Func4() { return 4; } // VTABLE 0x10 0xFFB0BF0
-
-int ZSysInterface::Func5() { return 5; } // VTABLE 0x14 0xFFAB760
-
-int ZSysInterface::Func6() { return 6; } // VTABLE 0x18 0xFFB0270
-
-int ZSysInterface::Func7() { return 7; } // VTABLE 0x1C 0xFFADFF0
-
-int ZSysInterface::Func8() { return 8; } // VTABLE 0x20 0xFFAB8C0
-
-int ZSysInterface::Func9() { return 9; } // VTABLE 0x24 0xFFB09E0
-
-void ZSysInterface::Func10() { return; } // VTABLE 0x28 0xFFADEB0
-
-int ZSysInterface::Func11() { return 11; } // VTABLE 0x2C 0xFFACB20
-
-int ZSysInterface::Func12() { return 12; } // VTABLE 0x30 0xFFACB90
-
-int ZSysInterface::Func13() { return 13; } // VTABLE 0x34 0xFFACBE0
-
-int ZSysInterface::Func14() { return 14; } // VTABLE 0x38 0xFFAE010
-
-int ZSysInterface::Func15() { return 15; } // VTABLE 0x3C 0xFFACC50
-
-int ZSysInterface::Func16() { return 16; } // VTABLE 0x40 0xFFACCB0
-
-int ZSysInterface::Func17() { return 17; } // VTABLE 0x44 0xFFACD10
-
-int ZSysInterface::Func18() { return 18; } // VTABLE 0x48 0xFFACD70
-
-int ZSysInterface::Func19() { return 19; } // VTABLE 0x4C 0xFFACD90
-
-int ZSysInterface::Func20() { return 20; } // VTABLE 0x50 0xFFACDC0
-
-int ZSysInterface::Func21() { return 21; } // VTABLE 0x54 0xFFACDF0
-
-int ZSysInterface::Func22() { return 22; } // VTABLE 0x58 0xFFACE50
-
-int ZSysInterface::Func23() { return 23; } // VTABLE 0x5C 0xFFB0C50
-
-int ZSysInterface::Func24() { return 24; } // VTABLE 0x60 0xFFAE2D0
-
-int ZSysInterface::Func25() { return 25; } // VTABLE 0x64 0xFFAB910
-
-int ZSysInterface::Func26() { return 26; } // VTABLE 0x68 0xFFABBE0
-
-int ZSysInterface::Func27() { return 27; } // VTABLE 0x6C 0xFFABE10
-
-int ZSysInterface::Func28() { return 28; } // VTABLE 0x70 0xFFAC040
-
-int ZSysInterface::Func29() { return 29; } // VTABLE 0x74 0xFFAC270
-
-int ZSysInterface::Func30() { return 30; } // VTABLE 0x78 0xFFAC4A0
-
-int ZSysInterface::Func31() { return 31; } // VTABLE 0x7C 0xFFAC6D0
-
-int ZSysInterface::Func32() { return 32; } // VTABLE 0x80 0xFFADF10
-
-int ZSysInterface::Func33() { return 33; } // VTABLE 0x84 0xFFAD0D0
-
-int ZSysInterface::Func34() { return 34; } // VTABLE 0x88 0xFFAE300
-
-int ZSysInterface::Func35() { return 35; } // VTABLE 0x8C 0xFFB1010
-
-int ZSysInterface::Func36() { return 36; } // VTABLE 0x90 0xFFB10F0
-
-int ZSysInterface::Func37() { return 37; } // VTABLE 0x94 0xFFB1140
-
-int ZSysInterface::Func38() { return 38; } // VTABLE 0x98 0xFFB1230
-
-int ZSysInterface::Func39() { return 39; } // VTABLE 0x9C 0xFFB1310
-
-// VTABLE 0xA0 0xFFAD290
-void ZSysInterface::Func40(LPSTR commandLine)
+bBool ZSysInterface::UnkFunc0()
 {
+    return false;
 }
 
-int ZSysInterface::Func41() { return 41; } // VTABLE 0xA4
-
-int ZSysInterface::NullSub1() { return 42; } // VTABLE 0xA8
-
-int ZSysInterface::NullSub2() { return 43; } // VTABLE 0xAC
-
-int ZSysInterface::Func44() { return 44; } // VTABLE 0xB0
-
-int ZSysInterface::NullSub3() { return 45; } // VTABLE 0xB4
-
-int ZSysInterface::Func46() { return 46; } // VTABLE 0xB8
-
-int ZSysInterface::Func47() { return 47; } // VTABLE 0xBC
-
-int ZSysInterface::Func48() { return 48; } // VTABLE 0xC0
-
-int ZSysInterface::Func49() { return 49; } // VTABLE 0xC4
-
-int ZSysInterface::NullSub4() { return 50; } // VTABLE 0xC8
-
-int ZSysInterface::Func51() { return 51; } // VTABLE 0xCC
-
-int ZSysInterface::Func53() { return 53; } // VTABLE 0xD4
-
-int ZSysInterface::Func54() { return 54; } // VTABLE 0xD8
-
-int ZSysInterface::Func55() { return 55; } // VTABLE 0xDC
-
-int ZSysInterface::Func67()
-{
-    return 67;
-} // VTABLE 0x10C
-
-int ZSysInterface::Func74()
-{
-    return 74;
-} // VTABLE 0x128
-
-int ZSysInterfaceBase::Func1()
+int ZSysInterface::InitializeResources()
 {
     return 0;
 }
 
-ZSysInterfaceBase::~ZSysInterfaceBase()
-{
-}
+void ZSysInterface::UnkFunc3() {}
 
-int ZSysInterfaceBase::Func52()
-{
-    return 0;
-}
+void ZSysInterface::ChangeDisplaySettings() {}
 
-int ZSysInterfaceBase::Func56()
+int ZSysInterface::UnkFunc8()
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func57()
+void ZSysInterface::UnkFunc9() {}
+
+void *ZSysInterface::InitActionMap()
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func58()
+void ZSysInterface::FreeActionMap() {}
+
+bBool ZSysInterface::ProcessWindowMessages(HWND hwnd)
+{
+    return false;
+}
+
+LRESULT ZSysInterface::DispatchAndAllocateMessage(WPARAM wParam, const void *message, int param)
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func59()
+char ZSysInterface::UnkFunc5(const char *str, int param)
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func60()
+char ZSysInterface::PrintStatus(char status)
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func61()
+bBool ZSysInterface::IsKeyPressed(int vKey)
+{
+    return false;
+}
+
+char ZSysInterface::UnkFunc14(int param)
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func62()
+char ZSysInterface::UnkFunc15(int param)
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func63()
+char ZSysInterface::UnkFunc16(int param)
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func64()
+char ZSysInterface::UnkFunc18(int param)
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func65()
+char ZSysInterface::UnkFunc19(int param)
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func66()
+WORD ZSysInterface::UnkFunc20(UINT param)
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func68()
+char **ZSysInterface::UnkFunc21(char **str, int param)
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func69()
+BOOL ZSysInterface::SetWindowTitle(const char *title)
+{
+    return FALSE;
+}
+
+int ZSysInterface::UnkFunc23(int param)
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func70()
+int ZSysInterface::UnkFunc24()
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func71()
+void ZSysInterface::UnkFunc25(const char *msg)
+{
+}
+
+void ZSysInterface::UnkFunc26(const char *msg)
+{
+}
+
+void ZSysInterface::UnkFunc27(const char *msg)
+{
+}
+
+void ZSysInterface::UnkFunc28(const char *msg)
+{
+}
+
+void ZSysInterface::UnkFunc29(const char *msg)
+{
+}
+
+char **ZSysInterface::UnkFunc30(char **str, int param)
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func72()
+int ZSysInterface::UnkFunc31()
 {
     return 0;
 }
 
-int ZSysInterfaceBase::Func73()
+void ZSysInterface::GenerateUniqueFilename() {}
+
+void ZSysInterface::UnkFunc33() {}
+
+double ZSysInterface::UnkFunc34()
+{
+    return 0.0;
+}
+
+int ZSysInterface::UnkFunc35()
+{
+    return 0;
+}
+
+int64_t ZSysInterface::UnkFunc36()
+{
+    return 0;
+}
+
+void ZSysInterface::UnkFunc37() {}
+
+void ZSysInterface::Sleep(DWORD milliseconds)
+{
+    ::Sleep(milliseconds);
+}
+
+void ZSysInterface::Init(char *p_cmdLineArgs) {}
+
+char ZSysInterface::Restart(int param)
+{
+    return 0;
+}
+
+void ZSysInterface::UnkFunc40(int param1, int param2, int param3) {}
+
+void ZSysInterface::UnkFunc41(int param1, int param2) {}
+
+int ZSysInterface::UnkFunc42(char *msg)
+{
+    return 0;
+}
+
+char ZSysInterface::UnkFunc43(int param)
+{
+    return 0;
+}
+
+void ZSysInterface::UnkFunc44() {}
+
+int ZSysInterface::UnkFunc45(int param1, int param2)
+{
+    return 0;
+}
+
+void ZSysInterface::UnkFunc46(int param1, int param2, int param3, int param4, char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    va_end(args);
+}
+
+void ZSysInterface::UnkFunc47(int param1, int param2, int param3, char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    va_end(args);
+}
+
+void ZSysInterface::UnkFunc48(int param1, char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    va_end(args);
+}
+
+int ZSysInterface::UnkFunc49(int param)
+{
+    return 0;
+}
+
+int ZSysInterface::UnkFunc50(int param)
+{
+    return 0;
+}
+
+int ZSysInterface::UnkFunc51(int param)
+{
+    return 0;
+}
+
+int ZSysInterface::GetConsole()
+{
+    return m_consoleInstance;
+}
+
+int ZSysInterface::UnkFunc53(int param1, int param2, int param3)
+{
+    return 0;
+}
+
+int ZSysInterface::UnkFunc54(int param1, int param2)
+{
+    return 0;
+}
+
+double ZSysInterface::UnkFunc55(int param1, int param2)
+{
+    return 0.0;
+}
+
+double ZSysInterface::UnkFunc56(int param1, int param2)
+{
+    return 0.0;
+}
+
+int ZSysInterface::UnkFunc57(const void *ptr, unsigned int param1, int param2, const char *str, int param3)
+{
+    return 0;
+}
+
+char ZSysInterface::UnkFunc58(char *str, unsigned int param1, int param2, int param3, int param4)
+{
+    return 0;
+}
+
+int ZSysInterface::UnkFunc59(int param1, int param2, int param3, int param4, int param5)
+{
+    return 0;
+}
+
+int ZSysInterface::UnkFunc60(int param1, int param2)
+{
+    return 0;
+}
+
+int ZSysInterface::UnkFunc61()
+{
+    return 0;
+}
+
+void ZSysInterface::UnkFunc62(const char *msg) {}
+void ZSysInterface::UnkFunc63(const char *msg) {}
+void ZSysInterface::UnkFunc64() {}
+void ZSysInterface::UnkFunc65() {}
+
+ZSysInterface *ZSysInterface::UnkFunc66(const void *ptr, signed int param1, int param2, int param3)
+{
+    return 0;
+}
+
+uint64_t ZSysInterface::UnkFunc67(int param1, int param2)
+{
+    return 0;
+}
+
+FARPROC ZSysInterface::UnkFunc68(int param)
 {
     return 0;
 }

@@ -2,57 +2,59 @@
 
 #include "system/zsyscom.h"
 
-// TODO: Clean this whole class up
+class ZCmdHandler;
+class ZCmdHandlerBase;
 
-class ZCmdClass;
-class ZCmdClassBase;
-
-struct ZCmdStruct
+struct ZCmdNode
 {
-    ZCmdStruct *cmdStruct1;
-    ZCmdStruct *cmdStruct2;
-    ZCmdStruct *cmdStruct3;
-    ZCmdStruct *cmdStruct4;
-    ZCmdClass *cmdClass;
+    // Command linked list
+    ZCmdNode *next;
+    ZCmdNode *prev;
+
+    // Same command linked list
+    ZCmdNode *prevSameCommand;
+    ZCmdNode *nextSameCommand;
+
+    ZCmdHandler *cmdHandler;
 };
 
 class ZConsoleCommand
 {
 public:
-    ZCmdStruct *m_cmdStruct;
-    ZCmdClass *m_cmdClass;
+    ZCmdNode *m_cmdNodeRoot;
+    ZCmdHandler *m_cmdHandler;
 
     ZConsoleCommand();
 
-    virtual ZCmdStruct *UnkFunc1(ZCmdClass *p_cmdClass);
-    virtual void UnkFunc2(ZCmdClass *p_cmdClass);
-    virtual ZCmdStruct *UnkFunc3(char *p_str, bool p_flag, bool p_flag2, ZCmdStruct *p_cmdStruct);
-    virtual bBool UnkFunc4(char *p_cmd, char *p_cmdValue);
+    virtual ZCmdNode *RegisterCommand(ZCmdHandler *p_handler);
+    virtual void UnregisterCommand(ZCmdHandler *p_handler);
+    virtual ZCmdNode *FindCommand(char *p_commandName, bool p_searchForward, bool p_exactMatch, ZCmdNode *p_startNode);
+    virtual bBool ExecuteCommand(char *p_cmd, char *p_cmdValue);
     virtual void PrintStatus(char *p_cmdValue);
-    virtual ZCmdStruct *GetCmdStruct();
+    virtual ZCmdNode *GetCmdRoot();
 
     void Destroy();
 };
 
-class ZCmdClassBase
+class ZCmdHandlerBase
 {
 public:
-    ZCmdClassBase();
+    ZCmdHandlerBase();
 
-    virtual ~ZCmdClassBase();
+    virtual ~ZCmdHandlerBase();
     virtual void UnkFunc0();
-    virtual void UnkFunc1(char *p_cmdValue) = 0;
+    virtual void PrintStatus(char *p_cmdValue) = 0;
 
-    char *m_commandsStr;
+    char *m_cmdName;
 };
 
-class ZCmdClass : public ZCmdClassBase
+class ZCmdHandler : public ZCmdHandlerBase
 {
 public:
-    ZCmdClass(ZConsoleCommand *p_consoleCmd);
+    ZCmdHandler(ZConsoleCommand *p_consoleCmd);
 
-    virtual ~ZCmdClass();
-    void UnkFunc1(char *p_cmdValue);
+    virtual ~ZCmdHandler();
+    void PrintStatus(char *p_cmdValue);
 
     void Destroy();
 

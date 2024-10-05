@@ -6,10 +6,15 @@
 
 // Typedefs
 typedef byte bBool;
+typedef unsigned char uint8_t;
+typedef long int64_t;
+typedef unsigned long uint64_t;
+typedef unsigned int uint32_t;
 
 // return malloc(size & 0x1FFFFFFF);
 
-inline static void *operator new(size_t size)
+inline static void *
+operator new(size_t size)
 {
     if (g_pSysMem)
         // TODO: Implement this when g_pSysMem is available

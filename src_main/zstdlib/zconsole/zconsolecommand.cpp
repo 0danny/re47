@@ -1,250 +1,230 @@
 #include "zconsolecommand.h"
 
-// Crude implementation to get it to work.
-
 /* ------------ ZConsoleCommand ----------------*/
 
 ZConsoleCommand::ZConsoleCommand()
 {
-    m_cmdClass = new ZCmdClass(this);
-    m_cmdStruct = new ZCmdStruct();
+    m_cmdHandler = new ZCmdHandler(this);
+    m_cmdNodeRoot = new ZCmdNode();
 
-    m_cmdStruct->cmdStruct1 = 0;
-    m_cmdStruct->cmdStruct2 = 0;
-    m_cmdStruct->cmdStruct3 = 0;
-    m_cmdStruct->cmdStruct4 = 0;
-    m_cmdStruct->cmdClass = m_cmdClass;
+    m_cmdNodeRoot->next = 0;
+    m_cmdNodeRoot->prev = 0;
+    m_cmdNodeRoot->prevSameCommand = 0;
+    m_cmdNodeRoot->nextSameCommand = 0;
+    m_cmdNodeRoot->cmdHandler = m_cmdHandler;
 }
 
-ZCmdStruct *ZConsoleCommand::UnkFunc1(ZCmdClass *p_cmdClass)
+ZCmdNode *ZConsoleCommand::RegisterCommand(ZCmdHandler *p_handler)
 {
-    ZCmdStruct *l_cmdStruct2; // edi
-    ZCmdStruct *l_malloc;     // eax
-    ZCmdStruct *l_cmdStruct;  // esi
-    ZCmdStruct *l_result;     // eax
-    ZCmdStruct *i;            // eax
-    ZCmdStruct *l_cmdStruct3; // edi
+    ZCmdNode *l_result;
 
-    l_cmdStruct2 = this->m_cmdStruct;
+    ZCmdNode *l_cmdStruct = new ZCmdNode();
 
-    l_malloc = new ZCmdStruct();
+    l_cmdStruct->next = 0;
+    l_cmdStruct->prev = 0;
+    l_cmdStruct->nextSameCommand = 0;
+    l_cmdStruct->prevSameCommand = 0;
+    l_cmdStruct->cmdHandler = p_handler;
 
-    l_cmdStruct = l_malloc;
-    l_malloc->cmdStruct1 = 0;
-    l_malloc->cmdStruct2 = 0;
-    l_malloc->cmdStruct4 = 0;
-    l_malloc->cmdStruct3 = 0;
-    l_malloc->cmdClass = p_cmdClass;
-
-    int strcmpResult = _strcmpi(p_cmdClass->m_commandsStr, l_cmdStruct2->cmdClass->m_commandsStr);
+    int strcmpResult = _strcmpi(p_handler->m_cmdName, m_cmdNodeRoot->cmdHandler->m_cmdName);
 
     if (strcmpResult >= 0)
     {
-        for (i = l_cmdStruct2->cmdStruct1; l_cmdStruct2->cmdStruct1; i = l_cmdStruct2->cmdStruct1)
+        for (ZCmdNode *i = m_cmdNodeRoot->next; m_cmdNodeRoot->next; i = m_cmdNodeRoot->next)
         {
-            if (_strcmpi(p_cmdClass->m_commandsStr, i->cmdClass->m_commandsStr) <= 0)
+            if (_strcmpi(p_handler->m_cmdName, i->cmdHandler->m_cmdName) <= 0)
                 break;
 
-            l_cmdStruct2 = l_cmdStruct2->cmdStruct1;
+            m_cmdNodeRoot = m_cmdNodeRoot->next;
         }
 
-        if (!l_cmdStruct2->cmdStruct1 || _strcmpi(p_cmdClass->m_commandsStr, l_cmdStruct2->cmdStruct1->cmdClass->m_commandsStr))
+        if (!m_cmdNodeRoot->next || _strcmpi(p_handler->m_cmdName, m_cmdNodeRoot->next->cmdHandler->m_cmdName))
         {
-            l_cmdStruct->cmdStruct1 = l_cmdStruct2->cmdStruct1;
-            l_cmdStruct->cmdStruct2 = l_cmdStruct2;
+            l_cmdStruct->next = m_cmdNodeRoot->next;
+            l_cmdStruct->prev = m_cmdNodeRoot;
 
-            l_result = l_cmdStruct2->cmdStruct1;
-            if (l_cmdStruct2->cmdStruct1)
-                l_result->cmdStruct2 = l_cmdStruct;
+            l_result = m_cmdNodeRoot->next;
 
-            l_cmdStruct2->cmdStruct1 = l_cmdStruct;
+            if (m_cmdNodeRoot->next)
+                l_result->prev = l_cmdStruct;
+
+            m_cmdNodeRoot->next = l_cmdStruct;
         }
         else
         {
-            l_cmdStruct3 = l_cmdStruct2->cmdStruct1;
-            l_result = l_cmdStruct3->cmdStruct4;
+            ZCmdNode *l_cmdStruct3 = m_cmdNodeRoot->next;
+            l_result = l_cmdStruct3->nextSameCommand;
 
             if (l_result)
             {
-                l_result->cmdStruct3 = l_cmdStruct;
-                l_cmdStruct->cmdStruct4 = l_cmdStruct3->cmdStruct4;
+                l_result->prevSameCommand = l_cmdStruct;
+                l_cmdStruct->nextSameCommand = l_cmdStruct3->nextSameCommand;
             }
 
-            l_cmdStruct->cmdStruct3 = l_cmdStruct3;
-            l_cmdStruct3->cmdStruct4 = l_cmdStruct;
+            l_cmdStruct->prevSameCommand = l_cmdStruct3;
+            l_cmdStruct3->nextSameCommand = l_cmdStruct;
         }
     }
     else
     {
-        l_cmdStruct->cmdStruct1 = this->m_cmdStruct;
-        this->m_cmdStruct->cmdStruct2 = l_cmdStruct;
-        this->m_cmdStruct = l_cmdStruct;
+        l_cmdStruct->next = m_cmdNodeRoot;
+        m_cmdNodeRoot->prev = l_cmdStruct;
+        m_cmdNodeRoot = l_cmdStruct;
     }
 
     return l_result;
 }
 
-void ZConsoleCommand::UnkFunc2(ZCmdClass *p_cmdClass)
+void ZConsoleCommand::UnregisterCommand(ZCmdHandler *p_handler)
 {
-    ZCmdStruct *m_cmdStruct; // esi
-    char *m_commandsStr;     // edi
-    ZCmdStruct *cmdStruct2;  // eax
-    ZCmdStruct *cmdStruct4;  // ecx
-    ZCmdStruct *cmdStruct1;  // eax
-    ZCmdStruct *v9;          // ecx
-    ZCmdStruct *cmdStruct3;  // eax
-    ZCmdStruct *v11;         // eax
-
-    m_cmdStruct = this->m_cmdStruct;
-
-    if (m_cmdStruct)
+    if (m_cmdNodeRoot)
     {
-        while (_strcmpi(m_cmdStruct->cmdClass->m_commandsStr, p_cmdClass->m_commandsStr))
+        while (_strcmpi(m_cmdNodeRoot->cmdHandler->m_cmdName, p_handler->m_cmdName))
         {
-            m_cmdStruct = m_cmdStruct->cmdStruct1;
+            m_cmdNodeRoot = m_cmdNodeRoot->next;
 
-            if (!m_cmdStruct)
+            if (!m_cmdNodeRoot)
                 return;
         }
 
-        while (m_cmdStruct->cmdClass != p_cmdClass)
+        while (m_cmdNodeRoot->cmdHandler != p_handler)
         {
-            m_cmdStruct = m_cmdStruct->cmdStruct4;
+            m_cmdNodeRoot = m_cmdNodeRoot->nextSameCommand;
 
-            if (!m_cmdStruct)
+            if (!m_cmdNodeRoot)
             {
-                m_commandsStr = p_cmdClass->m_commandsStr;
+                ZSysCom *l_com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\ConsoleCommand.cpp", 215);
+                l_com->UnkFunc4("Command %s not registered in list!", p_handler->m_cmdName);
 
-                ZSysCom *v5 = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\ConsoleCommand.cpp", 215);
-                v5->UnkFunc4("Command %s not registered in list!", m_commandsStr);
                 return;
             }
         }
 
-        if (m_cmdStruct == this->m_cmdStruct)
-            this->m_cmdStruct = m_cmdStruct->cmdStruct1;
+        if (m_cmdNodeRoot == m_cmdNodeRoot)
+            m_cmdNodeRoot = m_cmdNodeRoot->next;
 
-        cmdStruct2 = m_cmdStruct->cmdStruct2;
+        ZCmdNode *cmdStruct2 = m_cmdNodeRoot->prev;
+
         if (cmdStruct2)
         {
-
-            cmdStruct4 = m_cmdStruct->cmdStruct4;
+            ZCmdNode *cmdStruct4 = m_cmdNodeRoot->nextSameCommand;
 
             if (cmdStruct4)
             {
-                cmdStruct4->cmdStruct2 = cmdStruct2;
-                m_cmdStruct->cmdStruct2->cmdStruct1 = m_cmdStruct->cmdStruct4;
+                cmdStruct4->prev = cmdStruct2;
+                m_cmdNodeRoot->prev->next = m_cmdNodeRoot->nextSameCommand;
             }
             else
             {
-                cmdStruct2->cmdStruct1 = m_cmdStruct->cmdStruct1;
+                cmdStruct2->next = m_cmdNodeRoot->next;
             }
         }
 
-        cmdStruct1 = m_cmdStruct->cmdStruct1;
-        if (m_cmdStruct->cmdStruct1)
+        ZCmdNode *cmdStruct1 = m_cmdNodeRoot->next;
+
+        if (m_cmdNodeRoot->next)
         {
-            v9 = m_cmdStruct->cmdStruct4;
-            if (v9)
+            ZCmdNode *cmdStruct4 = m_cmdNodeRoot->nextSameCommand;
+
+            if (cmdStruct4)
             {
-                v9->cmdStruct1 = cmdStruct1;
-                m_cmdStruct->cmdStruct1->cmdStruct2 = m_cmdStruct->cmdStruct4;
+                cmdStruct4->next = cmdStruct1;
+                m_cmdNodeRoot->next->prev = m_cmdNodeRoot->nextSameCommand;
             }
             else
             {
-                cmdStruct1->cmdStruct2 = m_cmdStruct->cmdStruct2;
+                cmdStruct1->prev = m_cmdNodeRoot->prev;
             }
         }
 
-        cmdStruct3 = m_cmdStruct->cmdStruct3;
+        ZCmdNode *cmdStruct3 = m_cmdNodeRoot->prevSameCommand;
 
         if (cmdStruct3)
-            cmdStruct3->cmdStruct4 = m_cmdStruct->cmdStruct4;
+            cmdStruct3->nextSameCommand = m_cmdNodeRoot->nextSameCommand;
 
-        v11 = m_cmdStruct->cmdStruct4;
+        ZCmdNode *cmdStruct5 = m_cmdNodeRoot->nextSameCommand;
 
-        if (v11)
-            v11->cmdStruct3 = m_cmdStruct->cmdStruct3;
+        if (cmdStruct5)
+            cmdStruct5->prevSameCommand = m_cmdNodeRoot->prevSameCommand;
 
-        delete m_cmdStruct;
+        delete m_cmdNodeRoot;
     }
 }
 
-ZCmdStruct *ZConsoleCommand::UnkFunc3(char *p_str, bool p_flag, bool p_flag2, ZCmdStruct *p_cmdStruct)
+ZCmdNode *ZConsoleCommand::FindCommand(char *p_commandName, bool p_searchForward, bool p_exactMatch, ZCmdNode *p_startNode)
 {
-    ZCmdStruct *l_cmdStruct; // esi
-    unsigned int l_strLen;   // kr04_4
+    ZCmdNode *l_cmdStruct;
 
-    if (p_cmdStruct)
+    if (p_startNode)
     {
-        if (p_flag)
-            l_cmdStruct = p_cmdStruct->cmdStruct1;
+        if (p_searchForward)
+            l_cmdStruct = p_startNode->next;
         else
-            l_cmdStruct = p_cmdStruct->cmdStruct2;
+            l_cmdStruct = p_startNode->prev;
     }
     else
     {
-        l_cmdStruct = this->m_cmdStruct;
+        l_cmdStruct = m_cmdNodeRoot;
     }
 
-    l_strLen = strlen(p_str) + 1;
+    UINT l_cmdLength = strlen(p_commandName) + 1;
 
     if (!l_cmdStruct)
-        return p_cmdStruct;
+        return p_startNode;
 
-    while (p_flag2)
+    while (p_exactMatch)
     {
-        if (!_strcmpi(p_str, l_cmdStruct->cmdClass->m_commandsStr))
+        if (!_strcmpi(p_commandName, l_cmdStruct->cmdHandler->m_cmdName))
             return l_cmdStruct;
-    LABEL_11:
 
-        if (p_flag)
-            l_cmdStruct = l_cmdStruct->cmdStruct1;
+    IN_LOOP:
+        if (p_searchForward)
+            l_cmdStruct = l_cmdStruct->next;
         else
-            l_cmdStruct = l_cmdStruct->cmdStruct2;
+            l_cmdStruct = l_cmdStruct->prev;
 
         if (!l_cmdStruct)
-            return p_cmdStruct;
+            return p_startNode;
     }
 
-    if (_strnicmp(p_str, l_cmdStruct->cmdClass->m_commandsStr, l_strLen - 1))
-        goto LABEL_11;
+    if (_strnicmp(p_commandName, l_cmdStruct->cmdHandler->m_cmdName, l_cmdLength - 1))
+        goto IN_LOOP; // thats interesting lol
 
     return l_cmdStruct;
 }
 
-bBool ZConsoleCommand::UnkFunc4(char *p_cmd, char *p_cmdValue)
+bBool ZConsoleCommand::ExecuteCommand(char *p_cmd, char *p_cmdValue)
 {
-    ZCmdStruct *v3; // esi
+    ZCmdNode *l_cmdStruct = FindCommand(p_cmd, 1, 1, 0);
 
-    v3 = this->UnkFunc3(p_cmd, 1, 1, 0);
-
-    if (!v3)
+    if (!l_cmdStruct)
         return 0;
 
     do
     {
-        v3->cmdClass->UnkFunc1(p_cmdValue);
-        v3 = v3->cmdStruct4;
-    } while (v3);
+        l_cmdStruct->cmdHandler->PrintStatus(p_cmdValue);
+
+        l_cmdStruct = l_cmdStruct->nextSameCommand;
+
+    } while (l_cmdStruct);
 
     return 1;
 }
 
 void ZConsoleCommand::PrintStatus(char *p_cmdValue)
 {
-    for (ZCmdStruct *i = m_cmdStruct; i; i = i->cmdStruct1)
+    for (ZCmdNode *i = m_cmdNodeRoot; i; i = i->next)
     {
-        char *l_commandsStr = i->cmdClass->m_commandsStr;
+        char *l_commandsStr = i->cmdHandler->m_cmdName;
 
         ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\ConsoleCommand.cpp", 284);
         l_sysCom->UnkFunc4("%s", l_commandsStr);
     }
 }
 
-ZCmdStruct *ZConsoleCommand::GetCmdStruct()
+ZCmdNode *ZConsoleCommand::GetCmdRoot()
 {
-    return m_cmdStruct;
+    return m_cmdNodeRoot;
 }
 
 void ZConsoleCommand::Destroy()
@@ -252,43 +232,43 @@ void ZConsoleCommand::Destroy()
     // TODO: Implement (0x0FFC8B20)
 }
 
-/* ------------ ZCmdClass ----------------*/
+/* ------------ ZCmdHandler ----------------*/
 
-ZCmdClass::ZCmdClass(ZConsoleCommand *p_consoleCmd) : ZCmdClassBase()
+ZCmdHandler::ZCmdHandler(ZConsoleCommand *p_consoleCmd) : ZCmdHandlerBase()
 {
     m_consoleCmd = p_consoleCmd;
 }
 
-ZCmdClass::~ZCmdClass()
+ZCmdHandler::~ZCmdHandler()
 {
     Destroy();
 }
 
-void ZCmdClass::UnkFunc1(char *p_cmdValue)
+void ZCmdHandler::PrintStatus(char *p_cmdValue)
 {
     m_consoleCmd->PrintStatus(p_cmdValue);
 }
 
-void ZCmdClass::Destroy()
+void ZCmdHandler::Destroy()
 {
-    ZCmdClassBase::~ZCmdClassBase();
+    ZCmdHandlerBase::~ZCmdHandlerBase();
 }
 
-/* ------------ ZCmdClassBase ------------ */
+/* ------------ ZCmdHandlerBase ------------ */
 
-ZCmdClassBase::ZCmdClassBase()
+ZCmdHandlerBase::ZCmdHandlerBase()
 {
-    m_commandsStr = new char[strlen("commands") + 1];
-    strcpy(m_commandsStr, "commands");
+    m_cmdName = new char[strlen("commands") + 1];
+    strcpy(m_cmdName, "commands");
 }
 
-ZCmdClassBase::~ZCmdClassBase()
+ZCmdHandlerBase::~ZCmdHandlerBase()
 {
-    delete[] m_commandsStr;
+    delete[] m_cmdName;
 }
 
 // NULLSUB
-void ZCmdClassBase::UnkFunc0()
+void ZCmdHandlerBase::UnkFunc0()
 {
     return;
 }

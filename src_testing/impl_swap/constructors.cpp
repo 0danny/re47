@@ -52,7 +52,6 @@ namespace Constructors
     {
         printf("[CONSTRUCTOR HOOK]: ZConsoleCommand called\n");
 
-        // we have to put a new ZConsoleCommand inplace of _this
         return new (_this) ZConsoleCommand();
     }
 }

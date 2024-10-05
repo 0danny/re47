@@ -111,4 +111,4 @@ src_testing/impl_swap/utilities.h
 )
     
 target_link_directories(impl_swap PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external_libs)
-target_link_libraries(impl_swap PRIVATE MinHook.x86 globals system kernel32 common)
+target_link_libraries(impl_swap PRIVATE MinHook.x86 globals kernel32 common)

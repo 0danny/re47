@@ -1,9 +1,8 @@
 #include <windows.h>
 #include <csignal>
 
-#include "System/zsysinterface.h"
+#include "system/zsysinterface.h"
 
-// Function prototypes
 void SignalHandler(int signal);
 BOOL DoAlwaysNoConv(HINSTANCE instance);
 
@@ -56,12 +55,9 @@ int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, LPSTR p_lpCmdLine, 
             }
         }
 
-        g_pSysInterface->Func40(l_cmdLinePtr);
+        g_pSysInterface->Init(l_cmdLinePtr);
 
         FreeLibrary(l_systemLib);
-
-        // if (!dword_40703C)
-        // dword_407044();
     }
 
     return 0;

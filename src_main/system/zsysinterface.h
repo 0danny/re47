@@ -1,9 +1,13 @@
+#pragma once
+
 #include <windows.h>
 #include "common.h"
 
 class ZSysInterface
 {
 public:
+    ZSysInterface();
+
     virtual bBool UnkFunc0() = 0;
     virtual ~ZSysInterface() = 0;
     virtual int InitializeResources() = 0;

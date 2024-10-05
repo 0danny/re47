@@ -234,7 +234,46 @@ ZCmdNode *ZConsoleCommand::GetCmdRoot()
 
 void ZConsoleCommand::Destroy()
 {
-    // TODO: Implement (0x0FFC8B20)
+    ZCmdNode *l_nextSame;
+    ZCmdNode *l_rootNode;
+    ZCmdHandler *l_cmdHandler = this->m_cmdHandler;
+
+    char *l_cmdName;
+
+    UnregisterCommand(l_cmdHandler);
+
+    if (l_cmdHandler)
+        l_cmdHandler->~ZCmdHandler();
+
+    for (ZCmdNode *l_curNode = this->m_cmdNodeRoot; l_curNode; l_curNode = this->m_cmdNodeRoot)
+    {
+        l_nextSame = l_curNode->nextSameCommand;
+
+        for (ZCmdNode **l_curSameNode = &l_curNode->nextSameCommand; l_nextSame; l_curSameNode = &l_rootNode->nextSameCommand)
+        {
+            *l_curSameNode = l_nextSame->nextSameCommand;
+
+            l_cmdName = l_nextSame->cmdHandler->m_cmdName;
+
+            ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\ConsoleCommand.cpp", 94);
+            l_sysCom->UnkFunc4("Removing unremoved command '%s'", l_cmdName);
+
+            delete l_nextSame;
+
+            l_rootNode = this->m_cmdNodeRoot;
+            l_nextSame = l_rootNode->nextSameCommand;
+        }
+
+        ZCmdNode *l_rootNode2 = this->m_cmdNodeRoot;
+        this->m_cmdNodeRoot = l_rootNode2->next;
+
+        char *l_cmdName2 = l_rootNode2->cmdHandler->m_cmdName;
+
+        ZSysCom *l_sysCom2 = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\ConsoleCommand.cpp", 99);
+        l_sysCom2->UnkFunc4("Removing unremoved command '%s'", l_cmdName2);
+
+        delete l_rootNode2;
+    }
 }
 
 /* ------------ ZCmdHandler ----------------*/

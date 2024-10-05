@@ -12,8 +12,17 @@ jobs:
         with:
           path: msvc600
           repository: 'itsmattkc/MSVC600'
-      - name: 'build.bat'
+      - name: 'Build CMake project'
         shell: cmd
         run: |
-          set VS6_BIN_PATH=${{ github.workspace }}\msvc600\VC98\Bin
-          build.bat
+          call ${{ github.workspace }}\msvc600\VC98\Bin\VCVARS32.BAT x86
+          cmake -S ${{ github.workspace }} -B build -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=${{ github.workspace }}/bin
+          cmake --build build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: re47-${{ github.sha }}
+          if-no-files-found: error
+          path: |
+            ${{ github.workspace }}\bin\*exe
+            ${{ github.workspace }}\bin\*dll
+            ${{ github.workspace }}\bin\*pdb

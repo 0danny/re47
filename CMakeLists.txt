@@ -48,6 +48,9 @@ src_main/zstdlib/zdynamicloader.h
 
 src_main/zstdlib/zconsole/zconsolecommand.cpp
 src_main/zstdlib/zconsole/zconsolecommand.h
+
+src_main/zstdlib/zconsole/zconsole.cpp
+src_main/zstdlib/zconsole/zconsole.h
 )
 
 # Add System DLL

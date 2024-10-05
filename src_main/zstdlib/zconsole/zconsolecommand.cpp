@@ -156,7 +156,7 @@ void ZConsoleCommand::UnregisterCommand(ZCmdHandler *p_handler)
     }
 }
 
-ZCmdNode *ZConsoleCommand::FindCommand(char *p_commandName, bool p_searchForward, bool p_exactMatch, ZCmdNode *p_startNode)
+ZCmdNode *ZConsoleCommand::FindCommand(char *p_commandName, bBool p_searchForward, bBool p_exactMatch, ZCmdNode *p_startNode)
 {
     ZCmdNode *l_cmdStruct;
 
@@ -198,7 +198,7 @@ ZCmdNode *ZConsoleCommand::FindCommand(char *p_commandName, bool p_searchForward
     return l_cmdStruct;
 }
 
-bBool ZConsoleCommand::PrintCommandStatus(char *p_cmd, char *p_cmdValue)
+bBool ZConsoleCommand::FindCommandAlt(char *p_cmd, char *p_cmdValue)
 {
     ZCmdNode *l_cmdStruct = FindCommand(p_cmd, 1, 1, 0);
 
@@ -236,16 +236,14 @@ void ZConsoleCommand::Destroy()
 {
     ZCmdNode *l_nextSame;
     ZCmdNode *l_rootNode;
-    ZCmdHandler *l_cmdHandler = this->m_cmdHandler;
-
     char *l_cmdName;
 
-    UnregisterCommand(l_cmdHandler);
+    UnregisterCommand(m_cmdHandler);
 
-    if (l_cmdHandler)
-        l_cmdHandler->~ZCmdHandler();
+    if (m_cmdHandler)
+        m_cmdHandler->~ZCmdHandler();
 
-    for (ZCmdNode *l_curNode = this->m_cmdNodeRoot; l_curNode; l_curNode = this->m_cmdNodeRoot)
+    for (ZCmdNode *l_curNode = m_cmdNodeRoot; l_curNode; l_curNode = m_cmdNodeRoot)
     {
         l_nextSame = l_curNode->nextSameCommand;
 
@@ -260,12 +258,12 @@ void ZConsoleCommand::Destroy()
 
             delete l_nextSame;
 
-            l_rootNode = this->m_cmdNodeRoot;
+            l_rootNode = m_cmdNodeRoot;
             l_nextSame = l_rootNode->nextSameCommand;
         }
 
-        ZCmdNode *l_rootNode2 = this->m_cmdNodeRoot;
-        this->m_cmdNodeRoot = l_rootNode2->next;
+        ZCmdNode *l_rootNode2 = m_cmdNodeRoot;
+        m_cmdNodeRoot = l_rootNode2->next;
 
         char *l_cmdName2 = l_rootNode2->cmdHandler->m_cmdName;
 

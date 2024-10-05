@@ -21,9 +21,9 @@ namespace Constructors
             printf("[CONSTRUCTOR HOOK]: Could not hook StrRefTab constructor.\n");
         }
 
-        if (MH_CreateHook(zconsoleCommandAddress, (LPVOID)&Constructors::ZConsoleCommandHook, reinterpret_cast<LPVOID *>(&originalZConsoleCommand)) != MH_OK)
+        if (MH_CreateHook(zConsoleAddress, (LPVOID)&Constructors::ZConsoleConstructorHook, reinterpret_cast<LPVOID *>(&originalZConsole)) != MH_OK)
         {
-            printf("[CONSTRUCTOR HOOK]: Could not hook ZConsoleCommand constructor.\n");
+            printf("[CONSTRUCTOR HOOK]: Could not hook ZConsole constructor.\n");
         }
     }
 
@@ -48,10 +48,14 @@ namespace Constructors
         return new StrRefTab(p_poolSize, p_size);
     }
 
-    ZConsoleCommand *__fastcall ZConsoleCommandHook(ZConsoleCommand *_this, void *_EDX)
+    ZConsole *__fastcall ZConsoleConstructorHook(ZConsole *_this, void *_EDX)
     {
-        printf("[CONSTRUCTOR HOOK]: ZConsoleCommand called\n");
+        printf("[CONSTRUCTOR HOOK]: ZConsole called\n");
 
-        return new (_this) ZConsoleCommand();
+        ZConsole *res = new ZConsole();
+
+        res->AddCmdText("ZConsole broken intooooooo!!!!");
+
+        return res;
     }
 }

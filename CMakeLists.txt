@@ -5,7 +5,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src_main)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src_testing)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external_include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/include)
 
 # Linker, compiler and resource flags
 # Copied straight from the Isle Decompilation project
@@ -15,13 +15,13 @@ set(CMAKE_CXX_FLAGS_RELEASE "/O2 /D \"NDEBUG\"")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "/Zi /O2 /D \"NDEBUG\"")
 set(CMAKE_CXX_FLAGS_MINSIZEREL "/Os /D \"NDEBUG\"")
 
-set(CMAKE_EXE_LINKER_FLAGS "/machine:I386")
+set(CMAKE_EXE_LINKER_FLAGS "/machine:I386 /ignore:4098,4099") # Supress warning about missing .pdb files
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "/incremental:yes /debug")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "/incremental:no")
 set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
 set(CMAKE_EXE_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
-set(CMAKE_SHARED_LINKER_FLAGS "/machine:I386")
+set(CMAKE_SHARED_LINKER_FLAGS "/machine:I386 /ignore:4098,4099")
 set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "/incremental:yes /debug")
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "/incremental:no")
 set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
@@ -73,7 +73,7 @@ add_library(system SHARED
 target_sources(system PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dll_defs/system.def)
 target_link_libraries(system globals common)
 
-# Add DirectPlay DLL
+# Add directplay dll
 add_library(directplay SHARED
     src_main/directplay/dllmain.cpp
 
@@ -85,12 +85,11 @@ add_library(directplay SHARED
 )
 
 target_sources(directplay PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dll_defs/directplay.def)
-target_link_directories(directplay PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external_libs)
+target_link_directories(directplay PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
 target_link_libraries(directplay globals common)
 
-# Add Globals DLL
+# Add globals dll
 add_library(globals SHARED src_main/globals/dllmain.cpp)
-
 target_sources(globals PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dll_defs/globals.def)
 
 # Add the hitman executable
@@ -113,5 +112,5 @@ add_library(impl_swap SHARED
     src_testing/impl_swap/utilities.h
 )
 
-target_link_directories(impl_swap PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external_libs)
-target_link_libraries(impl_swap PRIVATE MinHook.x86 globals kernel32 common)
+target_link_directories(impl_swap PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
+target_link_libraries(impl_swap PRIVATE minhook_x86 globals kernel32 common)

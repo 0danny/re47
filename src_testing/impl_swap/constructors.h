@@ -5,7 +5,7 @@
 #include "zstdlib/zconsole/zconsole.h"
 #include "utilities.h"
 
-#include "MinHook.h"
+#include <minhook.h>
 
 namespace Constructors
 {

@@ -65,7 +65,7 @@ int __stdcall EnumSessions(LPCDPSESSIONDESC2 lpThisSD, LPDWORD lpdwTimeOut, DWOR
     }
     else
     {
-        ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\Engine\Network\_Wintel\DirectPlay\Source\DirectPlay.cpp", 223);
+        ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\Network\\_Wintel\\DirectPlay\\Source\\DirectPlay.cpp", 223);
         l_sysCom->UnkFunc4("Found Session: %s", lpThisSD->lpszSessionName);
 
         *(BOOL *)lpContext = 0;
@@ -118,10 +118,19 @@ bBool DirectPlay::GetSessions()
 
     memset(&l_sessionDesc, 0, sizeof(l_sessionDesc));
 
-    *&l_sessionDesc.guidInstance.Data2 = 0x11D33DE8;
-    *&l_sessionDesc.guidInstance.Data4[4] = 0x7D229018;
     l_sessionDesc.guidInstance.Data1 = 0x26DF80B0;
-    *l_sessionDesc.guidInstance.Data4 = 0xE0002981;
+    l_sessionDesc.guidInstance.Data2 = 0x11D3;
+    l_sessionDesc.guidInstance.Data3 = 0x3DE8;
+
+    l_sessionDesc.guidInstance.Data4[0] = 0x7D;
+    l_sessionDesc.guidInstance.Data4[1] = 0x22;
+    l_sessionDesc.guidInstance.Data4[2] = 0x90;
+    l_sessionDesc.guidInstance.Data4[3] = 0x18;
+
+    l_sessionDesc.guidInstance.Data4[4] = 0xE0;
+    l_sessionDesc.guidInstance.Data4[5] = 0x00;
+    l_sessionDesc.guidInstance.Data4[6] = 0x29;
+    l_sessionDesc.guidInstance.Data4[7] = 0x81;
 
     l_sessionDesc.dwSize = 80;
     bBool l_context = 0;
@@ -141,9 +150,17 @@ HRESULT DirectPlay::OpenSessionName(DWORD p_maxPlayers)
     l_sessionDesc.dwMaxPlayers = p_maxPlayers;
 
     l_sessionDesc.guidInstance.Data1 = 0x26DF80B0;
-    *&l_sessionDesc.guidInstance.Data2 = 0x11D33DE8;
-    *l_sessionDesc.guidInstance.Data4 = 0xE0002981;
-    *&l_sessionDesc.guidInstance.Data4[4] = 0x7D229018;
+    l_sessionDesc.guidInstance.Data2 = 0x11D3;
+    l_sessionDesc.guidInstance.Data3 = 0x3DE8;
+
+    l_sessionDesc.guidInstance.Data4[0] = 0xE0;
+    l_sessionDesc.guidInstance.Data4[1] = 0x00;
+    l_sessionDesc.guidInstance.Data4[2] = 0x29;
+    l_sessionDesc.guidInstance.Data4[3] = 0x81;
+    l_sessionDesc.guidInstance.Data4[4] = 0x7D;
+    l_sessionDesc.guidInstance.Data4[5] = 0x22;
+    l_sessionDesc.guidInstance.Data4[6] = 0x90;
+    l_sessionDesc.guidInstance.Data4[7] = 0x18;
 
     l_sessionDesc.dwFlags = 2;
     l_sessionDesc.dwSize = 80;
@@ -158,10 +175,18 @@ HRESULT DirectPlay::OpenSession()
 
     memset(&l_sessionDesc, 0, sizeof(l_sessionDesc));
 
-    *&l_sessionDesc.guidInstance.Data2 = 299056616;
-    l_sessionDesc.guidInstance.Data1 = 652181680;
-    *&l_sessionDesc.guidInstance.Data4[4] = 2099417112;
-    *l_sessionDesc.guidInstance.Data4 = -536860287;
+    l_sessionDesc.guidInstance.Data1 = 0x26DF80B0;
+    l_sessionDesc.guidInstance.Data2 = 0x11D3;
+    l_sessionDesc.guidInstance.Data3 = 0x3DE8;
+
+    l_sessionDesc.guidInstance.Data4[0] = 0xE0;
+    l_sessionDesc.guidInstance.Data4[1] = 0x00;
+    l_sessionDesc.guidInstance.Data4[2] = 0x29;
+    l_sessionDesc.guidInstance.Data4[3] = 0x81;
+    l_sessionDesc.guidInstance.Data4[4] = 0x7D;
+    l_sessionDesc.guidInstance.Data4[5] = 0x22;
+    l_sessionDesc.guidInstance.Data4[6] = 0x90;
+    l_sessionDesc.guidInstance.Data4[7] = 0x18;
 
     l_sessionDesc.dwFlags = 1;
     l_sessionDesc.dwSize = 80;

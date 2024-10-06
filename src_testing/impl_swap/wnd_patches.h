@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Windows.h>
+#include <windows.h>
+#include <minhook.h>
 #include <iostream>
-#include "MinHook.h"
 
 namespace WndPatches
 {

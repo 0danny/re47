@@ -1,10 +1,10 @@
 #include <windows.h>
+#include <minhook.h>
 #include <iostream>
 #include <fstream>
+
 #include "loader.h"
 #include "utilities.h"
-
-#include <MinHook.h>
 
 void OpenConsole();
 

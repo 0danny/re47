@@ -1,8 +1,10 @@
+#pragma once
+
 #include "constructors.h"
 #include "wnd_patches.h"
 #include "utilities.h"
 
-#include "MinHook.h"
+#include <minhook.h>
 
 namespace Loader
 {

@@ -12,9 +12,6 @@
 
 #include <ole2.h> // for DECLARE_INTERFACE and HRESULT
 
-/* avoid warnings in MSVC at Level4 */
-#pragma warning(disable : 4201)
-
 /*
  * Some types
  */
@@ -2238,7 +2235,5 @@ DEFINE_GUID(IID_IDirectPlay, 0x5454e9a0, 0xdb65, 0x11ce, 0x92, 0x1c, 0x00, 0xaa,
 #define IDirectPlay_Release(p) (p)->Release()
 
 #endif // IDirectPlay interface macros
-
-#pragma warning(default : 4201)
 
 #endif

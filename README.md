@@ -18,18 +18,49 @@ Join the discord server using the badge above to track the progress or if you ju
 ## Status
 Below each of the files in the decomp is discussed along with a percentage indicator of the progress.
 
-### Files
-1. **hitman.exe** (80%) - Imports ZSysInterface from Globals.dll and calls some sort of init function in WinMain.
-2. **globals.dll** (100%) - Exports global instances of each class type used ZSysInterface, ZSysMem etc.
-3. **system.dll** (10%) - Implements each class type exported by globals.dll.
-4. **directplay.dll** (0%)
-5. **enginedata.dll** (0%)
-6. **locale.dll** (0%)
-7. **renderd3d.dll** (0%)
-8. **renderopengl.dll** (0%)
-6. **render3dfx.dll** (0%)
-6. **sound.dll** (0%)
-6. **systemprobedll.dll** (0%)
+### Being Decompiled 📝
+
+**hitman.exe** [45kb]
+      **80%** Completed - **2** out of **3** functions named.
+
+**globals.dll** [20kb]
+      **100%** Completed - **1** out of **1** functions named.
+
+**system.dll** [272kb]
+      **10%** Completed - **465** out of **552** functions named.
+
+**systemprobedll.dll** [68kb]
+      **40%** Completed - **39** out of **53** functions named.
+
+**directplay.dll** [48kb]
+      **100%** Completed - **22** out of **22** functions named.
+
+<br>
+
+### Untouched ❌
+
+**hitmandlc.dlc** [2,496kb]
+      **0%** Completed
+
+**enginedata.dll** [244kb]
+      **0%** Completed
+
+**locale.dll** [92kb]
+      **0%** Completed
+
+**renderd3d.dll** [272kb]
+      **0%** Completed
+
+**renderopengl.dll** [248kb]
+      **0%** Completed
+
+**render3dfx.dll** [212kb]
+      **0%** Completed
+
+**sound.dll** [188kb]
+      **0%** Completed
+
+<br>
 
 Currently hitman.exe functions as original besides a couple of edge cases, globals.dll also acts exactly as original.
 

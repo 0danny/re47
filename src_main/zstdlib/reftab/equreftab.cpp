@@ -36,7 +36,7 @@ void EquRefTab::PrintStatus()
         for (l_nxtRef = RunNxtRefPtr(&l_refRun); l_nxtRef; l_nxtRef = RunNxtRefPtr(&l_refRun))
         {
             ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 828);
-            l_sysCom->UnkFunc4("Ref %x %d\n", *l_nxtRef, l_nxtRef[m_size - 1]);
+            l_sysCom->LogMessage("Ref %x %d\n", *l_nxtRef, l_nxtRef[m_size - 1]);
         }
     }
 }

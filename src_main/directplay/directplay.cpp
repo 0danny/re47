@@ -66,7 +66,7 @@ int __stdcall EnumSessions(LPCDPSESSIONDESC2 lpThisSD, LPDWORD lpdwTimeOut, DWOR
     else
     {
         ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\Network\\_Wintel\\DirectPlay\\Source\\DirectPlay.cpp", 223);
-        l_sysCom->UnkFunc4("Found Session: %s", lpThisSD->lpszSessionName);
+        l_sysCom->LogMessage("Found Session: %s", lpThisSD->lpszSessionName);
 
         *(BOOL *)lpContext = 0;
     }

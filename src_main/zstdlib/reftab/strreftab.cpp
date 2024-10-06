@@ -83,7 +83,7 @@ void StrRefTab::PrintStatus()
         for (UINT i = RunNxtRef(&l_refRun); l_refRun.prev; i = RunNxtRef(&l_refRun))
         {
             ZSysCom *l_com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 1320);
-            l_com->UnkFunc4("String %s\n", i);
+            l_com->LogMessage("String %s\n", i);
         }
     }
 }
@@ -188,7 +188,7 @@ void StrRefTab::RemoveStr(char *const p_str)
     {
     UNABLE_LABEL:
         ZSysCom *l_com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 1267);
-        l_com->UnkFunc4("WARNING: unable to remove string %s\n", p_str);
+        l_com->LogMessage("WARNING: unable to remove string %s\n", p_str);
     }
 }
 

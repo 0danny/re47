@@ -13,54 +13,95 @@
 This repository contains the decompilation project for Hitman Codename 47 (2000). The goal is to reconstruct the source code from the original game binaries in a way that it can be compiled into a working executable. This project is an effort for game preservation.
 
 ## Socials
+
 Join the discord server using the badge above to track the progress or if you just enjoy Hitman games in general!
 
 ## Status
+
 Below each of the files in the decomp is discussed along with a percentage indicator of the progress.
 
 ### Being Decompiled 📝
 
 **hitman.exe** [45kb]
-      **80%** Completed - **2** out of **3** functions named.
+**80%** Completed - **2** out of **3** functions named.
 
 **globals.dll** [20kb]
-      **100%** Completed - **1** out of **1** functions named.
+**100%** Completed - **1** out of **1** functions named.
 
 **system.dll** [272kb]
-      **10%** Completed - **465** out of **552** functions named.
+**10%** Completed - **465** out of **552** functions named.
 
 **systemprobedll.dll** [68kb]
-      **40%** Completed - **39** out of **53** functions named.
+**40%** Completed - **39** out of **53** functions named.
 
 **directplay.dll** [48kb]
-      **100%** Completed - **22** out of **22** functions named.
+**100%** Completed - **22** out of **22** functions named.
 
 <br>
 
 ### Untouched ❌
 
 **hitmandlc.dlc** [2,496kb]
-      **0%** Completed
+**0%** Completed
 
 **enginedata.dll** [244kb]
-      **0%** Completed
+**0%** Completed
 
 **locale.dll** [92kb]
-      **0%** Completed
+**0%** Completed
 
 **renderd3d.dll** [272kb]
-      **0%** Completed
+**0%** Completed
 
 **renderopengl.dll** [248kb]
-      **0%** Completed
+**0%** Completed
 
 **render3dfx.dll** [212kb]
-      **0%** Completed
+**0%** Completed
 
 **sound.dll** [188kb]
-      **0%** Completed
+**0%** Completed
 
 <br>
+### Files
+
+[Being Decompiled]
+hitman.exe [45kb]
+80% Completed - 2 out of 3 functions named.
+
+globals.dll [20kb]
+100% Completed - 1 out of 1 functions named.
+
+system.dll [272kb]
+10% Completed - 465 out of 552 functions named.
+
+systemprobedll.dll [68kb]
+40% Completed - 39 out of 53 functions named.
+
+directplay.dll [48kb]
+100% Completed - 22 out of 22 functions named.
+
+[Untouched]
+hitmandlc.dlc [2,496kb]
+0% Completed
+
+enginedata.dll [244kb]
+0% Completed
+
+locale.dll [92kb]
+0% Completed
+
+renderd3d.dll [272kb]
+0% Completed
+
+renderopengl.dll [248kb]
+0% Completed
+
+render3dfx.dll [212kb]
+0% Completed
+
+sound.dll [188kb]
+0% Completed
 
 Currently hitman.exe functions as original besides a couple of edge cases, globals.dll also acts exactly as original.
 
@@ -68,30 +109,30 @@ Currently hitman.exe functions as original besides a couple of edge cases, globa
 
 To build and run the decompiled version of Hitman Codename 47, you will need:
 
-- CMake
-- The portable version of Visual Studio 6 - https://github.com/itsmattkc/MSVC600
-- Visual Studio Code or an equivalent
+-   CMake
+-   The portable version of Visual Studio 6 - https://github.com/itsmattkc/MSVC600
+-   Visual Studio Code or an equivalent
 
 ## Building the Project
 
 1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/<your-username>/hitman-codename-47.git
-   cd hitman-codename-47
-   ```
+    ```bash
+    git clone https://github.com/<your-username>/hitman-codename-47.git
+    cd hitman-codename-47
+    ```
 2. **Set the VS6_BIN_PATH Environment Variable:**
-   
-   On windows navigate to "Edit the system environment variables" in the start menu. Click "Environment Variables" and under "System Variables" add a new entry with the name "VS6_BIN_PATH" and a value of your bin folder location (e.g. C:\VS6\bin)
-   
-4. **Run build.bat**
 
-   The output files should be written to the "build" folder at the root directory.
+    On windows navigate to "Edit the system environment variables" in the start menu. Click "Environment Variables" and under "System Variables" add a new entry with the name "VS6_BIN_PATH" and a value of your bin folder location (e.g. C:\VS6\bin)
+
+3. **Run build.bat**
+
+    The output files should be written to the "build" folder at the root directory.
 
 This project is in very early stages, a more streamlined build process is a future task.
 
 ## Reversing
 
-IDA Pro is being used to reverse the games executables and dlls, an IDA server could be something that is used to allow collaboration in the future. Currently it is just a guess that Hitman CN47 actually uses Visual Studio 6 for compilation given the time period. 
+IDA Pro is being used to reverse the games executables and dlls, an IDA server could be something that is used to allow collaboration in the future. Currently it is just a guess that Hitman CN47 actually uses Visual Studio 6 for compilation given the time period.
 It is MSVC, however which version and what flags were used during the compilation remains a mystery. A byte-accurate decomp would be nice, however that is a very timely process. The GOG version of the game is being used for the decomp as the original
 contains SafeDisc V2.0 DRM and GOG is DRM free. We don't have access to any debug symbols at this current point in time.
 
@@ -100,11 +141,12 @@ contains SafeDisc V2.0 DRM and GOG is DRM free. We don't have access to any debu
 Contributions to the Hitman Codename 47 decompilation project are welcome (and needed)! Here's how you can contribute:
 
 ### Naming Rules
-* Functions: `PascalCase`
-* Variables: `camelCase. Prefix with g_ if global, m_ for member variables or p_ for parameters.`
-* Classes: `PascalCase`
-* Files and Directories: `lowercase`
-* Namespaces: `PascalCase`
+
+-   Functions: `PascalCase`
+-   Variables: `camelCase. Prefix with g_ if global, m_ for member variables or p_ for parameters.`
+-   Classes: `PascalCase`
+-   Files and Directories: `lowercase`
+-   Namespaces: `PascalCase`
 
 ### Rules/Notes
 
@@ -121,4 +163,5 @@ Contributions to the Hitman Codename 47 decompilation project are welcome (and n
 Join the discord for more information.
 
 ## Disclaimer
+
 This project is for educational and game preservation purposes only and is not for commercial use. The repository does not contain any game assets/retail resources or proprietary code from the original game. The files built using this repository may only be utilized with assets provided by ownership of Hitman Codename 47 (2000). This project is in no way associated with or endorsed by IO Interactive.

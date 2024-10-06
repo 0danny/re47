@@ -3,14 +3,31 @@
 #include "common.h"
 #include "zconsolecommand.h"
 
-class ZConsoleUnk;
-
-struct ZConsoleStruct
+struct ZConsoleArray
 {
-    ZConsoleStruct *consoleStruct;
-    char **commandArray;
-    int unkInt2;
-    int unkInt3;
+    ZConsoleArray *nextArray;
+    char **commandList;
+};
+
+struct ZAutoComplete
+{
+    ZConsoleArray *commandArray;
+    ZConsoleArray *lastCommandArray;
+    int arraySize;
+    int commandCount;
+};
+
+class ZAutoCompleteHandler
+{
+public:
+    ZAutoComplete *m_consoleStruct;
+    char *m_currentMatch;
+    int m_matchIndex;
+
+    ZAutoCompleteHandler(ZAutoComplete *p_consoleStruct);
+    virtual ~ZAutoCompleteHandler();
+
+    const char *GetMatch(char *p_cmd);
 };
 
 #pragma pack(push, 1)
@@ -40,11 +57,11 @@ public:
 
     ZConsoleCommand m_consoleCmd;
 
-    int m_unkInt1;
+    int m_autoCompleteIndex;
     uint8_t m_isAutoCompleting;
 
-    ZConsoleStruct *m_consoleStruct;
-    ZConsoleUnk *m_consoleUnk;
+    ZAutoComplete *m_autoComplete;
+    ZAutoCompleteHandler *m_autoCompleteHandler;
 
     ZConsole();
 
@@ -55,7 +72,7 @@ public:
 
     virtual uint8_t IsAnimating();
 
-    virtual void HandleInput(int p_identifier, int p_lparam);
+    virtual void HandleInput(int p_identifier, char *p_cmdName);
     virtual void HandleKeyRelease(int p_keyCode, int p_unused);
 
     virtual void ExecuteCommand();
@@ -71,14 +88,3 @@ public:
 };
 
 #pragma pack(pop)
-
-class ZConsoleUnk
-{
-public:
-    ZConsoleStruct *m_consoleStruct;
-    int unkInt2;
-    int unkInt3;
-
-    ZConsoleUnk(ZConsoleStruct *p_consoleStruct);
-    virtual ~ZConsoleUnk();
-};

@@ -239,7 +239,7 @@ void RefTab::PrintStatus()
         l_currentBlock = l_currentBlock->next;
 
     ZSysCom *com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 518);
-    com->UnkFunc4("REFTAB::PrintStatus Nr %d\n", i);
+    com->LogMessage("REFTAB::PrintStatus Nr %d\n", i);
 
     for (currentBlock = m_head; currentBlock; currentBlock = currentBlock->next)
     {
@@ -264,7 +264,7 @@ void RefTab::PrintStatus()
         }
 
         com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 534);
-        com->UnkFunc4("RefBlk %d -> %s\n", currentBlock->usedUnits, l_mallocPtr);
+        com->LogMessage("RefBlk %d -> %s\n", currentBlock->usedUnits, l_mallocPtr);
     }
 
     // Free the allocated buffer
@@ -277,7 +277,7 @@ void RefTab::Remove(UINT p_refNum)
     if (!RemoveIfExists(p_refNum))
     {
         ZSysCom *com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 290);
-        com->UnkFunc4("WARNING: unable to remove REF %d\n", p_refNum);
+        com->LogMessage("WARNING: unable to remove REF %d\n", p_refNum);
     }
 }
 
@@ -416,10 +416,10 @@ UINT *RefTab::RunNxtRefPtr(RefRun *p_refRun)
     if (m_poolSize < 0)
     {
         ZSysCom *com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 373);
-        com->UnkFunc4("ERROR: Illegal operation inside REFTAB loop");
+        com->LogMessage("ERROR: Illegal operation inside REFTAB loop");
 
         com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 374);
-        com->UnkFunc4("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 374);
+        com->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 374);
 
         DebugBreak();
     }
@@ -467,10 +467,10 @@ UINT *RefTab::RunPrevRefPtr(RefRun *p_refRun)
     if (m_poolSize < 0)
     {
         ZSysCom *com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 424);
-        com->UnkFunc4("ERROR: Illegal operation inside REFTAB loop");
+        com->LogMessage("ERROR: Illegal operation inside REFTAB loop");
 
         com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 425);
-        com->UnkFunc4("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 425);
+        com->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 425);
 
         DebugBreak();
     }

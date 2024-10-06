@@ -38,3 +38,11 @@ inline static void operator delete(void *ptr)
     }
     free(ptr);
 }
+
+class ZArrayRangeError
+{
+public:
+    ZArrayRangeError(const char *msg) : message(msg) {}
+
+    const char *message;
+};

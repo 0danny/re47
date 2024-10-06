@@ -1,6 +1,7 @@
 #include "zconsole.h"
 
-// TODO: This implementation is incomplete
+// TODO: Too many shift tabs cause an out of bounds ref and crashes game. (something wrong with match index)
+
 ZConsole::ZConsole()
 {
     m_consoleCmd = *new ZConsoleCommand();
@@ -13,7 +14,7 @@ ZConsole::ZConsole()
     strcpy(m_inputBuffer, ">");
 
     m_inputLength = 1;
-    m_unkInt1 = 0;
+    m_autoCompleteIndex = 0;
     m_isAutoCompleting = 0;
     m_outputIndex = 0;
     m_outputScrollOffset = 0;
@@ -29,20 +30,20 @@ ZConsole::ZConsole()
     m_historyCount = 0;
     m_historyIndex = 0;
 
-    ZConsoleStruct *l_consoleStruct = new ZConsoleStruct();
+    ZAutoComplete *l_autoComplete = new ZAutoComplete();
 
-    if (l_consoleStruct)
+    if (l_autoComplete)
     {
-        l_consoleStruct->consoleStruct = 0;
-        l_consoleStruct->commandArray = 0;
+        l_autoComplete->lastCommandArray = 0;
+        l_autoComplete->commandArray = 0;
 
-        l_consoleStruct->unkInt2 = 32;
-        l_consoleStruct->unkInt3 = 0;
+        l_autoComplete->arraySize = 32;
+        l_autoComplete->commandCount = 0;
     }
 
-    m_consoleStruct = l_consoleStruct;
+    m_autoComplete = l_autoComplete;
 
-    m_consoleUnk = new ZConsoleUnk(m_consoleStruct);
+    m_autoCompleteHandler = new ZAutoCompleteHandler(m_autoComplete);
 }
 
 bBool ZConsole::UpdateConsoleVisibility()
@@ -105,7 +106,6 @@ void ZConsole::AddCmdText(const char *p_format, ...)
         m_outputIndex = 0;
 }
 
-// Im not a million percent sure about the name
 char *ZConsole::GetOutputLine(int p_offset)
 {
     if (!p_offset)
@@ -123,7 +123,7 @@ char *ZConsole::GetOutputLine(int p_offset)
         return g_emptyArray;
     }
 
-    int l_index = p_offset + l_offset + m_outputIndex;
+    int l_index = p_offset + l_offset + m_outputIndex; // Confusing
 
     if (l_index < 0)
         l_index += 1000 * ((999 - l_index) / 1000u);
@@ -139,18 +139,17 @@ uint8_t ZConsole::IsAnimating()
     return m_isAnimating;
 }
 
-// I've got no idea what this second parameter is - danny
-void ZConsole::HandleInput(int p_keyCode, int p_lparam)
+void ZConsole::HandleInput(int p_keyCode, char *p_cmdName)
 {
-    uint16_t l_lparam = (uint16_t)(p_lparam);
+    uint16_t l_lparam = (uint16_t)(p_cmdName);
 
-    if (!p_lparam)
+    if (!p_cmdName)
         l_lparam = 1;
 
     if (p_keyCode != VK_TAB && p_keyCode != VK_SHIFT)
     {
         m_isAutoCompleting = 0;
-        m_unkInt1 = 0;
+        m_autoCompleteIndex = 0;
     }
 
     switch (p_keyCode)
@@ -179,8 +178,163 @@ void ZConsole::HandleInput(int p_keyCode, int p_lparam)
         return;
 
     case VK_TAB:
-        // TODO: Implement auto-completion (0x0FFC5AE0).
-        m_isAutoCompleting = 1;
+
+        const char *l_match;
+        ZConsoleArray *l_cmdArray;
+        int l_arraySize;
+        int l_arraySize2;
+        int l_newIndex;
+
+        if (!m_isAutoCompleting)
+        {
+            // Clear previous auto complete data
+            for (ZConsoleArray *i = m_autoComplete->commandArray; m_autoComplete->commandArray; i = m_autoComplete->commandArray)
+            {
+                m_autoComplete->commandArray = i->nextArray;
+
+                delete i->commandList;
+                delete i;
+            }
+
+            m_autoComplete->lastCommandArray = 0;
+            m_autoComplete->commandCount = 0;
+
+            // Add all commands to the auto complete list
+            for (ZCmdNode *j = m_consoleCmd.GetCmdRoot(); j; j = j->next)
+            {
+                int l_cmdCount = m_autoComplete->commandCount;
+                p_cmdName = j->cmdHandler->m_cmdName; // most likely is a reuse and p_cmdName is not actually a char*
+
+                int l_index = l_cmdCount % m_autoComplete->arraySize;
+                m_autoComplete->commandCount = l_cmdCount + 1;
+
+                if (!l_index)
+                {
+                    // Create a new array in linked list if the current one is full
+                    if (m_autoComplete->lastCommandArray)
+                    {
+                        ZConsoleArray *l_newArray = new ZConsoleArray();
+                        l_newArray->nextArray = 0;
+                        l_newArray->commandList = new char *[m_autoComplete->arraySize];
+
+                        m_autoComplete->lastCommandArray->nextArray = l_newArray;
+                        m_autoComplete->lastCommandArray = m_autoComplete->lastCommandArray->nextArray;
+                    }
+                    else
+                    {
+                        ZConsoleArray *l_newArray = new ZConsoleArray();
+                        l_newArray->nextArray = 0;
+                        l_newArray->commandList = new char *[m_autoComplete->arraySize];
+
+                        m_autoComplete->commandArray = l_newArray;
+                        m_autoComplete->lastCommandArray = l_newArray;
+                    }
+                }
+
+                m_autoComplete->lastCommandArray->commandList[l_index] = p_cmdName;
+            }
+
+            l_match = m_autoCompleteHandler->GetMatch(&m_inputBuffer[1]);
+            goto CPY_LABEL;
+        }
+
+        if (!this->m_shiftPressed)
+        {
+            if (m_autoCompleteHandler->m_currentMatch)
+            {
+                m_autoComplete = m_autoCompleteHandler->m_consoleStruct;
+
+                int index = m_autoCompleteHandler->m_matchIndex + 1;
+                m_autoCompleteHandler->m_matchIndex = index;
+
+                if (index < m_autoComplete->commandCount)
+                {
+                    ZConsoleArray *commandArray = m_autoComplete->commandArray;
+
+                    if (!m_autoComplete->commandArray)
+                        throw ZArrayRangeError(p_cmdName);
+
+                    l_arraySize2 = m_autoComplete->arraySize;
+
+                    while (index >= l_arraySize2)
+                    {
+                        commandArray = commandArray->nextArray;
+                        index -= l_arraySize2;
+
+                        if (!commandArray)
+                            throw ZArrayRangeError(p_cmdName);
+                    }
+
+                    if (!commandArray)
+                        throw ZArrayRangeError(p_cmdName);
+
+                    char *l_curCommand = commandArray->commandList[index];
+
+                    if (!_strnicmp(m_autoCompleteHandler->m_currentMatch, l_curCommand, strlen(m_autoCompleteHandler->m_currentMatch)))
+                    {
+                        l_match = l_curCommand;
+                        goto CPY_LABEL;
+                    }
+                }
+                --m_autoCompleteHandler->m_matchIndex;
+                this->m_isAutoCompleting = 1;
+
+                return;
+            }
+
+        RETURN_LABEL:
+            this->m_isAutoCompleting = 1;
+            return;
+        }
+
+        if (!m_autoCompleteHandler->m_currentMatch)
+            goto RETURN_LABEL;
+
+        l_newIndex = m_autoCompleteHandler->m_matchIndex - 1;
+        m_autoCompleteHandler->m_matchIndex = m_autoCompleteHandler->m_matchIndex - 1;
+
+        if (l_newIndex)
+        {
+            l_cmdArray = m_autoCompleteHandler->m_consoleStruct->commandArray;
+
+            if (!m_autoCompleteHandler->m_consoleStruct->commandArray)
+                throw ZArrayRangeError(p_cmdName);
+
+            l_arraySize = m_autoCompleteHandler->m_consoleStruct->arraySize;
+
+            while (l_newIndex >= l_arraySize)
+            {
+                l_cmdArray = l_cmdArray->nextArray;
+                l_newIndex -= l_arraySize;
+
+                if (!l_cmdArray)
+                    throw ZArrayRangeError(p_cmdName);
+            }
+
+            if (!l_cmdArray)
+                throw ZArrayRangeError(p_cmdName);
+
+            if (!_strnicmp(m_autoCompleteHandler->m_currentMatch, l_cmdArray->commandList[l_newIndex], strlen(m_autoCompleteHandler->m_currentMatch)))
+            {
+                l_match = l_cmdArray->commandList[l_newIndex];
+
+            CPY_LABEL:
+
+                if (l_match)
+                {
+                    strcpy(&this->m_inputBuffer[1], l_match);
+                    strcat(this->m_inputBuffer, " ");
+
+                    this->m_inputLength = strlen(this->m_inputBuffer);
+                }
+
+                goto RETURN_LABEL;
+            }
+        }
+
+        ++m_autoCompleteHandler->m_matchIndex;
+        this->m_isAutoCompleting = 1;
+
         return;
 
     case VK_RETURN:
@@ -365,7 +519,7 @@ void ZConsole::AddToHistory(const char *p_command)
     strcpy(m_commandHistory[m_historyIndex], p_command);
 
     int l_newCmdCount = m_historyIndex + 1;
-    bool l_check = m_historyIndex - 19 < 0;
+    bBool l_check = m_historyIndex - 19 < 0;
 
     m_historyIndex = l_newCmdCount;
 
@@ -380,16 +534,69 @@ double ZConsole::GetVisibilityProgress()
     return m_visiblityProgress;
 }
 
-/* ----------------- ZConsoleUnk ----------------- */
+/* ----------------- ZAutoCompleteHandler ----------------- */
 
-ZConsoleUnk::ZConsoleUnk(ZConsoleStruct *p_consoleStruct)
+ZAutoCompleteHandler::ZAutoCompleteHandler(ZAutoComplete *p_consoleStruct)
 {
     m_consoleStruct = p_consoleStruct;
-    unkInt2 = 0;
-    unkInt3 = 0;
+    m_currentMatch = 0;
+    m_matchIndex = 0;
 }
 
-ZConsoleUnk::~ZConsoleUnk()
+ZAutoCompleteHandler::~ZAutoCompleteHandler()
 {
-    delete (int *)unkInt2;
+    delete[] m_currentMatch;
+}
+
+const char *ZAutoCompleteHandler::GetMatch(char *p_cmd)
+{
+    if (this->m_currentMatch)
+    {
+        delete[] this->m_currentMatch;
+        this->m_currentMatch = 0;
+    }
+
+    if (!p_cmd)
+        return 0;
+
+    this->m_currentMatch = new char[strlen(p_cmd) + 1];
+    strcpy(m_currentMatch, p_cmd);
+
+    this->m_matchIndex = 0;
+
+    if (!m_consoleStruct->commandCount)
+        return 0;
+
+    ZConsoleArray *l_commandArray;
+    int l_matchIndex;
+
+    while (1)
+    {
+        l_commandArray = m_consoleStruct->commandArray;
+
+        if (!m_consoleStruct->commandArray)
+            throw ZArrayRangeError(p_cmd);
+
+        while (this->m_matchIndex >= m_consoleStruct->arraySize)
+        {
+            l_commandArray = l_commandArray->nextArray;
+            this->m_matchIndex -= m_consoleStruct->arraySize;
+
+            if (!l_commandArray)
+                throw ZArrayRangeError(p_cmd);
+        }
+
+        if (!l_commandArray)
+            throw ZArrayRangeError(p_cmd);
+
+        char *command = l_commandArray->commandList[this->m_matchIndex];
+
+        if (!_strnicmp(this->m_currentMatch, command, strlen(this->m_currentMatch)))
+            return command;
+
+        l_matchIndex = ++this->m_matchIndex;
+
+        if (l_matchIndex >= m_consoleStruct->commandCount)
+            return 0;
+    }
 }

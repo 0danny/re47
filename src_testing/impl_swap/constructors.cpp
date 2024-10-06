@@ -57,11 +57,6 @@ namespace Constructors
 
         ZConsole *res = new ZConsole();
 
-        res->AddCmdText("-----------------------------------");
-        res->AddCmdText("[IMPLEMENTATION SWAP] - Loaded");
-        res->AddCmdText(" ** Re47 Project **");
-        res->AddCmdText("-----------------------------------");
-
-        return res;
+            return res;
     }
 }

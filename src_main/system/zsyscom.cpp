@@ -1,32 +1,11 @@
 #include "zsyscom.h"
 
-ZSysComBase::ZSysComBase()
+ZSysCom::ZSysCom()
 {
     this->m_unkInt1 = 1234;
     this->m_unkPtr = 0;
     this->m_unkBool1 = 0;
-}
 
-ZSysComBase::~ZSysComBase()
-{
-}
-
-void ZSysComBase::UnkFunc1()
-{
-}
-
-int ZSysComBase::GetUnkInt1()
-{
-    return this->m_unkInt1;
-}
-
-UINT ZSysComBase::GetMsgID()
-{
-    return this->m_msgID;
-}
-
-ZSysCom::ZSysCom()
-{
     this->m_unkPtr2 = 0;
     this->m_sendingZMessage = 0;
     this->m_filePath = 0;
@@ -38,6 +17,16 @@ ZSysCom::ZSysCom()
     g_pSysCom = this;
 }
 
+int ZSysCom::GetUnkInt1()
+{
+    return this->m_unkInt1;
+}
+
+UINT ZSysCom::GetMsgID()
+{
+    return this->m_msgID;
+}
+
 int ZSysCom::FormatString(char *p_resultBuffer, char *p_format, ...)
 {
     va_list l_argList;
@@ -46,6 +35,10 @@ int ZSysCom::FormatString(char *p_resultBuffer, char *p_format, ...)
 }
 
 ZSysCom::~ZSysCom()
+{
+}
+
+void ZSysCom::DestroyArrays()
 {
 }
 
@@ -152,19 +145,19 @@ void ZSysCom::DataToDebug(char *p_format, ...)
             {
                 ZSysCom *l_this = g_pSysCom->SetPathAndLine("Z:\\Engine\\System\\_Wintel\\Source\\SysComWintel.cpp", 216);
 
-                l_this->UnkFunc4("ZSysComWintel::DataToDebug: Couldn't send \"%s\"", l_buffer);
+                l_this->LogMessage("ZSysComWintel::DataToDebug: Couldn't send \"%s\"", l_buffer);
             }
         }
         else
         {
             ZSysCom *l_this2 = g_pSysCom->SetPathAndLine("Z:\\Engine\\System\\_Wintel\\Source\\SysComWintel.cpp", 209);
 
-            l_this2->UnkFunc4("ZSysComWintel::DataToDebug: Tried to send empty string");
+            l_this2->LogMessage("ZSysComWintel::DataToDebug: Tried to send empty string");
         }
     }
 }
 
-void ZSysCom::UnkFunc4(char *p_format, ...)
+void ZSysCom::LogMessage(char *p_format, ...)
 {
 }
 

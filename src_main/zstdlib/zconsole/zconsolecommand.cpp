@@ -97,10 +97,10 @@ void ZConsoleCommand::UnregisterCommand(ZCmdHandler *p_handler)
 
             if (!l_cmdNodeRoot)
             {
-                char *m_cmdName = p_handler->m_cmdName;
+                char *l_cmdName = p_handler->m_cmdName;
 
                 ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\ConsoleCommand.cpp", 215);
-                l_sysCom->UnkFunc4("Command %s not registered in list!", m_cmdName);
+                l_sysCom->LogMessage("Command %s not registered in list!", l_cmdName);
 
                 return;
             }
@@ -223,7 +223,7 @@ void ZConsoleCommand::PrintStatus(char *p_cmdValue)
         char *l_commandsStr = i->cmdHandler->m_cmdName;
 
         ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\ConsoleCommand.cpp", 284);
-        l_sysCom->UnkFunc4("%s", l_commandsStr);
+        l_sysCom->LogMessage("%s", l_commandsStr);
     }
 }
 
@@ -254,7 +254,7 @@ void ZConsoleCommand::Destroy()
             l_cmdName = l_nextSame->cmdHandler->m_cmdName;
 
             ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\ConsoleCommand.cpp", 94);
-            l_sysCom->UnkFunc4("Removing unremoved command '%s'", l_cmdName);
+            l_sysCom->LogMessage("Removing unremoved command '%s'", l_cmdName);
 
             delete l_nextSame;
 
@@ -268,7 +268,7 @@ void ZConsoleCommand::Destroy()
         char *l_cmdName2 = l_rootNode2->cmdHandler->m_cmdName;
 
         ZSysCom *l_sysCom2 = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\ConsoleCommand.cpp", 99);
-        l_sysCom2->UnkFunc4("Removing unremoved command '%s'", l_cmdName2);
+        l_sysCom2->LogMessage("Removing unremoved command '%s'", l_cmdName2);
 
         delete l_rootNode2;
     }

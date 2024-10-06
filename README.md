@@ -63,45 +63,6 @@ Below each of the files in the decomp is discussed along with a percentage indic
 **0%** Completed
 
 <br>
-### Files
-
-[Being Decompiled]
-hitman.exe [45kb]
-80% Completed - 2 out of 3 functions named.
-
-globals.dll [20kb]
-100% Completed - 1 out of 1 functions named.
-
-system.dll [272kb]
-10% Completed - 465 out of 552 functions named.
-
-systemprobedll.dll [68kb]
-40% Completed - 39 out of 53 functions named.
-
-directplay.dll [48kb]
-100% Completed - 22 out of 22 functions named.
-
-[Untouched]
-hitmandlc.dlc [2,496kb]
-0% Completed
-
-enginedata.dll [244kb]
-0% Completed
-
-locale.dll [92kb]
-0% Completed
-
-renderd3d.dll [272kb]
-0% Completed
-
-renderopengl.dll [248kb]
-0% Completed
-
-render3dfx.dll [212kb]
-0% Completed
-
-sound.dll [188kb]
-0% Completed
 
 Currently hitman.exe functions as original besides a couple of edge cases, globals.dll also acts exactly as original.
 

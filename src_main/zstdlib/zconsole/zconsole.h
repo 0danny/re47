@@ -72,7 +72,7 @@ public:
 
     virtual uint8_t IsAnimating();
 
-    virtual void HandleInput(int p_identifier, char *p_cmdName);
+    virtual void HandleInput(int p_keyCode, char *p_cmdName);
     virtual void HandleKeyRelease(int p_keyCode, int p_unused);
 
     virtual void ExecuteCommand();

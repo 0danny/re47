@@ -1,7 +1,5 @@
 #include "zconsole.h"
 
-// TODO: Too many shift tabs cause an out of bounds ref and crashes game. (something wrong with match index)
-
 ZConsole::ZConsole()
 {
     m_consoleCmd = *new ZConsoleCommand();
@@ -184,6 +182,7 @@ void ZConsole::HandleInput(int p_keyCode, char *p_cmdName)
         int l_arraySize;
         int l_arraySize2;
         int l_newIndex;
+        int l_matchIndex;
 
         if (!m_isAutoCompleting)
         {
@@ -238,7 +237,7 @@ void ZConsole::HandleInput(int p_keyCode, char *p_cmdName)
             goto CPY_LABEL;
         }
 
-        if (!this->m_shiftPressed)
+        if (!m_shiftPressed)
         {
             if (m_autoCompleteHandler->m_currentMatch)
             {
@@ -277,23 +276,24 @@ void ZConsole::HandleInput(int p_keyCode, char *p_cmdName)
                     }
                 }
                 --m_autoCompleteHandler->m_matchIndex;
-                this->m_isAutoCompleting = 1;
+                m_isAutoCompleting = 1;
 
                 return;
             }
 
         RETURN_LABEL:
-            this->m_isAutoCompleting = 1;
+            m_isAutoCompleting = 1;
             return;
         }
 
         if (!m_autoCompleteHandler->m_currentMatch)
             goto RETURN_LABEL;
 
-        l_newIndex = m_autoCompleteHandler->m_matchIndex - 1;
-        m_autoCompleteHandler->m_matchIndex = m_autoCompleteHandler->m_matchIndex - 1;
+        l_matchIndex = m_autoCompleteHandler->m_matchIndex;
+        l_newIndex = l_matchIndex - 1;
+        m_autoCompleteHandler->m_matchIndex = l_newIndex;
 
-        if (l_newIndex)
+        if (l_matchIndex)
         {
             l_cmdArray = m_autoCompleteHandler->m_consoleStruct->commandArray;
 
@@ -322,10 +322,10 @@ void ZConsole::HandleInput(int p_keyCode, char *p_cmdName)
 
                 if (l_match)
                 {
-                    strcpy(&this->m_inputBuffer[1], l_match);
-                    strcat(this->m_inputBuffer, " ");
+                    strcpy(&m_inputBuffer[1], l_match);
+                    strcat(m_inputBuffer, " ");
 
-                    this->m_inputLength = strlen(this->m_inputBuffer);
+                    m_inputLength = strlen(m_inputBuffer);
                 }
 
                 goto RETURN_LABEL;
@@ -333,8 +333,7 @@ void ZConsole::HandleInput(int p_keyCode, char *p_cmdName)
         }
 
         ++m_autoCompleteHandler->m_matchIndex;
-        this->m_isAutoCompleting = 1;
-
+        m_isAutoCompleting = 1;
         return;
 
     case VK_RETURN:
@@ -550,19 +549,19 @@ ZAutoCompleteHandler::~ZAutoCompleteHandler()
 
 const char *ZAutoCompleteHandler::GetMatch(char *p_cmd)
 {
-    if (this->m_currentMatch)
+    if (m_currentMatch)
     {
-        delete[] this->m_currentMatch;
-        this->m_currentMatch = 0;
+        delete[] m_currentMatch;
+        m_currentMatch = 0;
     }
 
     if (!p_cmd)
         return 0;
 
-    this->m_currentMatch = new char[strlen(p_cmd) + 1];
+    m_currentMatch = new char[strlen(p_cmd) + 1];
     strcpy(m_currentMatch, p_cmd);
 
-    this->m_matchIndex = 0;
+    m_matchIndex = 0;
 
     if (!m_consoleStruct->commandCount)
         return 0;
@@ -577,10 +576,10 @@ const char *ZAutoCompleteHandler::GetMatch(char *p_cmd)
         if (!m_consoleStruct->commandArray)
             throw ZArrayRangeError(p_cmd);
 
-        while (this->m_matchIndex >= m_consoleStruct->arraySize)
+        while (m_matchIndex >= m_consoleStruct->arraySize)
         {
             l_commandArray = l_commandArray->nextArray;
-            this->m_matchIndex -= m_consoleStruct->arraySize;
+            m_matchIndex -= m_consoleStruct->arraySize;
 
             if (!l_commandArray)
                 throw ZArrayRangeError(p_cmd);
@@ -589,12 +588,12 @@ const char *ZAutoCompleteHandler::GetMatch(char *p_cmd)
         if (!l_commandArray)
             throw ZArrayRangeError(p_cmd);
 
-        char *command = l_commandArray->commandList[this->m_matchIndex];
+        char *command = l_commandArray->commandList[m_matchIndex];
 
-        if (!_strnicmp(this->m_currentMatch, command, strlen(this->m_currentMatch)))
+        if (!_strnicmp(m_currentMatch, command, strlen(m_currentMatch)))
             return command;
 
-        l_matchIndex = ++this->m_matchIndex;
+        l_matchIndex = ++m_matchIndex;
 
         if (l_matchIndex >= m_consoleStruct->commandCount)
             return 0;

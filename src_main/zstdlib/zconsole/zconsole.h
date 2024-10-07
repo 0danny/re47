@@ -85,6 +85,8 @@ public:
     virtual void GoPrevCmd(bBool p_forwards);
     virtual void AddToHistory(const char *p_command);
     virtual double GetVisibilityProgress();
+
+    void Destroy();
 };
 
 #pragma pack(pop)

@@ -23,8 +23,8 @@ public:
     virtual bool Exists(char *const p_str);
     virtual void Sort();
 
+    static int Compare(const void *p_a, const void *p_b);
+    static bBool CompareCall(const char *p_str1, const char *p_str2);
+
     void Destroy();
 };
-
-int Compare(const void *p_a, const void *p_b);
-bBool CompareCall(const char *p_str1, const char *p_str2);

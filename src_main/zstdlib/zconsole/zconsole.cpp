@@ -533,6 +533,42 @@ double ZConsole::GetVisibilityProgress()
     return m_visiblityProgress;
 }
 
+void ZConsole::Destroy()
+{
+    for (int i = 0; i < 1000; i++)
+    {
+        delete[] m_outputBox[i];
+    }
+
+    for (int j = 0; j < 20; j++)
+    {
+        delete[] m_commandHistory[j];
+    }
+
+    if (m_autoCompleteHandler)
+    {
+        m_autoCompleteHandler->~ZAutoCompleteHandler();
+    }
+
+    if (m_autoComplete)
+    {
+        for (ZConsoleArray *i = m_autoComplete->commandArray; m_autoComplete->commandArray; i = m_autoComplete->commandArray)
+        {
+            m_autoComplete->commandArray = i->nextArray;
+
+            delete i->commandList;
+            delete i;
+        }
+
+        m_autoComplete->lastCommandArray = 0;
+        m_autoComplete->commandCount = 0;
+
+        delete m_autoComplete;
+    }
+
+    m_consoleCmd.Destroy();
+}
+
 /* ----------------- ZAutoCompleteHandler ----------------- */
 
 ZAutoCompleteHandler::ZAutoCompleteHandler(ZAutoComplete *p_consoleStruct)

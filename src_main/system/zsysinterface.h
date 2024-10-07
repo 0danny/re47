@@ -1,7 +1,8 @@
 #pragma once
 
-#include <windows.h>
 #include "common.h"
+#include "zstdlib/zconsole/zconsole.h"
+#include <windows.h>
 
 class ZSysInterface
 {
@@ -9,9 +10,11 @@ public:
     ZSysInterface();
 
     virtual bBool UnkFunc0() = 0;
+
     virtual ~ZSysInterface() = 0;
+
     virtual int InitializeResources() = 0;
-    virtual bBool ProcessWindowMessages(HWND) = 0;
+    virtual bBool ProcessWindowMessages(HWND p_hWnd) = 0;
     virtual void UnkFunc3() = 0;
     virtual LRESULT DispatchAndAllocateMessage(WPARAM, const void *, int) = 0;
     virtual char UnkFunc5(const char *, int) = 0;
@@ -19,17 +22,21 @@ public:
     virtual char PrintStatus(char) = 0;
     virtual int UnkFunc8() = 0;
     virtual void UnkFunc9() = 0;
+
     virtual void *InitActionMap() = 0;
     virtual void FreeActionMap() = 0;
+
     virtual uint8_t *UnkFunc12() = 0;
     virtual void UnkFunc13() = 0;
     virtual char UnkFunc14(int) = 0;
     virtual char UnkFunc15(int) = 0;
     virtual char UnkFunc16(int) = 0;
+
     virtual bBool IsKeyPressed(int p_vKey) = 0;
     virtual char UnkFunc18(int) = 0;
     virtual char UnkFunc19(int) = 0;
-    virtual WORD UnkFunc20(UINT) = 0;
+    virtual WORD ConvertVirtualKeyToAscii(UINT p_keyCode) = 0;
+
     virtual char **UnkFunc21(char **, int) = 0;
     virtual BOOL SetWindowTitle(const char *) = 0;
     virtual int UnkFunc23(int) = 0;
@@ -47,9 +54,11 @@ public:
     virtual int UnkFunc35() = 0;
     virtual int64_t UnkFunc36() = 0;
     virtual void UnkFunc37() = 0;
+
     virtual void Sleep(DWORD p_milliseconds) = 0;
     virtual void Init(char *p_cmdLineArgs) = 0;
     virtual char Restart(int) = 0;
+
     virtual void UnkFunc40(int, int, int) = 0;
     virtual void UnkFunc41(int, int) = 0;
     virtual int UnkFunc42(char *) = 0;
@@ -62,7 +71,7 @@ public:
     virtual int UnkFunc49(int) = 0;
     virtual int UnkFunc50(int) = 0;
     virtual int UnkFunc51(int) = 0;
-    virtual int GetConsole() = 0;
+    virtual ZConsole *GetConsole() = 0;
     virtual int UnkFunc53(int, int, int) = 0;
     virtual int UnkFunc54(int, int) = 0;
     virtual double UnkFunc55(int, int) = 0;
@@ -79,6 +88,8 @@ public:
     virtual ZSysInterface *UnkFunc66(const void *, signed int, int, int) = 0;
     virtual uint64_t UnkFunc67(int, int) = 0;
     virtual FARPROC UnkFunc68(int) = 0;
+
+    static LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     uint8_t m_currentState;
     uint8_t m_previousState;
@@ -257,7 +268,7 @@ public:
     int unkInt106;
     int unkInt107;
     int unkInt108;
-    int m_consoleInstance;
+    ZConsole *m_consoleInstance;
     uint8_t unkByte31_1;
     int unkInt110;
     uint8_t m_messageFlag;

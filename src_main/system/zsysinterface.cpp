@@ -20,7 +20,11 @@ int ZSysInterface::InitializeResources()
 
 void ZSysInterface::UnkFunc3() {}
 
-void ZSysInterface::ChangeDisplaySettings() {}
+void ZSysInterface::ChangeDisplaySettings()
+{
+    ::ChangeDisplaySettingsA(0, 0);
+    exit(1);
+}
 
 int ZSysInterface::UnkFunc8()
 {
@@ -36,9 +40,36 @@ void *ZSysInterface::InitActionMap()
 
 void ZSysInterface::FreeActionMap() {}
 
-bBool ZSysInterface::ProcessWindowMessages(HWND hwnd)
+bBool ZSysInterface::ProcessWindowMessages(HWND p_hWnd)
 {
-    return false;
+    struct tagMSG message;
+    ZSysInterface *self = this;
+
+    if (this->m_messageFlag)
+        return 1;
+
+    this->m_messageFlag = 1;
+
+    if (!PeekMessageA(&message, p_hWnd, 0, 0, 0))
+    {
+    RETURN_LBL:
+        self->m_messageFlag = 0;
+        return 1;
+    }
+
+    while (GetMessageA(&message, p_hWnd, 0, 0))
+    {
+        TranslateMessage(&message);
+        DispatchMessageA(&message);
+
+        if (!PeekMessageA(&message, p_hWnd, 0, 0, 0))
+        {
+            self = this;
+            goto RETURN_LBL;
+        }
+    }
+
+    return 0;
 }
 
 LRESULT ZSysInterface::DispatchAndAllocateMessage(WPARAM wParam, const void *message, int param)
@@ -56,9 +87,9 @@ char ZSysInterface::PrintStatus(char status)
     return 0;
 }
 
-bBool ZSysInterface::IsKeyPressed(int vKey)
+bBool ZSysInterface::IsKeyPressed(int p_vKey)
 {
-    return false;
+    return (GetAsyncKeyState(p_vKey) & 0x8000) != 0;
 }
 
 char ZSysInterface::UnkFunc14(int param)
@@ -86,9 +117,19 @@ char ZSysInterface::UnkFunc19(int param)
     return 0;
 }
 
-WORD ZSysInterface::UnkFunc20(UINT param)
+WORD ZSysInterface::ConvertVirtualKeyToAscii(UINT p_keyCode)
 {
-    return 0;
+    WORD l_asciiChar[2];
+    byte l_keyboardState[256];
+
+    GetKeyboardState(l_keyboardState);
+
+    l_asciiChar[0] = 0;
+
+    UINT l_scanCode = MapVirtualKeyA(p_keyCode, 0);
+    int l_numCharsConverted = ToAscii(p_keyCode, l_scanCode, l_keyboardState, l_asciiChar, 0);
+
+    return l_numCharsConverted < 1 ? 0 : l_asciiChar[0];
 }
 
 char **ZSysInterface::UnkFunc21(char **str, int param)
@@ -167,7 +208,9 @@ void ZSysInterface::Sleep(DWORD milliseconds)
     ::Sleep(milliseconds);
 }
 
-void ZSysInterface::Init(char *p_cmdLineArgs) {}
+void ZSysInterface::Init(char *p_cmdLineArgs)
+{
+}
 
 char ZSysInterface::Restart(int param)
 {
@@ -231,7 +274,7 @@ int ZSysInterface::UnkFunc51(int param)
     return 0;
 }
 
-int ZSysInterface::GetConsole()
+ZConsole *ZSysInterface::GetConsole()
 {
     return m_consoleInstance;
 }
@@ -299,4 +342,9 @@ uint64_t ZSysInterface::UnkFunc67(int param1, int param2)
 FARPROC ZSysInterface::UnkFunc68(int param)
 {
     return 0;
+}
+
+LRESULT ZSysInterface::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }

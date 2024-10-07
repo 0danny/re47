@@ -247,7 +247,7 @@ void StrRefTab::Sort()
         }
     }
 
-    qsort(l_allocated, l_numOfElements, sizeof(char *), Compare);
+    qsort(l_allocated, l_numOfElements, sizeof(char *), StrRefTab::Compare);
 
     RefRun *l_head = m_head;
     m_poolSize |= 0x80000000;
@@ -280,12 +280,12 @@ void StrRefTab::Sort()
     delete[] l_allocated;
 }
 
-int Compare(const void *p_a, const void *p_b)
+int StrRefTab::Compare(const void *p_a, const void *p_b)
 {
-    return CompareCall(*(char **)p_a, *(char **)p_b) != 0 ? 1 : -1;
+    return StrRefTab::CompareCall(*(char **)p_a, *(char **)p_b) != 0 ? 1 : -1;
 }
 
-bBool CompareCall(const char *p_str1, const char *p_str2)
+bBool StrRefTab::CompareCall(const char *p_str1, const char *p_str2)
 {
     if (!_strcmpi(p_str1, p_str2))
         return 0;

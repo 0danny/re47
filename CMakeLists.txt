@@ -37,6 +37,9 @@ add_library(common STATIC
     src_main/zstdlib/reftab/reftab.cpp
     src_main/zstdlib/reftab/reftab.h
 
+    src_main/zstdlib/reftab/reftab32.cpp
+    src_main/zstdlib/reftab/reftab32.h
+
     src_main/zstdlib/reftab/strreftab.cpp
     src_main/zstdlib/reftab/strreftab.h
 

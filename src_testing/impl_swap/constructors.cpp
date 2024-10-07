@@ -14,6 +14,11 @@ namespace Constructors
             printf("[CONSTRUCTOR HOOK]: Could not hook RefTab constructor.\n");
         }
 
+        if (MH_CreateHook(ref32RefTabAddress, (LPVOID)&Constructors::RefTab32Hook, NULL) != MH_OK)
+        {
+            printf("[CONSTRUCTOR HOOK]: Could not hook RefTab32 constructor.\n");
+        }
+
         if (MH_CreateHook(equRefTabAddress, (LPVOID)&Constructors::EquRefTabHook, NULL) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook EquRefTab constructor.\n");
@@ -24,7 +29,7 @@ namespace Constructors
             printf("[CONSTRUCTOR HOOK]: Could not hook StrRefTab constructor.\n");
         }
 
-        if (MH_CreateHook(linkRefTabAddress, (LPVOID)&Constructors::LinkRefTabHook, reinterpret_cast<LPVOID *>(&originalLinkRefTab)) != MH_OK)
+        if (MH_CreateHook(linkRefTabAddress, (LPVOID)&Constructors::LinkRefTabHook, NULL) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook LinkRefTab constructor.\n");
         }
@@ -40,6 +45,13 @@ namespace Constructors
         // printf("[CONSTRUCTOR HOOK]: RefTab called -> Pool Size: %d, Size: %d\n", p_poolSize, p_size); //spams the console
 
         return new RefTab(p_poolSize, p_size);
+    }
+
+    RefTab32 *__fastcall RefTab32Hook(RefTab32 *_this, void *_EDX)
+    {
+        printf("[CONSTRUCTOR HOOK]: RefTab32 called\n");
+
+        return new RefTab32();
     }
 
     EquRefTab *__fastcall EquRefTabHook(EquRefTab *_this, void *_EDX, int p_poolSize, int p_size)

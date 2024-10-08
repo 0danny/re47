@@ -1,13 +1,7 @@
 #include "reftab32.h"
 
-RefTab32::RefTab32() : RefTab(0, 0)
+RefTab32::RefTab32() : RefTab(32, 0)
 {
-    m_blockCapacity = 32;
-    m_count = 0;
-    m_size = 1;
-    m_poolSize = 32;
-    m_head = 0;
-    m_tail = 0;
 }
 
 RefTab32::~RefTab32()

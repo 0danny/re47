@@ -32,6 +32,7 @@ namespace Constructors
     typedef ZConsole *(__fastcall *ZConsoleConstructor)(ZConsole *_this);
 
     static ZConsoleConstructor originalZConsole = 0;
+    static RefTab32Constructor originalRefTab32 = 0;
 
     // Functions
     RefTab *__fastcall RefTabHook(RefTab *_this, void *_EDX, int p_poolSize, int p_size);

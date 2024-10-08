@@ -1,7 +1,7 @@
 #include "constructors.h"
 
 // Hooks constructors so that we can test our implementations.
-// This causes a slight mem leak because the original allocated ptrs are not free'd when the constructors are hooked.
+// Ensure you use inplace "this" constructors to avoid memory leaks.
 
 namespace Constructors
 {
@@ -14,7 +14,7 @@ namespace Constructors
             printf("[CONSTRUCTOR HOOK]: Could not hook RefTab constructor.\n");
         }
 
-        if (MH_CreateHook(ref32RefTabAddress, (LPVOID)&Constructors::RefTab32Hook, NULL) != MH_OK)
+        if (MH_CreateHook(ref32RefTabAddress, (LPVOID)&Constructors::RefTab32Hook, reinterpret_cast<LPVOID *>(&originalRefTab32)) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook RefTab32 constructor.\n");
         }
@@ -44,42 +44,43 @@ namespace Constructors
     {
         // printf("[CONSTRUCTOR HOOK]: RefTab called -> Pool Size: %d, Size: %d\n", p_poolSize, p_size); //spams the console
 
-        return new RefTab(p_poolSize, p_size);
+        return new (_this) RefTab(p_poolSize, p_size);
     }
 
     RefTab32 *__fastcall RefTab32Hook(RefTab32 *_this, void *_EDX)
     {
         printf("[CONSTRUCTOR HOOK]: RefTab32 called\n");
 
-        return new RefTab32();
+        // using the _this ptr, we place our reftab32 object at the same address as the original object
+        return new (_this) RefTab32();
     }
 
     EquRefTab *__fastcall EquRefTabHook(EquRefTab *_this, void *_EDX, int p_poolSize, int p_size)
     {
         printf("[CONSTRUCTOR HOOK]: EquRefTab called -> Pool Size: %d, Size: %d\n", p_poolSize, p_size);
 
-        return new EquRefTab(p_poolSize, p_size);
+        return new (_this) EquRefTab(p_poolSize, p_size);
     }
 
     StrRefTab *__fastcall StrRefTabHook(StrRefTab *_this, void *_EDX, int p_poolSize, int p_size)
     {
         printf("[CONSTRUCTOR HOOK]: StrRefTab called -> Pool Size: %d, Size: %d\n", p_poolSize, p_size);
 
-        return new StrRefTab(p_poolSize, p_size);
+        return new (_this) StrRefTab(p_poolSize, p_size);
     }
 
     LinkRefTab *__fastcall LinkRefTabHook(LinkRefTab *_this, void *_EDX, int p_poolSize, int p_size)
     {
         printf("[CONSTRUCTOR HOOK]: LinkRefTab called -> Pool Size: %d, Size: %d\n", p_poolSize, p_size);
 
-        return new LinkRefTab(p_poolSize, p_size);
+        return new (_this) LinkRefTab(p_poolSize, p_size);
     }
 
     ZConsole *__fastcall ZConsoleConstructorHook(ZConsole *_this, void *_EDX)
     {
         printf("[CONSTRUCTOR HOOK]: ZConsole called\n");
 
-        ZConsole *res = new ZConsole();
+        ZConsole *res = new (_this) ZConsole();
 
         res->AddCmdText("------------ Implementation Swap Loaded ------------");
         res->AddCmdText("re47 project");

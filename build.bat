@@ -22,7 +22,7 @@ if not exist "build" (
 
 cd build
 
-cmake .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Debug
+cmake .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
 
 nmake && nmake
 

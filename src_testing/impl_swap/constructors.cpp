@@ -19,6 +19,11 @@ namespace Constructors
             printf("[CONSTRUCTOR HOOK]: Could not hook RefTab32 constructor.\n");
         }
 
+        if (MH_CreateHook(staticRefTabAddress, (LPVOID)&Constructors::StaticRefTabHook, reinterpret_cast<LPVOID *>(&originalStaticRefTab)) != MH_OK)
+        {
+            printf("[CONSTRUCTOR HOOK]: Could not hook StaticRefTab constructor.\n");
+        }
+
         if (MH_CreateHook(equRefTabAddress, (LPVOID)&Constructors::EquRefTabHook, NULL) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook EquRefTab constructor.\n");
@@ -53,6 +58,13 @@ namespace Constructors
 
         // using the _this ptr, we place our reftab32 object at the same address as the original object
         return new (_this) RefTab32();
+    }
+
+    StaticRefTab *__fastcall StaticRefTabHook(StaticRefTab *_this, void *_EDX, int p_poolSize, int p_size)
+    {
+        printf("[CONSTRUCTOR HOOK]: StaticRefTab called -> Pool Size: %d, Size: %d\n", p_poolSize, p_size);
+
+        return new (_this) StaticRefTab(p_poolSize, p_size);
     }
 
     EquRefTab *__fastcall EquRefTabHook(EquRefTab *_this, void *_EDX, int p_poolSize, int p_size)

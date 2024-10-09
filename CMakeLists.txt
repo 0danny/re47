@@ -49,6 +49,9 @@ add_library(common STATIC
     src_main/zstdlib/reftab/linkreftab.cpp
     src_main/zstdlib/reftab/linkreftab.h
 
+    src_main/zstdlib/reftab/staticreftab.cpp
+    src_main/zstdlib/reftab/staticreftab.h
+
     src_main/zstdlib/zdynamicloader.cpp
     src_main/zstdlib/zdynamicloader.h
 

@@ -1,6 +1,6 @@
 #include "linkreftab.h"
 
-LinkRefTab::LinkRefTab(int p_poolSize, int p_size) : RefTab(p_poolSize, p_size + 2)
+LinkRefTab::LinkRefTab(i32 p_poolSize, i32 p_size) : RefTab(p_poolSize, p_size + 2)
 {
     m_refTab = 0;
     m_next = 0;
@@ -17,24 +17,24 @@ void LinkRefTab::Destroy()
     Clear();
 }
 
-UINT *LinkRefTab::Add(UINT p_refNum)
+u32 *LinkRefTab::Add(u32 p_refNum)
 {
-    UINT *l_nextRefNum;
+    u32 *l_nextRefNum;
     RefRun l_refRun;
 
     if (m_refTab)
     {
         m_refTab->RunInitNxtRef(&l_refRun);
-        UINT l_nextRef = m_refTab->RunNxtRef(&l_refRun);
+        u32 l_nextRef = m_refTab->RunNxtRef(&l_refRun);
 
         if (l_refRun.prev)
         {
-            l_nextRefNum = (UINT *)(l_nextRef + 4 * (2 - m_size));
+            l_nextRefNum = (u32 *)(l_nextRef + 4 * (2 - m_size));
             m_refTab->RunDelRef(&l_refRun);
         }
         else
         {
-            l_nextRefNum = (UINT *)p_refNum;
+            l_nextRefNum = (u32 *)p_refNum;
         }
 
         *l_nextRefNum = p_refNum;
@@ -95,7 +95,7 @@ void LinkRefTab::ClearThis()
     m_prev = 0;
 }
 
-int LinkRefTab::GetCount()
+i32 LinkRefTab::GetCount()
 {
     if (m_refTab)
         return m_count - m_refTab->GetCount();
@@ -103,7 +103,7 @@ int LinkRefTab::GetCount()
         return m_count;
 }
 
-void LinkRefTab::DelRefPtr(UINT *p_refPtr)
+void LinkRefTab::DelRefPtr(u32 *p_refPtr)
 {
     RefRun *l_data = (RefRun *)&p_refPtr[m_size - 2];
 
@@ -126,7 +126,7 @@ void LinkRefTab::DelRefPtr(UINT *p_refPtr)
         }
     }
 
-    m_refTab->Add((UINT)l_data);
+    m_refTab->Add((u32)l_data);
 
     if (l_data->prev)
         l_data->prev->next = l_data->next;
@@ -146,7 +146,7 @@ void LinkRefTab::DelRefPtr(UINT *p_refPtr)
     m_poolSize |= 0x80000000;
 }
 
-UINT LinkRefTab::GetRefNr(int p_refIndex)
+u32 LinkRefTab::GetRefNr(i32 p_refIndex)
 {
     if (!this)
         return 0;
@@ -154,7 +154,7 @@ UINT LinkRefTab::GetRefNr(int p_refIndex)
     RefRun l_refRun;
 
     RunInitNxtRef(&l_refRun);
-    UINT result = RunNxtRef(&l_refRun);
+    u32 result = RunNxtRef(&l_refRun);
 
     if (!l_refRun.prev)
         return 0;
@@ -170,7 +170,7 @@ UINT LinkRefTab::GetRefNr(int p_refIndex)
     return result;
 }
 
-UINT *LinkRefTab::GetRefPtrNr(int p_refIndex)
+u32 *LinkRefTab::GetRefPtrNr(i32 p_refIndex)
 {
     if (!this)
         return 0;
@@ -178,7 +178,7 @@ UINT *LinkRefTab::GetRefPtrNr(int p_refIndex)
     RefRun l_refRun;
     RunInitNxtRef(&l_refRun);
 
-    UINT *l_refPtr = RunNxtRefPtr(&l_refRun);
+    u32 *l_refPtr = RunNxtRefPtr(&l_refRun);
 
     if (!l_refPtr)
         return 0;
@@ -198,7 +198,7 @@ void LinkRefTab::PrintStatus()
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 1070);
 
-    int l_count = GetCount();
+    i32 l_count = GetCount();
 
     l_sysCom->LogMessage("Nr Ele %d NrLinks %d\n", m_count, l_count);
 
@@ -207,7 +207,7 @@ void LinkRefTab::PrintStatus()
         RefRun l_refRun;
         RunInitNxtRef(&l_refRun);
 
-        for (int i = RunNxtRef(&l_refRun); l_refRun.prev; i = RunNxtRef(&l_refRun))
+        for (i32 i = RunNxtRef(&l_refRun); l_refRun.prev; i = RunNxtRef(&l_refRun))
         {
             l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 1074);
             l_sysCom->LogMessage("Ref %d\n", i);
@@ -241,9 +241,9 @@ void LinkRefTab::RunDelRef(RefRun *p_refRun)
         }
     }
 
-    m_refTab->Add((UINT)l_prev);
+    m_refTab->Add((u32)l_prev);
 
-    if ((int)p_refRun->next <= 0)
+    if ((i32)p_refRun->next <= 0)
         p_refRun->prev = l_prev->next;
     else
         p_refRun->prev = l_prev->prev;
@@ -278,7 +278,7 @@ void LinkRefTab::RunInitPrevRef(RefRun *p_refRun)
     m_poolSize &= ~0x80000000;
 }
 
-UINT *LinkRefTab::RunNxtRefPtr(RefRun *p_refRun)
+u32 *LinkRefTab::RunNxtRefPtr(RefRun *p_refRun)
 {
     if (m_poolSize < 0)
     {
@@ -291,7 +291,7 @@ UINT *LinkRefTab::RunNxtRefPtr(RefRun *p_refRun)
     else
         p_refRun->prev = m_next;
 
-    UINT *l_result = (UINT *)p_refRun->prev;
+    u32 *l_result = (u32 *)p_refRun->prev;
 
     if (p_refRun->prev)
         l_result += 2 - m_size;
@@ -299,7 +299,7 @@ UINT *LinkRefTab::RunNxtRefPtr(RefRun *p_refRun)
     return l_result;
 }
 
-UINT *LinkRefTab::RunPrevRefPtr(RefRun *p_refRun)
+u32 *LinkRefTab::RunPrevRefPtr(RefRun *p_refRun)
 {
     if (m_poolSize < 0)
     {
@@ -312,7 +312,7 @@ UINT *LinkRefTab::RunPrevRefPtr(RefRun *p_refRun)
     else
         p_refRun->prev = m_prev;
 
-    UINT *l_result = (UINT *)p_refRun->prev;
+    u32 *l_result = (u32 *)p_refRun->prev;
 
     if (p_refRun->prev)
         l_result += 2 - m_size;
@@ -320,9 +320,9 @@ UINT *LinkRefTab::RunPrevRefPtr(RefRun *p_refRun)
     return l_result;
 }
 
-UINT *LinkRefTab::RunToRefPtr(RefRun *p_refRun)
+u32 *LinkRefTab::RunToRefPtr(RefRun *p_refRun)
 {
-    UINT *l_result = (UINT *)p_refRun->prev;
+    u32 *l_result = (u32 *)p_refRun->prev;
 
     if (p_refRun->prev)
         l_result += 2 - m_size;
@@ -331,25 +331,25 @@ UINT *LinkRefTab::RunToRefPtr(RefRun *p_refRun)
 }
 
 // Added
-UINT *LinkRefTab::AddStart(UINT p_refNum)
+u32 *LinkRefTab::AddStart(u32 p_refNum)
 {
-    UINT *l_nextRefNum;
+    u32 *l_nextRefNum;
     RefRun l_refRun;
 
     if (m_refTab)
     {
         m_refTab->RunInitNxtRef(&l_refRun);
-        UINT l_nextRef = m_refTab->RunNxtRef(&l_refRun);
+        u32 l_nextRef = m_refTab->RunNxtRef(&l_refRun);
 
         if (l_refRun.prev)
         {
-            l_nextRefNum = (UINT *)(l_nextRef + 4 * (2 - m_size));
+            l_nextRefNum = (u32 *)(l_nextRef + 4 * (2 - m_size));
 
             m_refTab->RunDelRef(&l_refRun);
         }
         else
         {
-            l_nextRefNum = (UINT *)p_refNum;
+            l_nextRefNum = (u32 *)p_refNum;
         }
 
         *l_nextRefNum = p_refNum;
@@ -387,29 +387,29 @@ UINT *LinkRefTab::AddStart(UINT p_refNum)
     return l_nextRefNum + 1;
 }
 
-void LinkRefTab::AddEnd(UINT p_refNum)
+void LinkRefTab::AddEnd(u32 p_refNum)
 {
     AddUnique(p_refNum);
 }
 
-UINT *LinkRefTab::InsertBefore(UINT *p_uintPtr, UINT p_refNum)
+u32 *LinkRefTab::InsertBefore(u32 *p_uintPtr, u32 p_refNum)
 {
-    UINT *l_nextRefNum;
+    u32 *l_nextRefNum;
     RefRun l_refRun;
 
     if (m_refTab)
     {
         m_refTab->RunInitNxtRef(&l_refRun);
-        UINT l_nextRef = m_refTab->RunNxtRef(&l_refRun);
+        u32 l_nextRef = m_refTab->RunNxtRef(&l_refRun);
 
         if (l_refRun.prev)
         {
-            l_nextRefNum = (UINT *)(l_nextRef + 4 * (2 - m_size));
+            l_nextRefNum = (u32 *)(l_nextRef + 4 * (2 - m_size));
             m_refTab->RunDelRef(&l_refRun);
         }
         else
         {
-            l_nextRefNum = (UINT *)p_refNum;
+            l_nextRefNum = (u32 *)p_refNum;
         }
 
         *l_nextRefNum = p_refNum;
@@ -431,9 +431,9 @@ UINT *LinkRefTab::InsertBefore(UINT *p_uintPtr, UINT p_refNum)
 
     l_data->prev = 0;
     l_data->next = 0;
-    UINT *l_data2 = &p_uintPtr[m_size - 2];
+    u32 *l_data2 = &p_uintPtr[m_size - 2];
 
-    if (&p_uintPtr[m_size] == (UINT *)8)
+    if (&p_uintPtr[m_size] == (u32 *)8)
     {
         l_data->prev = m_prev;
         l_data->next = 0;
@@ -451,7 +451,7 @@ UINT *LinkRefTab::InsertBefore(UINT *p_uintPtr, UINT p_refNum)
     else
     {
         RefRun *l_dataRefRun = (RefRun *)*l_data2;
-        bBool l_check = *l_data2 == 0;
+        boolean l_check = *l_data2 == 0;
         l_data->prev = (RefRun *)*l_data2;
 
         l_data->next = (RefRun *)l_data2;
@@ -461,28 +461,28 @@ UINT *LinkRefTab::InsertBefore(UINT *p_uintPtr, UINT p_refNum)
         else
             l_dataRefRun->next = l_data;
 
-        *l_data2 = (UINT)l_data;
+        *l_data2 = (u32)l_data;
 
         return l_nextRefNum + 1;
     }
 }
 
-UINT *LinkRefTab::GetPrevRefPtr(UINT *p_refPtr)
+u32 *LinkRefTab::GetPrevRefPtr(u32 *p_refPtr)
 {
-    UINT l_refNum = p_refPtr[m_size - 2];
+    u32 l_refNum = p_refPtr[m_size - 2];
 
     if (l_refNum)
-        return (UINT *)(l_refNum + 4 * (2 - m_size));
+        return (u32 *)(l_refNum + 4 * (2 - m_size));
     else
         return 0;
 }
 
-UINT *LinkRefTab::GetNextRefPtr(UINT *p_refPtr)
+u32 *LinkRefTab::GetNextRefPtr(u32 *p_refPtr)
 {
-    UINT l_refPtr = p_refPtr[m_size - 1];
+    u32 l_refPtr = p_refPtr[m_size - 1];
 
     if (l_refPtr)
-        return (UINT *)(l_refPtr + 4 * (2 - m_size));
+        return (u32 *)(l_refPtr + 4 * (2 - m_size));
     else
         return 0;
 }

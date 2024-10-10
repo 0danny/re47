@@ -5,7 +5,7 @@
 class StrRefTab : public RefTab
 {
 public:
-    StrRefTab(int p_poolSize, int p_size);
+    StrRefTab(i32 p_poolSize, i32 p_size);
 
     virtual ~StrRefTab();
 
@@ -23,8 +23,8 @@ public:
     virtual bool Exists(char *const p_str);
     virtual void Sort();
 
-    static int Compare(const void *p_a, const void *p_b);
-    static bBool CompareCall(const char *p_str1, const char *p_str2);
+    static i32 Compare(const void *p_a, const void *p_b);
+    static boolean CompareCall(const char *p_str1, const char *p_str2);
 
     void Destroy();
 };

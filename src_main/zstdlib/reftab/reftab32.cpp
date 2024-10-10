@@ -24,7 +24,7 @@ void RefTab32::Destroy()
         DeleteBlock(l_headPtr);
     }
 
-    int l_poolRes = m_poolSize | 0x80000000;
+    i32 l_poolRes = m_poolSize | 0x80000000;
 
     m_poolSize = l_poolRes;
     m_count = 0;

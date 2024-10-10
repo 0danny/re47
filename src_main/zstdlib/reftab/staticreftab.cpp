@@ -1,12 +1,12 @@
 #include "staticreftab.h"
 
-StaticRefTab::StaticRefTab(int p_poolSize, int p_size) : RefTab(p_poolSize, p_size + 1)
+StaticRefTab::StaticRefTab(i32 p_poolSize, i32 p_size) : RefTab(p_poolSize, p_size + 1)
 {
     RefTab *l_refTab = new RefTab(0, 0);
 
     if (l_refTab)
     {
-        int l_poolSize = m_poolSize & 0x7FFFFFFF;
+        i32 l_poolSize = m_poolSize & 0x7FFFFFFF;
 
         if (l_poolSize < 1)
             l_poolSize = 1;
@@ -51,7 +51,7 @@ void StaticRefTab::Destroy()
     m_head = 0;
 }
 
-UINT *StaticRefTab::Add(UINT p_refNum)
+u32 *StaticRefTab::Add(u32 p_refNum)
 {
     m_count += 1;
 
@@ -66,23 +66,23 @@ UINT *StaticRefTab::Add(UINT p_refNum)
         if (m_head)
             m_head->prev = l_newBlock;
 
-        int l_poolRes = m_poolSize & 0x7FFFFFFF;
+        i32 l_poolRes = m_poolSize & 0x7FFFFFFF;
 
         m_head = l_newBlock;
 
-        UINT l_refNum = (UINT)&l_newBlock[1];
-        int l_offset = 12;
+        u32 l_refNum = (u32)&l_newBlock[1];
+        i32 l_offset = 12;
 
         if (l_poolRes)
         {
-            int l_count = l_poolRes;
-            int l_newSize;
+            i32 l_count = l_poolRes;
+            i32 l_newSize;
 
             do
             {
                 m_refTab->Add(l_refNum);
 
-                *(UINT *)(l_refNum + 4 * m_size - 4) = (UINT)l_newBlock;
+                *(u32 *)(l_refNum + 4 * m_size - 4) = (u32)l_newBlock;
                 l_newSize = 4 * m_size;
 
                 l_refNum += l_newSize;
@@ -93,18 +93,18 @@ UINT *StaticRefTab::Add(UINT p_refNum)
         }
     }
 
-    UINT *l_nxtRef;
-    UINT *l_nxtRefPtr;
+    u32 *l_nxtRef;
+    u32 *l_nxtRefPtr;
     RefRun l_refRun;
 
-    if (m_refTab && (m_refTab->RunInitNxtRef(&l_refRun), l_nxtRef = (UINT *)m_refTab->RunNxtRef(&l_refRun), l_refRun.prev))
+    if (m_refTab && (m_refTab->RunInitNxtRef(&l_refRun), l_nxtRef = (u32 *)m_refTab->RunNxtRef(&l_refRun), l_refRun.prev))
     {
         l_nxtRefPtr = l_nxtRef;
         m_refTab->RunDelRef(&l_refRun);
     }
     else
     {
-        l_nxtRefPtr = (UINT *)p_refNum;
+        l_nxtRefPtr = (u32 *)p_refNum;
     }
 
     RefRun *l_data = (RefRun *)l_nxtRefPtr[m_size - 1];
@@ -115,7 +115,7 @@ UINT *StaticRefTab::Add(UINT p_refNum)
     return l_nxtRefPtr + 1;
 }
 
-void StaticRefTab::AddUnique(UINT p_refNum)
+void StaticRefTab::AddUnique(u32 p_refNum)
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 616);
     l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 616);
@@ -155,7 +155,7 @@ void StaticRefTab::ClearThis()
     }
 }
 
-void StaticRefTab::DelRefPtr(UINT *p_refNum)
+void StaticRefTab::DelRefPtr(u32 *p_refNum)
 {
     m_count = m_count - 1;
     RefRun *l_data = (RefRun *)p_refNum[m_size - 1];
@@ -175,10 +175,8 @@ void StaticRefTab::DelRefPtr(UINT *p_refNum)
             RefRun l_refRun;
             m_refTab->RunInitNxtRef(&l_refRun);
 
-            for (UINT i = m_refTab->RunNxtRef(&l_refRun); l_refRun.prev; i = m_refTab->RunNxtRef(&l_refRun))
+            for (u32 i = m_refTab->RunNxtRef(&l_refRun); l_refRun.prev; i = m_refTab->RunNxtRef(&l_refRun))
             {
-                printf("Reference is -> %d\n", i);
-
                 if (*(RefRun **)(i + 4 * this->m_size - 4) == l_data)
                     m_refTab->RunDelRef(&l_refRun);
             }
@@ -188,11 +186,11 @@ void StaticRefTab::DelRefPtr(UINT *p_refNum)
     }
     else
     {
-        m_refTab->Add((UINT)p_refNum);
+        m_refTab->Add((u32)p_refNum);
     }
 }
 
-bBool StaticRefTab::Exists(UINT p_refNum)
+boolean StaticRefTab::Exists(u32 p_refNum)
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 668);
     l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 668);
@@ -201,7 +199,7 @@ bBool StaticRefTab::Exists(UINT p_refNum)
     return 0;
 }
 
-UINT *StaticRefTab::Find(UINT p_refNum)
+u32 *StaticRefTab::Find(u32 p_refNum)
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 673);
     l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 673);
@@ -210,7 +208,7 @@ UINT *StaticRefTab::Find(UINT p_refNum)
     return 0;
 }
 
-UINT StaticRefTab::GetRefNr(int p_refIndex)
+u32 StaticRefTab::GetRefNr(i32 p_refIndex)
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 678);
     l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 678);
@@ -219,7 +217,7 @@ UINT StaticRefTab::GetRefNr(int p_refIndex)
     return 0;
 }
 
-UINT *StaticRefTab::GetRefPtrNr(int p_refIndex)
+u32 *StaticRefTab::GetRefPtrNr(i32 p_refIndex)
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 683);
     l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 683);
@@ -236,7 +234,7 @@ void StaticRefTab::PrintStatus()
     DebugBreak();
 }
 
-void StaticRefTab::Remove(UINT p_refNum)
+void StaticRefTab::Remove(u32 p_refNum)
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 692);
     l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 692);
@@ -244,7 +242,7 @@ void StaticRefTab::Remove(UINT p_refNum)
     DebugBreak();
 }
 
-bBool StaticRefTab::RemoveIfExists(UINT p_refNum)
+boolean StaticRefTab::RemoveIfExists(u32 p_refNum)
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 696);
     l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 696);
@@ -278,7 +276,7 @@ void StaticRefTab::RunInitPrevRef(RefRun *p_refRun)
     DebugBreak();
 }
 
-UINT StaticRefTab::RunNxtRef(RefRun *p_refRun)
+u32 StaticRefTab::RunNxtRef(RefRun *p_refRun)
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 713);
     l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 713);
@@ -287,7 +285,7 @@ UINT StaticRefTab::RunNxtRef(RefRun *p_refRun)
     return 0;
 }
 
-UINT *StaticRefTab::RunNxtRefPtr(RefRun *p_refRun)
+u32 *StaticRefTab::RunNxtRefPtr(RefRun *p_refRun)
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 718);
     l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 718);
@@ -296,7 +294,7 @@ UINT *StaticRefTab::RunNxtRefPtr(RefRun *p_refRun)
     return 0;
 }
 
-UINT StaticRefTab::RunPrevRef(RefRun *p_refRun)
+u32 StaticRefTab::RunPrevRef(RefRun *p_refRun)
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 723);
     l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 723);
@@ -305,7 +303,7 @@ UINT StaticRefTab::RunPrevRef(RefRun *p_refRun)
     return 0;
 }
 
-UINT *StaticRefTab::RunPrevRefPtr(RefRun *p_refRun)
+u32 *StaticRefTab::RunPrevRefPtr(RefRun *p_refRun)
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 728);
     l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 728);

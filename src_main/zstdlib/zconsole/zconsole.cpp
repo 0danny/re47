@@ -18,7 +18,7 @@ ZConsole::ZConsole()
     m_outputScrollOffset = 0;
     m_shiftPressed = 0;
 
-    for (int i = 0; i < 1000; i++)
+    for (i32 i = 0; i < 1000; i++)
     {
         m_outputBox[i] = new char[150];
     }
@@ -44,7 +44,7 @@ ZConsole::ZConsole()
     m_autoCompleteHandler = new ZAutoCompleteHandler(m_autoComplete);
 }
 
-bBool ZConsole::UpdateConsoleVisibility()
+boolean ZConsole::UpdateConsoleVisibility()
 {
     if (m_isVisible)
     {
@@ -96,7 +96,7 @@ void ZConsole::AddCmdText(const char *p_format, ...)
 
     m_outputBox[m_outputIndex][149] = '\0';
 
-    int l_newIndex = m_outputIndex + 1;
+    i32 l_newIndex = m_outputIndex + 1;
 
     m_outputIndex = l_newIndex;
 
@@ -104,12 +104,12 @@ void ZConsole::AddCmdText(const char *p_format, ...)
         m_outputIndex = 0;
 }
 
-char *ZConsole::GetOutputLine(int p_offset)
+char *ZConsole::GetOutputLine(i32 p_offset)
 {
     if (!p_offset)
         return m_inputBuffer;
 
-    int l_offset = m_outputScrollOffset;
+    i32 l_offset = m_outputScrollOffset;
 
     if (l_offset + p_offset > 1000)
     {
@@ -121,7 +121,7 @@ char *ZConsole::GetOutputLine(int p_offset)
         return g_emptyArray;
     }
 
-    int l_index = p_offset + l_offset + m_outputIndex; // Confusing
+    i32 l_index = p_offset + l_offset + m_outputIndex; // Confusing
 
     if (l_index < 0)
         l_index += 1000 * ((999 - l_index) / 1000u);
@@ -132,14 +132,14 @@ char *ZConsole::GetOutputLine(int p_offset)
     return m_outputBox[l_index];
 }
 
-uint8_t ZConsole::IsAnimating()
+u8 ZConsole::IsAnimating()
 {
     return m_isAnimating;
 }
 
-void ZConsole::HandleInput(int p_keyCode, char *p_cmdName)
+void ZConsole::HandleInput(i32 p_keyCode, char *p_cmdName)
 {
-    uint16_t l_lparam = (uint16_t)(p_cmdName);
+    u16 l_lparam = (u16)(p_cmdName);
 
     if (!p_cmdName)
         l_lparam = 1;
@@ -157,13 +157,13 @@ void ZConsole::HandleInput(int p_keyCode, char *p_cmdName)
 
         if (l_lparam)
         {
-            int l_deleteCount = (l_lparam - 1) + 1;
+            i32 l_deleteCount = (l_lparam - 1) + 1;
 
             do
             {
                 if (m_inputLength > 1)
                 {
-                    int newLength = (m_inputLength - 1);
+                    i32 newLength = (m_inputLength - 1);
 
                     m_inputLength = newLength;
                     m_inputBuffer[newLength] = '\0';
@@ -179,10 +179,10 @@ void ZConsole::HandleInput(int p_keyCode, char *p_cmdName)
 
         const char *l_match;
         ZConsoleArray *l_cmdArray;
-        int l_arraySize;
-        int l_arraySize2;
-        int l_newIndex;
-        int l_matchIndex;
+        i32 l_arraySize;
+        i32 l_arraySize2;
+        i32 l_newIndex;
+        i32 l_matchIndex;
 
         if (!m_isAutoCompleting)
         {
@@ -201,10 +201,10 @@ void ZConsole::HandleInput(int p_keyCode, char *p_cmdName)
             // Add all commands to the auto complete list
             for (ZCmdNode *j = m_consoleCmd.GetCmdRoot(); j; j = j->next)
             {
-                int l_cmdCount = m_autoComplete->commandCount;
+                i32 l_cmdCount = m_autoComplete->commandCount;
                 p_cmdName = j->cmdHandler->m_cmdName; // most likely is a reuse and p_cmdName is not actually a char*
 
-                int l_index = l_cmdCount % m_autoComplete->arraySize;
+                i32 l_index = l_cmdCount % m_autoComplete->arraySize;
                 m_autoComplete->commandCount = l_cmdCount + 1;
 
                 if (!l_index)
@@ -243,7 +243,7 @@ void ZConsole::HandleInput(int p_keyCode, char *p_cmdName)
             {
                 m_autoComplete = m_autoCompleteHandler->m_consoleStruct;
 
-                int index = m_autoCompleteHandler->m_matchIndex + 1;
+                i32 index = m_autoCompleteHandler->m_matchIndex + 1;
                 m_autoCompleteHandler->m_matchIndex = index;
 
                 if (index < m_autoComplete->commandCount)
@@ -372,7 +372,7 @@ void ZConsole::HandleInput(int p_keyCode, char *p_cmdName)
     default: // If any other keys are pressed
         if (l_lparam)
         {
-            int l_defaultCount = (l_lparam - 1) + 1;
+            i32 l_defaultCount = (l_lparam - 1) + 1;
 
             do
             {
@@ -393,7 +393,7 @@ void ZConsole::HandleInput(int p_keyCode, char *p_cmdName)
                 {
                     m_inputBuffer[m_inputLength] = p_keyCode;
 
-                    int newLen = m_inputLength + 1;
+                    i32 newLen = m_inputLength + 1;
 
                     m_inputLength = newLen;
                     m_inputBuffer[newLen] = 0;
@@ -407,7 +407,7 @@ void ZConsole::HandleInput(int p_keyCode, char *p_cmdName)
     }
 }
 
-void ZConsole::HandleKeyRelease(int p_keyCode, int p_unused)
+void ZConsole::HandleKeyRelease(i32 p_keyCode, i32 p_unused)
 {
     if (p_keyCode == VK_SHIFT)
         m_shiftPressed = 0;
@@ -468,7 +468,7 @@ void ZConsole::ToggleVisibility()
     m_isVisible = m_isVisible == 0;
 }
 
-void ZConsole::GoPrevCmd(bBool p_forwards)
+void ZConsole::GoPrevCmd(boolean p_forwards)
 {
     if (m_commandHistory[0])
     {
@@ -476,7 +476,7 @@ void ZConsole::GoPrevCmd(bBool p_forwards)
         {
             do
             {
-                int l_cmdCount = m_historyCount + 1;
+                i32 l_cmdCount = m_historyCount + 1;
                 m_historyCount = l_cmdCount;
 
                 if (l_cmdCount == 20)
@@ -517,8 +517,8 @@ void ZConsole::AddToHistory(const char *p_command)
     m_commandHistory[m_historyIndex] = new char[strlen(p_command) + 1];
     strcpy(m_commandHistory[m_historyIndex], p_command);
 
-    int l_newCmdCount = m_historyIndex + 1;
-    bBool l_check = m_historyIndex - 19 < 0;
+    i32 l_newCmdCount = m_historyIndex + 1;
+    boolean l_check = m_historyIndex - 19 < 0;
 
     m_historyIndex = l_newCmdCount;
 
@@ -535,12 +535,12 @@ double ZConsole::GetVisibilityProgress()
 
 void ZConsole::Destroy()
 {
-    for (int i = 0; i < 1000; i++)
+    for (i32 i = 0; i < 1000; i++)
     {
         delete[] m_outputBox[i];
     }
 
-    for (int j = 0; j < 20; j++)
+    for (i32 j = 0; j < 20; j++)
     {
         delete[] m_commandHistory[j];
     }
@@ -603,7 +603,7 @@ const char *ZAutoCompleteHandler::GetMatch(char *p_cmd)
         return 0;
 
     ZConsoleArray *l_commandArray;
-    int l_matchIndex;
+    i32 l_matchIndex;
 
     while (1)
     {

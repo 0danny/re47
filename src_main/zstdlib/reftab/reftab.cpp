@@ -1,7 +1,7 @@
 #include "reftab.h"
 
 // MATCHED
-RefTab::RefTab(int p_poolSize, int p_size)
+RefTab::RefTab(i32 p_poolSize, i32 p_size)
 {
     if (p_poolSize < 1)
         p_poolSize = 1;
@@ -32,7 +32,7 @@ RefTab::~RefTab()
 }
 
 // MATCHED
-UINT *RefTab::Add(UINT p_refNum)
+u32 *RefTab::Add(u32 p_refNum)
 {
     if (!m_head || m_tail->usedUnits == m_blockCapacity)
     {
@@ -57,7 +57,7 @@ UINT *RefTab::Add(UINT p_refNum)
         newBlock->usedUnits = 0;
     }
 
-    UINT *data = reinterpret_cast<UINT *>(&m_tail->data + m_tail->usedUnits);
+    u32 *data = reinterpret_cast<u32 *>(&m_tail->data + m_tail->usedUnits);
 
     *data = p_refNum;
 
@@ -70,7 +70,7 @@ UINT *RefTab::Add(UINT p_refNum)
 }
 
 // MATCHED
-void RefTab::AddUnique(UINT p_refNum)
+void RefTab::AddUnique(u32 p_refNum)
 {
     if (!Find(p_refNum))
         Add(p_refNum);
@@ -101,20 +101,20 @@ void RefTab::ClearThis()
 }
 
 // MATCHED
-int RefTab::GetCount()
+i32 RefTab::GetCount()
 {
     return m_count;
 }
 
 // MATCHED
-void RefTab::DelRefPtr(UINT *p_refNum)
+void RefTab::DelRefPtr(u32 *p_refNum)
 {
     RefRun l_refRun;
 
     if (this)
     {
         RunInitNxtRef(&l_refRun);
-        UINT *l_nextRef = (UINT *)RunNxtRefPtr(&l_refRun);
+        u32 *l_nextRef = (u32 *)RunNxtRefPtr(&l_refRun);
 
         if (l_nextRef)
         {
@@ -123,7 +123,7 @@ void RefTab::DelRefPtr(UINT *p_refNum)
                 if (l_nextRef == p_refNum)
                     break;
 
-                l_nextRef = (UINT *)RunNxtRefPtr(&l_refRun);
+                l_nextRef = (u32 *)RunNxtRefPtr(&l_refRun);
 
                 if (!l_nextRef)
                     return;
@@ -137,7 +137,7 @@ void RefTab::DelRefPtr(UINT *p_refNum)
 }
 
 // MATCHED
-bBool RefTab::Exists(UINT p_refNum)
+boolean RefTab::Exists(u32 p_refNum)
 {
     if (!this)
         return 0;
@@ -145,7 +145,7 @@ bBool RefTab::Exists(UINT p_refNum)
     RefRun l_refRun;
 
     RunInitNxtRef(&l_refRun);
-    UINT l_nextRef = RunNxtRef(&l_refRun);
+    u32 l_nextRef = RunNxtRef(&l_refRun);
 
     if (!l_refRun.prev)
         return 0;
@@ -162,7 +162,7 @@ bBool RefTab::Exists(UINT p_refNum)
 }
 
 // MATCHED
-UINT *RefTab::Find(UINT p_refNum)
+u32 *RefTab::Find(u32 p_refNum)
 {
     RefRun l_refRun;
 
@@ -170,7 +170,7 @@ UINT *RefTab::Find(UINT p_refNum)
         return 0;
 
     RunInitNxtRef(&l_refRun);
-    UINT *result = RunNxtRefPtr(&l_refRun);
+    u32 *result = RunNxtRefPtr(&l_refRun);
 
     if (!result)
         return 0;
@@ -187,7 +187,7 @@ UINT *RefTab::Find(UINT p_refNum)
 }
 
 // MATCHED
-UINT RefTab::GetRefNr(int p_refIndex)
+u32 RefTab::GetRefNr(i32 p_refIndex)
 {
     // Gets the reference by index
     if (p_refIndex >= m_count)
@@ -195,45 +195,45 @@ UINT RefTab::GetRefNr(int p_refIndex)
 
     RefRun *i;
 
-    int poolRes = m_poolSize & 0x7FFFFFFF;
+    i32 poolRes = m_poolSize & 0x7FFFFFFF;
 
     for (i = m_head; p_refIndex >= poolRes; p_refIndex -= poolRes)
         i = i->next;
 
-    return *((UINT *)&i->data + p_refIndex * m_size);
+    return *((u32 *)&i->data + p_refIndex * m_size);
 }
 
 // MATCHED
-UINT *RefTab::GetRefPtrNr(int p_refIndex)
+u32 *RefTab::GetRefPtrNr(i32 p_refIndex)
 {
-    // Gets the reference by index
+    // Gets the reference ptr by index
     if (p_refIndex >= m_count)
         return 0;
 
     RefRun *i;
 
-    int poolRes = m_poolSize & 0x7FFFFFFF;
+    i32 poolRes = m_poolSize & 0x7FFFFFFF;
 
     for (i = m_head; p_refIndex >= poolRes; p_refIndex -= poolRes)
         i = i->next;
 
-    return ((UINT *)&i->data + p_refIndex * m_size);
+    return ((u32 *)&i->data + p_refIndex * m_size);
 }
 
 // MATCHED
 void RefTab::PrintStatus()
 {
     RefRun *currentBlock;
-    UINT *data;
-    int usedUnits = 0;
-    int l_count;
+    u32 *data;
+    i32 usedUnits = 0;
+    i32 l_count;
 
     char *l_malloc = new char[256];
     char *l_mallocPtr = l_malloc;
 
     RefRun *l_currentBlock = m_head;
 
-    int i;
+    i32 i;
 
     for (i = 0; l_currentBlock; ++i)
         l_currentBlock = l_currentBlock->next;
@@ -243,12 +243,12 @@ void RefTab::PrintStatus()
 
     for (currentBlock = m_head; currentBlock; currentBlock = currentBlock->next)
     {
-        data = (UINT *)&currentBlock->data;
+        data = (u32 *)&currentBlock->data;
         l_count = 0;
 
         if (currentBlock->usedUnits)
         {
-            for (int j = 0; j < currentBlock->usedUnits; j += m_size)
+            for (i32 j = 0; j < currentBlock->usedUnits; j += m_size)
             {
                 _ltoa(*data, l_mallocPtr, 10);
 
@@ -272,7 +272,7 @@ void RefTab::PrintStatus()
 }
 
 // MATCHED
-void RefTab::Remove(UINT p_refNum)
+void RefTab::Remove(u32 p_refNum)
 {
     if (!RemoveIfExists(p_refNum))
     {
@@ -282,7 +282,7 @@ void RefTab::Remove(UINT p_refNum)
 }
 
 // MATCHED
-bBool RefTab::RemoveIfExists(UINT p_refNum)
+boolean RefTab::RemoveIfExists(u32 p_refNum)
 {
     RefRun l_refRun;
 
@@ -290,7 +290,7 @@ bBool RefTab::RemoveIfExists(UINT p_refNum)
         return 0;
 
     RunInitNxtRef(&l_refRun);
-    UINT l_nextRef = RunNxtRef(&l_refRun);
+    u32 l_nextRef = RunNxtRef(&l_refRun);
 
     if (!l_refRun.prev)
         return 0;
@@ -317,7 +317,7 @@ bBool RefTab::RemoveIfExists(UINT p_refNum)
 void RefTab::RunDelRef(RefRun *p_refRun)
 {
     RefRun *l_tail = m_tail;
-    int l_size = m_size;
+    i32 l_size = m_size;
 
     --m_count;
 
@@ -327,7 +327,7 @@ void RefTab::RunDelRef(RefRun *p_refRun)
     {
         l_size = m_size;
 
-        bBool l_less0 = (int)p_refRun->next - l_size < 0;
+        boolean l_less0 = (i32)p_refRun->next - l_size < 0;
         p_refRun->next = (RefRun *)((char *)p_refRun->next - l_size);
 
         if (l_less0)
@@ -339,8 +339,8 @@ void RefTab::RunDelRef(RefRun *p_refRun)
 
     if (m_count)
     {
-        UINT *l_flag = (UINT *)(&m_tail->data + m_tail->usedUnits);
-        UINT *l_flag2 = (UINT *)(&p_refRun->prev->data + (int)p_refRun->next);
+        u32 *l_flag = (u32 *)(&m_tail->data + m_tail->usedUnits);
+        u32 *l_flag2 = (u32 *)(&p_refRun->prev->data + (i32)p_refRun->next);
 
         if (l_flag != l_flag2)
             memcpy(l_flag2, l_flag, 4 * m_size);
@@ -351,17 +351,13 @@ void RefTab::RunDelRef(RefRun *p_refRun)
     if (!l_tail2->usedUnits)
     {
         RefRun *l_prev = l_tail2->prev;
-        m_tail = l_tail2->prev;
+        boolean l_flag3 = l_prev == 0;
+        m_tail = l_prev;
 
-        if (l_tail2->prev == 0)
+        if (l_flag3)
         {
             m_head = 0;
             p_refRun->prev = 0;
-
-            if (m_count)
-                g_pSysCom->ThrowFatal("RefPik\n");
-
-            DeleteBlock(l_tail2);
         }
         else
         {
@@ -372,9 +368,9 @@ void RefTab::RunDelRef(RefRun *p_refRun)
             }
 
             m_tail->next = 0;
-
-            DeleteBlock(l_tail2);
         }
+
+        DeleteBlock(l_tail2);
     }
 }
 
@@ -403,15 +399,15 @@ void RefTab::RunInitPrevRef(RefRun *p_refRun)
 }
 
 // MATCHED
-UINT RefTab::RunNxtRef(RefRun *p_refRun)
+u32 RefTab::RunNxtRef(RefRun *p_refRun)
 {
-    UINT *result = RunNxtRefPtr(p_refRun);
+    u32 *result = RunNxtRefPtr(p_refRun);
 
     return result ? *result : 0;
 }
 
 // MATCHED
-UINT *RefTab::RunNxtRefPtr(RefRun *p_refRun)
+u32 *RefTab::RunNxtRefPtr(RefRun *p_refRun)
 {
     if (m_poolSize < 0)
     {
@@ -436,13 +432,13 @@ UINT *RefTab::RunNxtRefPtr(RefRun *p_refRun)
 
     if (p_refRun->prev)
     {
-        int next = (int)p_refRun->next;
+        i32 next = (i32)p_refRun->next;
 
         if (next != m_tail->usedUnits || prev->next)
         {
             p_refRun->next = (RefRun *)(next + m_size);
 
-            return (UINT *)((char *)prev + sizeof(UINT) * next + 12);
+            return (u32 *)((char *)prev + sizeof(u32) * next + 12);
         }
         else
         {
@@ -451,18 +447,18 @@ UINT *RefTab::RunNxtRefPtr(RefRun *p_refRun)
         }
     }
 
-    return (UINT *)prev;
+    return (u32 *)prev;
 }
 
 // MATCHED
-UINT RefTab::RunPrevRef(RefRun *p_refRun)
+u32 RefTab::RunPrevRef(RefRun *p_refRun)
 {
-    UINT *result = RunPrevRefPtr(p_refRun);
+    u32 *result = RunPrevRefPtr(p_refRun);
     return result ? *result : 0;
 }
 
 // MATCHED
-UINT *RefTab::RunPrevRefPtr(RefRun *p_refRun)
+u32 *RefTab::RunPrevRefPtr(RefRun *p_refRun)
 {
     if (m_poolSize < 0)
     {
@@ -480,9 +476,9 @@ UINT *RefTab::RunPrevRefPtr(RefRun *p_refRun)
     if (!p_refRun->prev)
         return 0;
 
-    int l_size = m_size;
+    i32 l_size = m_size;
 
-    bBool l_flag = (int)p_refRun->next - l_size < 0;
+    boolean l_flag = (i32)p_refRun->next - l_size < 0;
     p_refRun->next = (RefRun *)((char *)p_refRun->next - l_size);
 
     if (l_flag)
@@ -496,13 +492,13 @@ UINT *RefTab::RunPrevRefPtr(RefRun *p_refRun)
         p_refRun->next = (RefRun *)(m_blockCapacity - m_size);
     }
 
-    return (UINT *)(&p_refRun->prev->data + (int)p_refRun->next);
+    return (u32 *)(&p_refRun->prev->data + (i32)p_refRun->next);
 }
 
 // MATCHED
-UINT *RefTab::RunToRefPtr(RefRun *p_refRun)
+u32 *RefTab::RunToRefPtr(RefRun *p_refRun)
 {
-    return (UINT *)(&p_refRun->prev->data + (int)p_refRun->next);
+    return (u32 *)(&p_refRun->prev->data + (i32)p_refRun->next);
 }
 
 // MATCHED
@@ -514,7 +510,7 @@ void RefTab::DeleteBlock(void *p_lpMem)
 // MATCHED
 RefRun *RefTab::NewBlock()
 {
-    int newSize = sizeof(UINT) * m_blockCapacity + 12;
+    i32 newSize = sizeof(u32) * m_blockCapacity + 12;
 
     return reinterpret_cast<RefRun *>(operator new(newSize));
 }

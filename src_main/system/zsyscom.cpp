@@ -2,32 +2,32 @@
 
 ZSysCom::ZSysCom()
 {
-    this->m_unkInt1 = 1234;
-    this->m_unkPtr = 0;
-    this->m_unkBool1 = 0;
+    m_unkInt1 = 1234;
+    m_unkPtr = 0;
+    m_unkBool1 = 0;
 
-    this->m_unkPtr2 = 0;
-    this->m_sendingZMessage = 0;
-    this->m_filePath = 0;
-    this->m_lineNum = 0;
-    this->m_unkBool3 = 0;
-    this->m_unkHwnd = 0;
-    this->m_msgID = RegisterWindowMessageA("ZSystemMessage");
+    m_unkPtr2 = 0;
+    m_sendingZMessage = 0;
+    m_filePath = 0;
+    m_lineNum = 0;
+    m_unkBool3 = 0;
+    m_unkHwnd = 0;
+    m_msgID = RegisterWindowMessageA("ZSystemMessage");
 
     g_pSysCom = this;
 }
 
-int ZSysCom::GetUnkInt1()
+i32 ZSysCom::GetUnkInt1()
 {
-    return this->m_unkInt1;
+    return m_unkInt1;
 }
 
-UINT ZSysCom::GetMsgID()
+u32 ZSysCom::GetMsgID()
 {
-    return this->m_msgID;
+    return m_msgID;
 }
 
-int ZSysCom::FormatString(char *p_resultBuffer, char *p_format, ...)
+i32 ZSysCom::FormatString(char *p_resultBuffer, char *p_format, ...)
 {
     va_list l_argList;
     va_start(l_argList, p_format);
@@ -46,14 +46,14 @@ void ZSysCom::ProcessDebugWnd(HWND p_hWnd)
 {
     struct tagMSG l_msg;
 
-    this->m_debugHwnd = p_hWnd;
-    this->SendDebugMsg(9, (WPARAM)p_hWnd, 0);
+    m_debugHwnd = p_hWnd;
+    SendDebugMsg(9, (WPARAM)p_hWnd, 0);
 
     HWND l_findWnd = FindWindowA(0, "ZDebug");
 
     if (l_findWnd)
     {
-        int l_count = 0;
+        i32 l_count = 0;
 
         while (1)
         {
@@ -66,7 +66,7 @@ void ZSysCom::ProcessDebugWnd(HWND p_hWnd)
                 DispatchMessageA(&l_msg);
             }
 
-            if (this->m_unkHwnd)
+            if (m_unkHwnd)
                 break;
 
             Sleep(5);
@@ -77,43 +77,43 @@ void ZSysCom::ProcessDebugWnd(HWND p_hWnd)
             }
         }
 
-        this->m_unkBool3 = 1;
+        m_unkBool3 = 1;
     }
     else
     {
-        this->m_unkBool3 = 1;
+        m_unkBool3 = 1;
     }
 }
 
-void ZSysCom::SendDebugMsg(WPARAM p_wParam, LPARAM p_lParam, bBool p_sendMessage)
+void ZSysCom::SendDebugMsg(WPARAM p_wParam, LPARAM p_lParam, boolean p_sendMessage)
 {
-    HWND l_unkHwnd = this->m_unkHwnd;
+    HWND l_unkHwnd = m_unkHwnd;
 
     if (p_sendMessage)
     {
         if (l_unkHwnd)
-            SendMessageA(0, this->m_msgID, p_wParam + (this->m_unkInt1 << 8), p_lParam);
+            SendMessageA(0, m_msgID, p_wParam + (m_unkInt1 << 8), p_lParam);
     }
     else
     {
         if (!l_unkHwnd)
             l_unkHwnd = HWND_BROADCAST;
 
-        PostMessageA(l_unkHwnd, this->m_msgID, p_wParam + (this->m_unkInt1 << 8), p_lParam);
+        PostMessageA(l_unkHwnd, m_msgID, p_wParam + (m_unkInt1 << 8), p_lParam);
     }
 }
 
-int ZSysCom::ForwardWndProc(UINT p_msg, WPARAM p_wParam, LPARAM p_lParam)
+i32 ZSysCom::ForwardWndProc(u32 p_msg, WPARAM p_wParam, LPARAM p_lParam)
 {
     return 0;
 }
 
-ZSysCom *ZSysCom::SetPathAndLine(char *p_filePath, int p_lineNum)
+ZSysCom *ZSysCom::SetPathAndLine(char *p_filePath, i32 p_lineNum)
 {
     ZSysCom *l_result = this;
 
-    this->m_filePath = p_filePath;
-    this->m_lineNum = p_lineNum;
+    m_filePath = p_filePath;
+    m_lineNum = p_lineNum;
 
     return l_result;
 }
@@ -129,7 +129,7 @@ void ZSysCom::DataToDebug(char *p_format, ...)
 
     va_start(l_argList, p_format);
 
-    if (this->m_unkHwnd)
+    if (m_unkHwnd)
     {
         vsprintf(l_buffer, p_format, l_argList);
 
@@ -139,7 +139,7 @@ void ZSysCom::DataToDebug(char *p_format, ...)
 
             if (l_atom)
             {
-                this->SendDebugMsg(12, l_atom, 0);
+                SendDebugMsg(12, l_atom, 0);
             }
             else
             {
@@ -161,7 +161,7 @@ void ZSysCom::LogMessage(char *p_format, ...)
 {
 }
 
-void ZSysCom::UnkFunc5(int p_unkInt, char *p_format, ...)
+void ZSysCom::UnkFunc5(i32 p_unkInt, char *p_format, ...)
 {
 }
 
@@ -173,16 +173,16 @@ void ZSysCom::SendZMessage(char *p_format, ...)
 
     va_start(l_argList, p_format);
 
-    if (!this->m_sendingZMessage)
+    if (!m_sendingZMessage)
     {
-        this->m_sendingZMessage = 1;
+        m_sendingZMessage = 1;
 
         vsprintf(l_buffer, p_format, l_argList);
 
         if (!l_buffer[0] || *((byte *)&l_copyData.lpData + strlen(l_buffer) + 3) != '\n')
             strcat(l_buffer, "\n");
 
-        HWND l_unkHwnd = this->m_unkHwnd;
+        HWND l_unkHwnd = m_unkHwnd;
 
         if (l_unkHwnd)
         {
@@ -197,7 +197,7 @@ void ZSysCom::SendZMessage(char *p_format, ...)
             MessageBoxA(0, l_buffer, "ZSystem Default Output", MB_TOPMOST);
         }
 
-        this->m_sendingZMessage = 0;
+        m_sendingZMessage = 0;
     }
 }
 

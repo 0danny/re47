@@ -9,14 +9,16 @@ namespace Constructors
     {
         printf("[CONSTRUCTOR HOOK]: Creating constructor hooks...\n");
 
+        // When the RefTab32 and AllocRefTab hooks are both active at the same time, it causes a crash. However, alone they work fine, weird....
+        /*
+                if (MH_CreateHook(ref32RefTabAddress, (LPVOID)&Constructors::RefTab32Hook, reinterpret_cast<LPVOID *>(&originalRefTab32)) != MH_OK)
+                {
+                    printf("[CONSTRUCTOR HOOK]: Could not hook RefTab32 constructor.\n");
+                }*/
+
         if (MH_CreateHook(refTabAddress, (LPVOID)&Constructors::RefTabHook, NULL) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook RefTab constructor.\n");
-        }
-
-        if (MH_CreateHook(ref32RefTabAddress, (LPVOID)&Constructors::RefTab32Hook, reinterpret_cast<LPVOID *>(&originalRefTab32)) != MH_OK)
-        {
-            printf("[CONSTRUCTOR HOOK]: Could not hook RefTab32 constructor.\n");
         }
 
         if (MH_CreateHook(staticRefTabAddress, (LPVOID)&Constructors::StaticRefTabHook, reinterpret_cast<LPVOID *>(&originalStaticRefTab)) != MH_OK)
@@ -43,6 +45,11 @@ namespace Constructors
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook ZConsole constructor.\n");
         }
+
+        if (MH_CreateHook(allocRefTabAddress, (LPVOID)&Constructors::AllocRefTabHook, reinterpret_cast<LPVOID *>(&originalAllocRefTab)) != MH_OK)
+        {
+            printf("[CONSTRUCTOR HOOK]: Could not hook AllocRefTab constructor.\n");
+        }
     }
 
     RefTab *__fastcall RefTabHook(RefTab *_this, void *_EDX, int p_poolSize, int p_size)
@@ -56,7 +63,6 @@ namespace Constructors
     {
         printf("[CONSTRUCTOR HOOK]: RefTab32 called\n");
 
-        // using the _this ptr, we place our reftab32 object at the same address as the original object
         return new (_this) RefTab32();
     }
 
@@ -65,6 +71,13 @@ namespace Constructors
         printf("[CONSTRUCTOR HOOK]: StaticRefTab called -> Pool Size: %d, Size: %d\n", p_poolSize, p_size);
 
         return new (_this) StaticRefTab(p_poolSize, p_size);
+    }
+
+    AllocRefTab *__fastcall AllocRefTabHook(AllocRefTab *_this, void *_EDX)
+    {
+        printf("[CONSTRUCTOR HOOK]: AllocRefTab called\n");
+
+        return new (_this) AllocRefTab();
     }
 
     EquRefTab *__fastcall EquRefTabHook(EquRefTab *_this, void *_EDX, int p_poolSize, int p_size)

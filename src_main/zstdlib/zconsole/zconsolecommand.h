@@ -28,8 +28,8 @@ public:
 
     virtual ZCmdNode *RegisterCommand(ZCmdHandler *p_handler);
     virtual void UnregisterCommand(ZCmdHandler *p_handler);
-    virtual ZCmdNode *FindCommand(char *p_commandName, bBool p_searchForward, bBool p_exactMatch, ZCmdNode *p_startNode);
-    virtual bBool ExecuteCommand(char *p_cmd, char *p_cmdValue);
+    virtual ZCmdNode *FindCommand(char *p_commandName, boolean p_searchForward, boolean p_exactMatch, ZCmdNode *p_startNode);
+    virtual boolean ExecuteCommand(char *p_cmd, char *p_cmdValue);
     virtual void PrintStatus(char *p_cmdValue);
     virtual ZCmdNode *GetCmdRoot();
 

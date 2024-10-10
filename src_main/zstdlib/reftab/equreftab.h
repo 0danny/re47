@@ -5,7 +5,7 @@
 class EquRefTab : public RefTab
 {
 public:
-    EquRefTab(int p_poolSize, int p_size);
+    EquRefTab(i32 p_poolSize, i32 p_size);
 
     virtual ~EquRefTab();
 
@@ -13,8 +13,8 @@ public:
     void PrintStatus();
 
     // Added
-    virtual UINT *FindEqu(int p_value);
-    virtual UINT *AddEqu(UINT p_refNum, int p_value);
+    virtual u32 *FindEqu(i32 p_value);
+    virtual u32 *AddEqu(u32 p_refNum, i32 p_value);
 
     void Destroy();
 };

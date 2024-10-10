@@ -18,7 +18,7 @@ void ZDynamicLoader::NewLibrary(HMODULE p_hModule, const char *p_libName)
         delete[] m_libName;
     }
 
-    int l_strLen = strlen(p_libName) + 1;
+    i32 l_strLen = strlen(p_libName) + 1;
 
     char *l_strMalloc = new char[l_strLen];
 

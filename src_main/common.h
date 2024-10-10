@@ -5,13 +5,18 @@
 #include "system/zsysmem.h"
 
 // Typedefs
-typedef byte bBool;
-typedef long int64_t;
 
-typedef unsigned char uint8_t;
-typedef unsigned short uint16_t;
-typedef unsigned int uint32_t;
-typedef unsigned long uint64_t;
+typedef byte boolean;
+
+typedef char i8;
+typedef short i16;
+typedef int i32;
+typedef long i64;
+
+typedef unsigned char u8;
+typedef unsigned short u16;
+typedef unsigned int u32;
+typedef unsigned long u64;
 
 static char *g_emptyArray = new char[264];
 static char *g_emptyDelimiter = new char[4];

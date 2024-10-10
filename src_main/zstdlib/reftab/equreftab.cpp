@@ -1,6 +1,6 @@
 #include "equreftab.h"
 
-EquRefTab::EquRefTab(int p_poolSize, int p_size) : RefTab(p_poolSize, p_size + 1) {}
+EquRefTab::EquRefTab(i32 p_poolSize, i32 p_size) : RefTab(p_poolSize, p_size + 1) {}
 
 EquRefTab::~EquRefTab()
 {
@@ -10,7 +10,7 @@ EquRefTab::~EquRefTab()
 void EquRefTab::Destroy()
 {
     RefRun *l_head = m_head;
-    int l_poolRes = m_poolSize | 0x80000000;
+    i32 l_poolRes = m_poolSize | 0x80000000;
 
     m_poolSize = l_poolRes;
 
@@ -29,7 +29,7 @@ void EquRefTab::PrintStatus()
     if (this)
     {
         RefRun l_refRun;
-        UINT *l_nxtRef;
+        u32 *l_nxtRef;
 
         RunInitNxtRef(&l_refRun);
 
@@ -41,7 +41,7 @@ void EquRefTab::PrintStatus()
     }
 }
 
-UINT *EquRefTab::FindEqu(int p_value)
+u32 *EquRefTab::FindEqu(i32 p_value)
 {
     if (!this)
         return 0;
@@ -49,14 +49,14 @@ UINT *EquRefTab::FindEqu(int p_value)
     RefRun l_refRun;
     RunInitNxtRef(&l_refRun);
 
-    UINT *l_nxtRef = RunNxtRefPtr(&l_refRun);
+    u32 *l_nxtRef = RunNxtRefPtr(&l_refRun);
 
     if (!l_nxtRef)
         return 0;
 
     while (1)
     {
-        UINT l_data = l_nxtRef[m_size - 1];
+        u32 l_data = l_nxtRef[m_size - 1];
 
         if (l_data != -1 && p_value == l_data)
             break;
@@ -70,9 +70,9 @@ UINT *EquRefTab::FindEqu(int p_value)
     return l_nxtRef;
 }
 
-UINT *EquRefTab::AddEqu(UINT p_refNum, int p_value)
+u32 *EquRefTab::AddEqu(u32 p_refNum, i32 p_value)
 {
-    UINT *l_add;
+    u32 *l_add;
 
     l_add = RefTab::Add(p_refNum);
     l_add[this->m_size - 2] = p_value;

@@ -10,36 +10,36 @@ public:
     RefRun *m_prev;
     RefTab *m_refTab;
 
-    LinkRefTab(int p_poolSize, int p_size);
+    LinkRefTab(i32 p_poolSize, i32 p_size);
     virtual ~LinkRefTab();
 
     // Overriden
-    UINT *Add(UINT p_refNum);
+    u32 *Add(u32 p_refNum);
 
     void Clear();
     void ClearThis();
-    int GetCount();
-    void DelRefPtr(UINT *p_refNum);
+    i32 GetCount();
+    void DelRefPtr(u32 *p_refNum);
 
-    UINT GetRefNr(int p_refIndex);
-    UINT *GetRefPtrNr(int p_refIndex);
+    u32 GetRefNr(i32 p_refIndex);
+    u32 *GetRefPtrNr(i32 p_refIndex);
     void PrintStatus();
 
     void RunDelRef(RefRun *p_refRun);
     void RunInitNxtRef(RefRun *p_refRun);
     void RunInitPrevRef(RefRun *p_refRun);
 
-    UINT *RunNxtRefPtr(RefRun *p_refRun);
-    UINT *RunPrevRefPtr(RefRun *p_refRun);
-    UINT *RunToRefPtr(RefRun *p_refRun);
+    u32 *RunNxtRefPtr(RefRun *p_refRun);
+    u32 *RunPrevRefPtr(RefRun *p_refRun);
+    u32 *RunToRefPtr(RefRun *p_refRun);
 
     // Added
-    virtual UINT *AddStart(UINT p_refNum);
-    virtual void AddEnd(UINT p_refNum);
-    virtual UINT *InsertBefore(UINT *p_uintPtr, UINT p_refNum);
+    virtual u32 *AddStart(u32 p_refNum);
+    virtual void AddEnd(u32 p_refNum);
+    virtual u32 *InsertBefore(u32 *p_uintPtr, u32 p_refNum);
 
-    virtual UINT *GetPrevRefPtr(UINT *p_refPtr);
-    virtual UINT *GetNextRefPtr(UINT *p_refPtr);
+    virtual u32 *GetPrevRefPtr(u32 *p_refPtr);
+    virtual u32 *GetNextRefPtr(u32 *p_refPtr);
 
     void Destroy();
 };

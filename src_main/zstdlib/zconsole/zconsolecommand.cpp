@@ -27,7 +27,7 @@ ZCmdNode *ZConsoleCommand::RegisterCommand(ZCmdHandler *p_handler)
     l_newNode->prevSameCommand = 0;
     l_newNode->cmdHandler = p_handler;
 
-    int strcmpResult = _strcmpi(p_handler->m_cmdName, l_cmdNodeRoot->cmdHandler->m_cmdName);
+    i32 strcmpResult = _strcmpi(p_handler->m_cmdName, l_cmdNodeRoot->cmdHandler->m_cmdName);
 
     if (strcmpResult >= 0)
     {
@@ -156,7 +156,7 @@ void ZConsoleCommand::UnregisterCommand(ZCmdHandler *p_handler)
     }
 }
 
-ZCmdNode *ZConsoleCommand::FindCommand(char *p_commandName, bBool p_searchForward, bBool p_exactMatch, ZCmdNode *p_startNode)
+ZCmdNode *ZConsoleCommand::FindCommand(char *p_commandName, boolean p_searchForward, boolean p_exactMatch, ZCmdNode *p_startNode)
 {
     ZCmdNode *l_cmdStruct;
 
@@ -172,7 +172,7 @@ ZCmdNode *ZConsoleCommand::FindCommand(char *p_commandName, bBool p_searchForwar
         l_cmdStruct = m_cmdNodeRoot;
     }
 
-    UINT l_cmdLength = strlen(p_commandName) + 1;
+    u32 l_cmdLength = strlen(p_commandName) + 1;
 
     if (!l_cmdStruct)
         return p_startNode;
@@ -198,7 +198,7 @@ ZCmdNode *ZConsoleCommand::FindCommand(char *p_commandName, bBool p_searchForwar
     return l_cmdStruct;
 }
 
-bBool ZConsoleCommand::ExecuteCommand(char *p_cmd, char *p_cmdValue)
+boolean ZConsoleCommand::ExecuteCommand(char *p_cmd, char *p_cmdValue)
 {
     ZCmdNode *l_cmdStruct = FindCommand(p_cmd, 1, 1, 0);
 

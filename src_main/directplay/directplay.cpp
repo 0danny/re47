@@ -43,7 +43,7 @@ DirectPlay::~DirectPlay()
     FreeData();
 }
 
-int __stdcall EnumCallback(LPGUID lpguidSP, LPSTR lpSPName, DWORD dwMajorVersion, DWORD dwMinorVersion, LPVOID lpContext)
+i32 __stdcall EnumCallback(LPGUID lpguidSP, LPSTR lpSPName, DWORD dwMajorVersion, DWORD dwMinorVersion, LPVOID lpContext)
 {
     if (!strstr(lpSPName, "TCP"))
         return 1;
@@ -57,7 +57,7 @@ int __stdcall EnumCallback(LPGUID lpguidSP, LPSTR lpSPName, DWORD dwMajorVersion
     return 0;
 }
 
-int __stdcall EnumSessions(LPCDPSESSIONDESC2 lpThisSD, LPDWORD lpdwTimeOut, DWORD dwFlags, LPVOID lpContext)
+i32 __stdcall EnumSessions(LPCDPSESSIONDESC2 lpThisSD, LPDWORD lpdwTimeOut, DWORD dwFlags, LPVOID lpContext)
 {
     if (dwFlags)
     {
@@ -74,7 +74,7 @@ int __stdcall EnumSessions(LPCDPSESSIONDESC2 lpThisSD, LPDWORD lpdwTimeOut, DWOR
     return 0;
 }
 
-int DirectPlay::FindSession()
+i32 DirectPlay::FindSession()
 {
     LPDIRECTPLAY l_lpDP;
     DirectPlayCreate(this->m_tcpGUID, &l_lpDP, 0);
@@ -112,7 +112,7 @@ int DirectPlay::EnumProxy()
     return DirectPlayEnumerateA(EnumCallback, &m_tcpGUID);
 }
 
-bBool DirectPlay::GetSessions()
+boolean DirectPlay::GetSessions()
 {
     DPSESSIONDESC2 l_sessionDesc;
 
@@ -133,7 +133,7 @@ bBool DirectPlay::GetSessions()
     l_sessionDesc.guidInstance.Data4[7] = 0x81;
 
     l_sessionDesc.dwSize = 80;
-    bBool l_context = 0;
+    boolean l_context = 0;
 
     m_lpDP->EnumSessions(&l_sessionDesc, 1000, EnumSessions, &l_context, 0);
 

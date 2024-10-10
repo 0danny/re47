@@ -1,6 +1,6 @@
 #include "strreftab.h"
 
-StrRefTab::StrRefTab(int p_poolSize, int p_size) : RefTab(p_poolSize, p_size) {}
+StrRefTab::StrRefTab(i32 p_poolSize, i32 p_size) : RefTab(p_poolSize, p_size) {}
 
 StrRefTab::~StrRefTab()
 {
@@ -15,7 +15,7 @@ void StrRefTab::Destroy()
 
         RunInitNxtRef(&l_refRun);
 
-        for (UINT i = RunNxtRef(&l_refRun); l_refRun.prev; i = RunNxtRef(&l_refRun))
+        for (u32 i = RunNxtRef(&l_refRun); l_refRun.prev; i = RunNxtRef(&l_refRun))
         {
             delete[] (char *)i;
         }
@@ -63,7 +63,7 @@ void StrRefTab::ClearThis()
 
         RunInitNxtRef(&l_refRun);
 
-        for (UINT i = RunNxtRef(&l_refRun); l_refRun.prev; i = RunNxtRef(&l_refRun))
+        for (u32 i = RunNxtRef(&l_refRun); l_refRun.prev; i = RunNxtRef(&l_refRun))
         {
             delete[] (char *)i;
         }
@@ -80,7 +80,7 @@ void StrRefTab::PrintStatus()
 
         RunInitNxtRef(&l_refRun);
 
-        for (UINT i = RunNxtRef(&l_refRun); l_refRun.prev; i = RunNxtRef(&l_refRun))
+        for (u32 i = RunNxtRef(&l_refRun); l_refRun.prev; i = RunNxtRef(&l_refRun))
         {
             ZSysCom *l_com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 1320);
             l_com->LogMessage("String %s\n", i);
@@ -98,9 +98,9 @@ void StrRefTab::RunDelRef(RefRun *p_refRun)
     }
     else
     {
-        int l_size = this->m_size;
+        i32 l_size = this->m_size;
 
-        int l_dataOffset = (int)p_refRun->next - l_size;
+        i32 l_dataOffset = (i32)p_refRun->next - l_size;
 
         RefRun *l_prev = p_refRun->prev;
 
@@ -153,12 +153,12 @@ char *StrRefTab::AddStr(char *const p_str)
 
 char *StrRefTab::AddAlways(char *const p_str)
 {
-    int l_strLen = strlen(p_str) + 1;
+    i32 l_strLen = strlen(p_str) + 1;
     char *l_malloc = new char[l_strLen];
 
     strcpy(l_malloc, p_str);
 
-    return (char *)(*RefTab::Add((UINT)l_malloc));
+    return (char *)(*RefTab::Add((u32)l_malloc));
 }
 
 void StrRefTab::RemoveStr(char *const p_str)
@@ -170,7 +170,7 @@ void StrRefTab::RemoveStr(char *const p_str)
     {
         while (1)
         {
-            int l_cmp = _strcmpi(l_nxtRef, p_str);
+            i32 l_cmp = _strcmpi(l_nxtRef, p_str);
 
             if (!l_cmp)
                 break;
@@ -218,7 +218,7 @@ bool StrRefTab::Exists(char *const p_str)
 
 void StrRefTab::Sort()
 {
-    int l_mallocCount = sizeof(char *) * GetCount();
+    i32 l_mallocCount = sizeof(char *) * GetCount();
 
     char **l_allocated = (char **)new char[l_mallocCount];
 
@@ -280,29 +280,29 @@ void StrRefTab::Sort()
     delete[] l_allocated;
 }
 
-int StrRefTab::Compare(const void *p_a, const void *p_b)
+i32 StrRefTab::Compare(const void *p_a, const void *p_b)
 {
     return StrRefTab::CompareCall(*(char **)p_a, *(char **)p_b) != 0 ? 1 : -1;
 }
 
-bBool StrRefTab::CompareCall(const char *p_str1, const char *p_str2)
+boolean StrRefTab::CompareCall(const char *p_str1, const char *p_str2)
 {
     if (!_strcmpi(p_str1, p_str2))
         return 0;
 
-    unsigned int l_strLen1 = strlen(p_str1);
-    unsigned int l_strLen2 = strlen(p_str2) + 1;
+    u32 l_strLen1 = strlen(p_str1);
+    u32 l_strLen2 = strlen(p_str2) + 1;
 
     if (l_strLen1 > (l_strLen2 - 1))
         l_strLen1 = l_strLen2 - 1;
 
-    int l_index = 0;
+    i32 l_index = 0;
 
     if (!l_strLen1)
         return p_str2[l_index] == 0;
 
     const char *l_str2Ptr = p_str2;
-    int l_index2 = p_str1 - p_str2;
+    i32 l_index2 = p_str1 - p_str2;
 
     while (1)
     {

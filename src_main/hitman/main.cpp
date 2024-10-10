@@ -3,10 +3,10 @@
 
 #include "system/zsysinterface.h"
 
-void SignalHandler(int signal);
-BOOL DoAlwaysNoConv(HINSTANCE instance);
+void SignalHandler(i32 signal);
+i32 DoAlwaysNoConv(HINSTANCE instance);
 
-int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, LPSTR p_lpCmdLine, int p_nShowCmd)
+i32 WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, LPSTR p_lpCmdLine, i32 p_nShowCmd)
 {
     char l_filePath[264];
     char l_fileBuffer[264];
@@ -63,13 +63,13 @@ int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, LPSTR p_lpCmdLine, 
     return 0;
 }
 
-BOOL DoAlwaysNoConv(HINSTANCE instance)
+i32 DoAlwaysNoConv(HINSTANCE instance)
 {
     return 1;
 }
 
 // TODO: Handle these correctly, see functions in IDA
-void SignalHandler(int signal)
+void SignalHandler(i32 signal)
 {
     // Show a messagebox.
     MessageBoxA(0, "Unhandled exception -> " + signal, "Error", 0);

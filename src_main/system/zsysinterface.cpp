@@ -1,6 +1,6 @@
 #include "zsysinterface.h"
 
-ZSysInterface::ZSysInterface()
+ZSysInterface::ZSysInterface(HINSTANCE p_dllHinst)
 {
 }
 
@@ -39,6 +39,15 @@ void *ZSysInterface::InitActionMap()
 }
 
 void ZSysInterface::FreeActionMap() {}
+
+u8 *ZSysInterface::UnkFunc12()
+{
+    return 0;
+}
+
+void ZSysInterface::UnkFunc13()
+{
+}
 
 boolean ZSysInterface::ProcessWindowMessages(HWND p_hWnd)
 {

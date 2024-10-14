@@ -21,7 +21,11 @@ namespace Loader
     {
         printf("[LOADER]: Injecting hooks...\n");
 
-        Constructors::CreateHooks();
+        if (g_enableSwaps)
+        {
+            Constructors::CreateHooks();
+        }
+
         WndPatches::CreateHooks();
 
         EnableHooks();
@@ -31,7 +35,9 @@ namespace Loader
     {
         printf("[LOADER_HOOK]: Library Loaded -> %s\n", Utilities::GetFileName(lpLibFileName));
 
-        return originalLoadLibraryA(lpLibFileName);
+        HMODULE module = originalLoadLibraryA(lpLibFileName);
+
+        return module;
     }
 
     UINT WINAPI RegisterWindowMessageAHook(LPCSTR lpString)

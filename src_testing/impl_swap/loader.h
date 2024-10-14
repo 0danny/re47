@@ -17,6 +17,8 @@ namespace Loader
     static LoadLibraryA_t originalLoadLibraryA = 0;
     static RegisterWindowMessageA_t originalRegisterWindowMessageA = 0;
 
+    static BOOL g_enableSwaps = TRUE;
+
     void Init();
     void InjectHooks();
     void EnableHooks();

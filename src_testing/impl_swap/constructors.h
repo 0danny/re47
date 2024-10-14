@@ -8,6 +8,7 @@
 #include "zstdlib/reftab/strreftab.h"
 #include "zstdlib/reftab/linkreftab.h"
 
+#include "zstdlib/trees/zrbtree.h"
 #include "zstdlib/zconsole/zconsole.h"
 #include "utilities.h"
 
@@ -25,6 +26,7 @@ namespace Constructors
     static LPVOID strRefTabAddress = (LPVOID)0x0FFC0D30;
     static LPVOID linkRefTabAddress = (LPVOID)0x0FFC0050;
 
+    static LPVOID zrbTreeAddress = (LPVOID)0x0FFC80D0;
     static LPVOID zConsoleAddress = (LPVOID)0x0FFC5400;
 
     // Typedefs
@@ -38,6 +40,7 @@ namespace Constructors
     typedef StrRefTab *(__fastcall *StrRefTabConstructor)(StrRefTab *_this, int p_poolSize, int p_size);
     typedef LinkRefTab *(__fastcall *LinkRefTabConstructor)(LinkRefTab *_this, int p_poolSize, int p_size);
 
+    typedef ZRBTree *(__fastcall *ZRBTreeConstructor)(ZRBTree *_this);
     typedef ZConsole *(__fastcall *ZConsoleConstructor)(ZConsole *_this);
 
     static ZConsoleConstructor originalZConsole = 0;
@@ -54,6 +57,8 @@ namespace Constructors
     EquRefTab *__fastcall EquRefTabHook(EquRefTab *_this, void *_EDX, int p_poolSize, int p_size);
     StrRefTab *__fastcall StrRefTabHook(StrRefTab *_this, void *_EDX, int p_poolSize, int p_size);
     LinkRefTab *__fastcall LinkRefTabHook(LinkRefTab *_this, void *_EDX, int p_poolSize, int p_size);
+
+    ZRBTree *__fastcall ZRBTreeConstructorHook(ZRBTree *_this, void *_EDX);
 
     ZConsole *__fastcall ZConsoleConstructorHook(ZConsole *_this, void *_EDX);
 

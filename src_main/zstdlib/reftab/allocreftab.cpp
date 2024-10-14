@@ -38,8 +38,6 @@ u32 AllocRefTab::NewRef()
     {
         while (1)
         {
-            printf("Ref Count -> %d\n", m_refTab->m_count);
-
             m_refTab->RunDelRef(&l_refRun);
 
             l_arrayRef = (m_array[l_nextRef - 1] << m_refShitAmount) | (l_nextRef - 1);

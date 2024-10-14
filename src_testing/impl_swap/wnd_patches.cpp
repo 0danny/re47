@@ -41,6 +41,7 @@ namespace WndPatches
                                       HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam)
     {
         printf("[WND_PATCH]: Patching CreateWindowExA!\n");
+        printf("[WND PATCH] lpWindowName: %s, X: %d, Y: %d, Width: %d, Height: %d\n", lpWindowName, x, y, nWidth, nHeight);
 
         dwStyle = WS_OVERLAPPEDWINDOW;
 

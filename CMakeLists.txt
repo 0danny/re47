@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5.0)
-project(HitmanC47 CXX RC)
+project(HitmanC47 C CXX RC)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
@@ -29,6 +29,26 @@ set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
 set(CMAKE_RC_FLAGS "/I\"${CMAKE_CURRENT_SOURCE_DIR}/resources\"")
 set(RESOURCE_FILE "resources/hitman.rc")
+
+# Build ZLIB
+add_library(zlib STATIC
+    external/include/zlib/adler32.c
+    external/include/zlib/compress.c
+    external/include/zlib/crc32.c
+    external/include/zlib/deflate.c
+    external/include/zlib/gzio.c
+    external/include/zlib/infblock.c
+    external/include/zlib/infcodes.c
+    external/include/zlib/inffast.c
+    external/include/zlib/inflate.c
+    external/include/zlib/inftrees.c
+    external/include/zlib/infutil.c
+    external/include/zlib/trees.c
+    external/include/zlib/uncompr.c
+    external/include/zlib/zutil.c
+)
+
+set_target_properties(zlib PROPERTIES LINKER_LANGUAGE C)
 
 # Add common library (zstdlib)
 add_library(common STATIC
@@ -63,6 +83,9 @@ add_library(common STATIC
 
     src_main/zstdlib/zconsole/zconsole.cpp
     src_main/zstdlib/zconsole/zconsole.h
+
+    src_main/zstdlib/trees/zrbtree.cpp
+    src_main/zstdlib/trees/zrbtree.h
 )
 
 # Add System DLL
@@ -106,7 +129,7 @@ target_sources(globals PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dll_defs/globals.def)
 
 # Add the hitman executable
 add_executable(hitman WIN32 src_main/hitman/main.cpp ${RESOURCE_FILE})
-target_link_libraries(hitman globals common)
+target_link_libraries(hitman globals common zlib)
 
 # Build the testing dll(s)
 add_library(impl_swap SHARED

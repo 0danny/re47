@@ -7,7 +7,7 @@
 class ZValTree : public ZRBTree
 {
 public:
-    ZValTree(int p_poolSize);
+    ZValTree(i32 p_poolSize);
     ~ZValTree();
 
     StaticRefTab *m_refTab;
@@ -17,9 +17,9 @@ public:
     void CopyData(SBinTreeNode *p_binNode, SBinTreeNode *p_binNode2);
 
     // Added
-    virtual void InsertKey(int p_key, int p_data);
-    virtual void DeleteKey(int p_key);
-    virtual SBinTreeNode *GetKeyVal(int p_key);
+    virtual void InsertKey(i32 p_key, i32 p_data);
+    virtual void DeleteKey(i32 p_key);
+    virtual SBinTreeNode *GetKeyVal(i32 p_key);
 };
 
 #pragma pack(pop)

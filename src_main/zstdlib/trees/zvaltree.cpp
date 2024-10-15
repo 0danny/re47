@@ -1,6 +1,6 @@
 #include "zvaltree.h"
 
-ZValTree::ZValTree(int p_poolSize) : ZRBTree()
+ZValTree::ZValTree(i32 p_poolSize) : ZRBTree()
 {
     m_refTab = new StaticRefTab(p_poolSize, 5);
 }
@@ -12,16 +12,16 @@ ZValTree::~ZValTree()
 
     while (1)
     {
-        l_result = this->m_rootNode;
+        l_result = m_rootNode;
 
-        if (l_result == this->m_nullNode || !l_result)
+        if (l_result == m_nullNode || !l_result)
             break;
 
-        l_nodeDeleted = ZRBTree::Delete(this->m_rootNode);
+        l_nodeDeleted = ZRBTree::Delete(m_rootNode);
 
-        m_refTab->DelRefPtr((UINT *)l_nodeDeleted);
+        m_refTab->DelRefPtr((u32 *)l_nodeDeleted);
 
-        this->m_refTab->DelRefPtr(0);
+        m_refTab->DelRefPtr(0);
     }
 
     if (m_refTab)
@@ -31,7 +31,7 @@ ZValTree::~ZValTree()
 SBinTreeNode *ZValTree::Delete(SBinTreeNode *p_binNode)
 {
     SBinTreeNode *l_deleteRes = ZRBTree::Delete(p_binNode);
-    m_refTab->DelRefPtr((UINT *)l_deleteRes);
+    m_refTab->DelRefPtr((u32 *)l_deleteRes);
 
     return 0;
 }
@@ -41,32 +41,31 @@ void ZValTree::CopyData(SBinTreeNode *p_binNode, SBinTreeNode *p_binNode2)
     p_binNode[1].parent = p_binNode2[1].parent;
 }
 
-void ZValTree::InsertKey(int p_key, int p_data)
+void ZValTree::InsertKey(i32 p_key, i32 p_data)
 {
-    SBinTreeNode *l_dataPtr = (SBinTreeNode *)(this->m_refTab->Add(0) - 1);
+    SBinTreeNode *l_dataPtr = (SBinTreeNode *)(m_refTab->Add(0) - 1);
 
     l_dataPtr->key = p_key;
-
     l_dataPtr[1].parent = (SBinTreeNode *)p_data;
 
-    this->Insert(l_dataPtr);
+    Insert(l_dataPtr);
 }
 
-void ZValTree::DeleteKey(int p_key)
+void ZValTree::DeleteKey(i32 p_key)
 {
-    SBinTreeNode *l_searchRes = this->Search(p_key, 0);
+    SBinTreeNode *l_searchRes = Search(p_key, 0);
 
     if (l_searchRes)
     {
-        SBinTreeNode *l_ptr = this->Delete(l_searchRes);
+        SBinTreeNode *l_ptr = Delete(l_searchRes);
 
-        m_refTab->DelRefPtr((UINT *)l_ptr);
+        m_refTab->DelRefPtr((u32 *)l_ptr);
     }
 }
 
-SBinTreeNode *ZValTree::GetKeyVal(int p_key)
+SBinTreeNode *ZValTree::GetKeyVal(i32 p_key)
 {
-    SBinTreeNode *l_searchRes = this->Search(p_key, 0);
+    SBinTreeNode *l_searchRes = Search(p_key, 0);
 
     if (l_searchRes)
         return l_searchRes[1].parent;

@@ -29,7 +29,7 @@ Below each of the files in the decomp is discussed along with a percentage indic
 **100%** Completed - **1** out of **1** functions named.
 
 **system.dll** [272kb]
-**10%** Completed - **465** out of **552** functions named.
+**20%** Completed - **522** out of **552** functions named.
 
 **systemprobedll.dll** [68kb]
 **40%** Completed - **39** out of **53** functions named.

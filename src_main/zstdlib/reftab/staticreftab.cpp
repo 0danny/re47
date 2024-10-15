@@ -47,6 +47,7 @@ void StaticRefTab::Destroy()
 
         DeleteBlock(l_head);
     }
+
     m_count = 0;
     m_head = 0;
 }

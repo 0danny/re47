@@ -55,6 +55,12 @@ namespace Constructors
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook ZRBTree constructor.\n");
         }
+
+        /*
+                if (MH_CreateHook(zvalTreeAddress, (LPVOID)&Constructors::ZValTreeConstructorHook, NULL) != MH_OK)
+                {
+                    printf("[CONSTRUCTOR HOOK]: Could not hook ZValTree constructor.\n");
+                }*/
     }
 
     RefTab *__fastcall RefTabHook(RefTab *_this, void *_EDX, int p_poolSize, int p_size)
@@ -111,6 +117,13 @@ namespace Constructors
         printf("[CONSTRUCTOR HOOK]: ZRBTree called\n");
 
         return new (_this) ZRBTree();
+    }
+
+    ZValTree *__fastcall ZValTreeConstructorHook(ZValTree *_this, void *_EDX, int p_poolSize)
+    {
+        printf("[CONSTRUCTOR HOOK]: ZValTree called -> Pool Size: %d\n", p_poolSize);
+
+        return new (_this) ZValTree(p_poolSize);
     }
 
     ZConsole *__fastcall ZConsoleConstructorHook(ZConsole *_this, void *_EDX)

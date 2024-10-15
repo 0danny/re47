@@ -54,6 +54,7 @@ set_target_properties(zlib PROPERTIES LINKER_LANGUAGE C)
 add_library(common STATIC
     src_main/common.h
 
+    # RefTabs
     src_main/zstdlib/reftab/reftab.cpp
     src_main/zstdlib/reftab/reftab.h
 
@@ -75,17 +76,23 @@ add_library(common STATIC
     src_main/zstdlib/reftab/staticreftab.cpp
     src_main/zstdlib/reftab/staticreftab.h
 
+    # Dynamic Loader
     src_main/zstdlib/zdynamicloader.cpp
     src_main/zstdlib/zdynamicloader.h
 
+    # Console
     src_main/zstdlib/zconsole/zconsolecommand.cpp
     src_main/zstdlib/zconsole/zconsolecommand.h
 
     src_main/zstdlib/zconsole/zconsole.cpp
     src_main/zstdlib/zconsole/zconsole.h
 
+    # Trees
     src_main/zstdlib/trees/zrbtree.cpp
     src_main/zstdlib/trees/zrbtree.h
+
+    src_main/zstdlib/trees/zvaltree.cpp
+    src_main/zstdlib/trees/zvaltree.h
 )
 
 # Add System DLL

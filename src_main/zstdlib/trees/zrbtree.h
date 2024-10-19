@@ -1,11 +1,10 @@
 #pragma once
 
-#include "common.h"
 #include "system/zsyscom.h"
 
 #pragma pack(push, 1)
 
-// 17 in size
+// 17 in size (not 17 because of data, but 17 because of the struct size)
 struct SBinTreeNode
 {
     SBinTreeNode *parent;
@@ -13,6 +12,7 @@ struct SBinTreeNode
     SBinTreeNode *right;
     i32 key;
     u8 color;
+    i32 data;
 };
 
 #pragma pack(pop)

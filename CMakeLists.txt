@@ -76,9 +76,12 @@ add_library(common STATIC
     src_main/zstdlib/reftab/staticreftab.cpp
     src_main/zstdlib/reftab/staticreftab.h
 
-    # Dynamic Loader
+    # Main
     src_main/zstdlib/zdynamicloader.cpp
     src_main/zstdlib/zdynamicloader.h
+
+    src_main/zstdlib/zmalloc.cpp
+    src_main/zstdlib/zmalloc.h
 
     # Console
     src_main/zstdlib/zconsole/zconsolecommand.cpp
@@ -144,6 +147,9 @@ add_library(impl_swap SHARED
 
     src_testing/impl_swap/constructors.cpp
     src_testing/impl_swap/constructors.h
+
+    src_testing/impl_swap/methods.cpp
+    src_testing/impl_swap/methods.h
 
     src_testing/impl_swap/wnd_patches.cpp
     src_testing/impl_swap/wnd_patches.h

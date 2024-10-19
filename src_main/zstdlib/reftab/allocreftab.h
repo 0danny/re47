@@ -13,8 +13,8 @@ public:
     i32 m_refShitAmount; // 20
 
     AllocRefTab();
-    virtual ~AllocRefTab();
 
+    virtual ~AllocRefTab();
     virtual u32 NewRef();
     virtual boolean FreeRef(u32 p_refNum);
     virtual boolean CheckRefActive(u32 p_refNum);

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "zrbtree.h"
 #include "zstdlib/reftab/staticreftab.h"
 
@@ -19,7 +21,7 @@ public:
     // Added
     virtual void InsertKey(i32 p_key, i32 p_data);
     virtual void DeleteKey(i32 p_key);
-    virtual SBinTreeNode *GetKeyVal(i32 p_key);
+    virtual int GetKeyVal(i32 p_key);
 };
 
 #pragma pack(pop)

@@ -2,6 +2,7 @@
 
 #include "constructors.h"
 #include "wnd_patches.h"
+#include "methods.h"
 #include "utilities.h"
 
 #include <minhook.h>

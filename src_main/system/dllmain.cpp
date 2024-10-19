@@ -2,6 +2,7 @@
 
 #include "zsysfile.h"
 #include "zsysinterface.h"
+#include "zsysmem.h"
 #include "common.h"
 
 static i32 g_initCount = 0;

@@ -4,6 +4,7 @@ namespace Loader
 {
     void Init()
     {
+
         if (MH_CreateHookApi(L"kernel32", "LoadLibraryA", &LoadLibraryAHook, reinterpret_cast<LPVOID *>(&originalLoadLibraryA)) != MH_OK)
         {
             printf("[LOADER] -> Failed to hook LoadLibraryA!\n");
@@ -24,9 +25,10 @@ namespace Loader
         if (g_enableSwaps)
         {
             Constructors::CreateHooks();
+            Methods::CreateHooks();
         }
 
-        WndPatches::CreateHooks();
+        // WndPatches::CreateHooks();
 
         EnableHooks();
     }

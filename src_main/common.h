@@ -2,10 +2,13 @@
 
 #include <new>
 #include <cstdlib>
-#include "system/zsysmem.h"
+#include <windows.h>
+
+// Avoid circular dependencies
+class ZSysMem;
+extern __declspec(dllimport) ZSysMem *g_pSysMem;
 
 // Typedefs
-
 typedef byte boolean;
 
 typedef char i8;
@@ -44,6 +47,7 @@ inline static void operator delete(void *ptr)
     free(ptr);
 }
 
+// Exceptions
 class ZArrayRangeError
 {
 public:

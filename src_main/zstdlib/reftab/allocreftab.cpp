@@ -1,3 +1,4 @@
+#include "reftab.h"
 #include "allocreftab.h"
 
 AllocRefTab::AllocRefTab()

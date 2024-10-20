@@ -31,6 +31,8 @@ namespace Constructors
     static LPVOID zvalTreeAddress = (LPVOID)0x0FFC8580;
     static LPVOID zConsoleAddress = (LPVOID)0x0FFC5400;
 
+    static LPVOID zSysComAddress = (LPVOID)0x0FFA4570;
+
     // Typedefs
     typedef RefTab *(__fastcall *RefTabConstructor)(RefTab *_this, int p_poolSize, int p_size);
     typedef RefTab32 *(__fastcall *RefTab32Constructor)(RefTab32 *_this);
@@ -47,10 +49,14 @@ namespace Constructors
 
     typedef ZConsole *(__fastcall *ZConsoleConstructor)(ZConsole *_this);
 
+    typedef ZSysCom *(__fastcall *ZSysComConstructor)(ZSysCom *_this);
+
     static ZConsoleConstructor originalZConsole = 0;
     static RefTab32Constructor originalRefTab32 = 0;
     static StaticRefTabConstructor originalStaticRefTab = 0;
     static AllocRefTabConstructor originalAllocRefTab = 0;
+
+    static ZSysComConstructor originalZSysCom = 0;
 
     // Functions
     RefTab *__fastcall RefTabHook(RefTab *_this, void *_EDX, int p_poolSize, int p_size);
@@ -66,6 +72,8 @@ namespace Constructors
     ZValTree *__fastcall ZValTreeConstructorHook(ZValTree *_this, void *_EDX, int p_poolSize);
 
     ZConsole *__fastcall ZConsoleConstructorHook(ZConsole *_this, void *_EDX);
+
+    ZSysCom *__fastcall ZSysComConstructorHook(ZSysCom *_this, void *_EDX);
 
     void CreateHooks();
 }

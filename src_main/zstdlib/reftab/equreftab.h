@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EQUREFTAB_H
+#define EQUREFTAB_H
 
 #include "reftab.h"
 
@@ -18,3 +19,5 @@ public:
 
     void Destroy();
 };
+
+#endif

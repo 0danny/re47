@@ -1,6 +1,8 @@
-#pragma once
+#ifndef ZCONSOLECOMMAND_H
+#define ZCONSOLECOMMAND_H
 
 #include "system/zsyscom.h"
+#include "common.h"
 
 class ZCmdHandler;
 class ZCmdHandlerBase;
@@ -60,3 +62,5 @@ public:
 
     ZConsoleCommand *m_consoleCmd;
 };
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ZVALTREE_H
+#define ZVALTREE_H
 
 #include "zrbtree.h"
 #include "zstdlib/reftab/staticreftab.h"
@@ -25,3 +26,5 @@ public:
 };
 
 #pragma pack(pop)
+
+#endif

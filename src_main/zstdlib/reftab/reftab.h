@@ -1,6 +1,6 @@
-#pragma once
+#ifndef REFTAB_H
+#define REFTAB_H
 
-#include <windows.h>
 #include "system/zsyscom.h"
 
 struct RefRun
@@ -60,3 +60,5 @@ public:
     virtual void DeleteBlock(void *p_lpMem);
     virtual RefRun *NewBlock();
 };
+
+#endif

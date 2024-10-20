@@ -1,6 +1,6 @@
-#pragma once
+#ifndef ZCONSOLE_H
+#define ZCONSOLE_H
 
-#include "common.h"
 #include "zconsolecommand.h"
 
 struct ZConsoleArray
@@ -90,3 +90,5 @@ public:
 };
 
 #pragma pack(pop)
+
+#endif

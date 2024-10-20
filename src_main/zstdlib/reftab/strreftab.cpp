@@ -192,7 +192,7 @@ void StrRefTab::RemoveStr(char *const p_str)
     }
 }
 
-bool StrRefTab::Exists(char *const p_str)
+boolean StrRefTab::Exists(char *const p_str)
 {
     if (!this)
         return 0;

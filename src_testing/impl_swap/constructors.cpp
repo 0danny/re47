@@ -16,6 +16,11 @@ namespace Constructors
                     printf("[CONSTRUCTOR HOOK]: Could not hook RefTab32 constructor.\n");
                 }*/
 
+        if (MH_CreateHook(zSysComAddress, (LPVOID)&Constructors::ZSysComConstructorHook, reinterpret_cast<LPVOID *>(&originalZSysCom)) != MH_OK)
+        {
+            printf("[CONSTRUCTOR HOOK]: Could not hook ZSysCom constructor.\n");
+        }
+
         if (MH_CreateHook(refTabAddress, (LPVOID)&Constructors::RefTabHook, NULL) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook RefTab constructor.\n");
@@ -137,5 +142,12 @@ namespace Constructors
         res->AddCmdText("----------------------------------------------------");
 
         return res;
+    }
+
+    ZSysCom *__fastcall ZSysComConstructorHook(ZSysCom *_this, void *_EDX)
+    {
+        printf("[CONSTRUCTOR HOOK]: ZSysCom called\n");
+
+        return originalZSysCom(_this);
     }
 }

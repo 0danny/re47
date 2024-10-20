@@ -1,8 +1,8 @@
-#pragma once
+#ifndef ZSYSINTERFACE_H
+#define ZSYSINTERFACE_H
 
-#include "common.h"
 #include "zstdlib/zconsole/zconsole.h"
-#include <windows.h>
+#include "common.h"
 
 class ZSysInterface
 {
@@ -292,3 +292,5 @@ public:
 };
 
 extern __declspec(dllimport) ZSysInterface *g_pSysInterface;
+
+#endif

@@ -7,10 +7,16 @@ namespace Methods
         printf("[METHOD HOOK]: Creating method hooks...\n");
 
         /*
-        if (MH_CreateHook(zSysMem_NewRef, (LPVOID)&Methods::ZSysMem_NewRefHook, reinterpret_cast<LPVOID *>(&originalZSysMem_NewRef)) != MH_OK)
-        {
-            printf("[METHOD HOOK]: Could not hook ZSysMem_NewRef method.\n");
-        }*/
+                if (MH_CreateHook(zMalloc_RemoveFreeHeaderFromBins, (LPVOID)&Methods::ZMalloc_RemoveFreeHeaderFromBinsHook, NULL) != MH_OK)
+                {
+                    printf("[METHOD HOOK]: Could not hook ZMalloc_RemoveFreeHeaderFromBins method.\n");
+                }
+
+
+                if (MH_CreateHook(zSysMem_NewRef, (LPVOID)&Methods::ZSysMem_NewRefHook, reinterpret_cast<LPVOID *>(&originalZSysMem_NewRef)) != MH_OK)
+                {
+                    printf("[METHOD HOOK]: Could not hook ZSysMem_NewRef method.\n");
+                }*/
     }
 
     void __fastcall ZSysMem_NewRefHook(ZSysMem *_this, void *_EDX, void *p_link)
@@ -42,5 +48,10 @@ namespace Methods
 
             header->checksum = l_local;
         }
+    }
+
+    void __fastcall ZMalloc_RemoveFreeHeaderFromBinsHook(ZMalloc *_this, void *_EDX, SMallocFreeHeader *p_freeHeader, SBinTreeNode *p_mallocBin)
+    {
+        _this->RemoveFreeHeaderFromBins(p_freeHeader, p_mallocBin);
     }
 }

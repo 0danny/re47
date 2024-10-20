@@ -1,8 +1,12 @@
-#pragma once
+#ifndef ZSYSCOM_H
+#define ZSYSCOM_H
 
-#include <windows.h>
-#include <stdio.h>
 #include "common.h"
+
+class LinkRefTab;
+class StrRefTab;
+
+// TODO: Fix whole class
 
 // 0x27 in size
 #pragma pack(push, 1)
@@ -13,10 +17,10 @@ public:
     ZSysCom();
 
     // Base class members
-    u32 m_msgID;        // 0x4
-    i32 m_unkInt1;      // 0x8
-    void *m_unkPtr;     // 0xC
-    boolean m_unkBool1; // 0x10
+    u32 m_msgID;              // 0x4
+    i32 m_unkInt1;            // 0x8
+    LinkRefTab *m_linkRefTab; // 0xC
+    boolean m_unkBool1;       // 0x10
 
     boolean m_sendingZMessage; // 0x11
     boolean m_unkBool3;        // 0x12
@@ -24,7 +28,7 @@ public:
     i32 m_lineNum;             // 0x1A
     HWND m_debugHwnd;          // 0x1E
     HWND m_unkHwnd;            // 0x22
-    void *m_unkPtr2;           // 0x26
+    StrRefTab *m_logsArray;    // 0x26
 
     // Overrides
     virtual i32 FormatString(char *p_resultBuffer, char *p_format, ...);
@@ -32,6 +36,7 @@ public:
     // Destroy
     virtual ~ZSysCom();
     virtual void DestroyArrays();
+    void Destroy();
 
     // Getters
     virtual i32 GetUnkInt1();
@@ -58,3 +63,5 @@ public:
 #pragma pack(pop)
 
 extern __declspec(dllimport) ZSysCom *g_pSysCom;
+
+#endif

@@ -1,6 +1,6 @@
 #include "zmalloc.h"
 
-ZMalloc::ZMalloc()
+ZMalloc::ZMalloc() : ZMallocTree()
 {
 }
 
@@ -20,7 +20,7 @@ void ZMalloc::RemoveFreeHeaderFromBins(SMallocFreeHeader *p_freeHeader, SBinTree
     SBinTreeNode *l_searchNode = p_mallocBin;
 
     if (!p_mallocBin)
-        l_searchNode = m_rbTree1.Search(p_freeHeader->size, 0);
+        l_searchNode = ZRBTree::Search(p_freeHeader->size, 0);
 
     SBinTreeNode *l_rightNode = p_freeHeader->right;
 
@@ -36,7 +36,7 @@ void ZMalloc::RemoveFreeHeaderFromBins(SMallocFreeHeader *p_freeHeader, SBinTree
 
     if (!l_searchNode->data)
     {
-        SBinTreeNode *l_deletedNode = m_rbTree1.Delete(l_searchNode);
+        SBinTreeNode *l_deletedNode = ZRBTree::Delete(l_searchNode);
 
         FreeMallocBin(l_deletedNode);
     }
@@ -68,7 +68,9 @@ inline void ZMalloc::MarkFree(void *p_marked)
         DebugBreak();
     }
 
-    SBinTreeNode *deleted = m_rbTree1.Delete(l_searchRes);
+    SBinTreeNode *deleted = ZRBTree::Delete(l_searchRes);
 
     free(deleted);
 }
+
+inline ZMallocTree::ZMallocTree() : ZRBTree() {}

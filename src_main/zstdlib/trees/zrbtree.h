@@ -1,5 +1,7 @@
-#pragma once
+#ifndef ZRBTREE_H
+#define ZRBTREE_H
 
+#include "common.h"
 #include "system/zsyscom.h"
 
 #pragma pack(push, 1)
@@ -54,3 +56,5 @@ public:
 };
 
 #pragma pack(pop)
+
+#endif

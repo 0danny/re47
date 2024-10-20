@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STATICREFTAB_H
+#define STATICREFTAB_H
 
 #include "reftab.h"
 
@@ -41,3 +42,5 @@ public:
 
     void Destroy();
 };
+
+#endif

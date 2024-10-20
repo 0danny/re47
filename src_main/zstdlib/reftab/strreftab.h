@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STRREFTAB_H
+#define STRREFTAB_H
 
 #include "reftab.h"
 
@@ -20,7 +21,7 @@ public:
     virtual char *AddStr(char *const p_str);
     virtual char *AddAlways(char *const p_str);
     virtual void RemoveStr(char *const p_str);
-    virtual bool Exists(char *const p_str);
+    virtual boolean Exists(char *const p_str);
     virtual void Sort();
 
     static i32 Compare(const void *p_a, const void *p_b);
@@ -28,3 +29,5 @@ public:
 
     void Destroy();
 };
+
+#endif

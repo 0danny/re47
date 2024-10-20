@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ZDYNAMICLOADER_H
+#define ZDYNAMICLOADER_H
 
 #include "common.h"
 
@@ -28,3 +29,5 @@ public:
 
     virtual void Unknown11();
 };
+
+#endif

@@ -1,7 +1,7 @@
-#pragma once
+#ifndef LINKREFTAB_H
+#define LINKREFTAB_H
 
 #include "reftab.h"
-#include "common.h"
 
 class LinkRefTab : public RefTab
 {
@@ -43,3 +43,5 @@ public:
 
     void Destroy();
 };
+
+#endif

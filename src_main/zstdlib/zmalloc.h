@@ -1,7 +1,7 @@
-#pragma once
+#ifndef ZMALLOC_H
+#define ZMALLOC_H
 
 #include "zstdlib/trees/zrbtree.h"
-#include "system/zsyscom.h"
 
 struct SMallocFreeHeader
 {
@@ -22,19 +22,25 @@ struct SMallocBlockHeader
 
 #pragma pack(push, 2)
 
-// 33 in size
-class ZMalloc
+class ZMallocTree : public ZRBTree
 {
 public:
-    ZMalloc();
-    ~ZMalloc();
+    inline ZMallocTree();
 
     i32 m_unkInt0;
     i32 m_unkInt1;
     i32 m_nodeArray[116];
     i32 m_unkInt2;
     i32 m_unkInt3;
-    ZRBTree m_rbTree1;
+};
+
+// 33 in size
+class ZMalloc : public ZMallocTree
+{
+public:
+    ZMalloc();
+    ~ZMalloc();
+
     ZRBTree m_rbTree2;
 
     void RemoveFreeHeaderFromBins(SMallocFreeHeader *p_freeHeader, SBinTreeNode *p_mallocBin);
@@ -43,3 +49,5 @@ public:
 };
 
 #pragma pack(pop)
+
+#endif

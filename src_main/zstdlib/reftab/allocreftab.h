@@ -1,6 +1,9 @@
-#pragma once
+#ifndef ALLOCREFTAB_H
+#define ALLOCREFTAB_H
 
-#include "reftab.h"
+#include "common.h"
+
+class RefTab;
 
 // 24 in size.
 class AllocRefTab
@@ -20,3 +23,5 @@ public:
     virtual boolean CheckRefActive(u32 p_refNum);
     virtual void PrintRef(u32 p_refNum);
 };
+
+#endif

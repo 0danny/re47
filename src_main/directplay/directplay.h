@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DIRECTPLAY_H
+#define DIRECTPLAY_H
 
 #include "system/zsyscom.h"
 #include "dplay.h"
@@ -31,3 +32,5 @@ i32 __stdcall EnumCallback(LPGUID lpguidSP, LPSTR lpSPName, DWORD dwMajorVersion
 i32 __stdcall EnumSessions(LPCDPSESSIONDESC2 lpThisSD, LPDWORD lpdwTimeOut, DWORD dwFlags, LPVOID lpContext);
 
 #pragma pack(pop)
+
+#endif

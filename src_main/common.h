@@ -1,7 +1,9 @@
-#pragma once
+#ifndef COMMON_H
+#define COMMON_H
 
 #include <new>
 #include <cstdlib>
+#include <stdio.h>
 #include <windows.h>
 
 // Avoid circular dependencies
@@ -55,3 +57,5 @@ public:
 
     const char *message;
 };
+
+#endif

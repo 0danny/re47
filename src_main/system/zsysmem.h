@@ -1,7 +1,5 @@
-#pragma once
-
-#include <windows.h>
-#include <stdio.h>
+#ifndef ZSYSMEM_H
+#define ZSYSMEM_H
 
 #include "zstdlib/zmalloc.h"
 #include "zstdlib/reftab/allocreftab.h"
@@ -66,3 +64,5 @@ public:
 #pragma pack(pop)
 
 extern __declspec(dllimport) ZSysMem *g_pSysMem;
+
+#endif

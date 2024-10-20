@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DIRECTPLAYPROXY_H
+#define DIRECTPLAYPROXY_H
 
 #include "common.h"
 #include "zstdlib/zdynamicloader.h"
@@ -15,3 +16,5 @@ public:
     void Unknown2();
     void Unknown3();
 };
+
+#endif

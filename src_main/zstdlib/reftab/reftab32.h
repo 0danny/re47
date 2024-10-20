@@ -1,4 +1,5 @@
-#pragma once
+#ifndef REFTAB32_H
+#define REFTAB32_H
 
 #include "reftab.h"
 
@@ -16,3 +17,5 @@ public:
 
     void Destroy();
 };
+
+#endif

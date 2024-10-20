@@ -1,11 +1,9 @@
-#pragma once
+#ifndef ZSYSFILE_H
+#define ZSYSFILE_H
 
-#include <windows.h>
-#include <stdio.h>
+#include "common.h"
 
 #pragma pack(push, 1)
-
-class ZSysFile;
 
 class ZSysFile
 {
@@ -15,3 +13,5 @@ public:
 #pragma pack(pop)
 
 extern __declspec(dllimport) ZSysFile *g_pSysFile;
+
+#endif

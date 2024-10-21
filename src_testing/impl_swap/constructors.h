@@ -13,8 +13,6 @@
 #include "zstdlib/zconsole/zconsole.h"
 #include "utilities.h"
 
-#include <minhook.h>
-
 namespace Constructors
 {
     // Addresses

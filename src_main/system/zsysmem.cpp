@@ -77,7 +77,7 @@ void *ZSysMem::NewWithRef(u32 allocSize)
     return 0;
 }
 
-char *ZSysMem::Delete(i32 *param)
+boolean ZSysMem::Delete(void *p_mem)
 {
     // Implementation
     return 0;

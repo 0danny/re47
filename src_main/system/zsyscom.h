@@ -6,8 +6,6 @@
 class LinkRefTab;
 class StrRefTab;
 
-// TODO: Fix whole class
-
 // 0x27 in size
 #pragma pack(push, 1)
 
@@ -23,11 +21,11 @@ public:
     boolean m_unkBool1;       // 0x10
 
     boolean m_sendingZMessage; // 0x11
-    boolean m_unkBool3;        // 0x12
+    boolean m_debugWndReady;   // 0x12
     char *m_filePath;          // 0x16
     i32 m_lineNum;             // 0x1A
     HWND m_debugHwnd;          // 0x1E
-    HWND m_unkHwnd;            // 0x22
+    HWND m_mainHwnd;           // 0x22
     StrRefTab *m_logsArray;    // 0x26
 
     // Overrides
@@ -53,9 +51,9 @@ public:
     virtual void DataToDebug(char *p_format, ...);
     virtual void LogMessage(char *p_format, ...);
 
-    virtual void UnkFunc5(i32 p_unkInt, char *p_format, ...);
+    virtual void UnkFunc5(i32 p_unused, char *p_format, ...);
     virtual void SendZMessage(char *p_format, ...);
-    virtual void UnkFunc7(char *p_format, ...);
+    virtual void AddCmdText(char *p_format, ...);
     virtual void *UnkFunc8(char *p_unkChar);
     virtual void UnkFunc9();
 };

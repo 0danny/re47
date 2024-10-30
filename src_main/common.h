@@ -6,10 +6,6 @@
 #include <stdio.h>
 #include <windows.h>
 
-// Avoid circular dependencies
-class ZSysMem;
-extern __declspec(dllimport) ZSysMem *g_pSysMem;
-
 // Typedefs
 typedef byte boolean;
 
@@ -25,29 +21,6 @@ typedef unsigned long u64;
 
 static char *g_emptyArray = new char[264];
 static char *g_emptyDelimiter = new char[4];
-
-// Mem alloc overloads
-inline static void *operator new(size_t size)
-{
-    if (g_pSysMem)
-        // TODO: Implement this when g_pSysMem is available
-        // return g_pSysMem->vtable->Alloc(size);
-        return malloc(size);
-    else
-        return malloc(size);
-}
-
-inline static void operator delete(void *ptr)
-{
-    if (g_pSysMem)
-    {
-        // TODO: Implement this when g_pSysMem is available
-        // g_pSysMem->vtable->Free(ptr);
-        free(ptr);
-        return;
-    }
-    free(ptr);
-}
 
 // Exceptions
 class ZArrayRangeError

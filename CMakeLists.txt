@@ -53,6 +53,7 @@ set_target_properties(zlib PROPERTIES LINKER_LANGUAGE C)
 # Add common library (zstdlib)
 add_library(common STATIC
     src_main/common.h
+    src_main/memory.cpp
 
     # RefTabs
     src_main/zstdlib/reftab/reftab.cpp

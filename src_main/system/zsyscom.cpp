@@ -14,8 +14,8 @@ ZSysCom::ZSysCom()
     m_sendingZMessage = 0;
     m_filePath = 0;
     m_lineNum = 0;
-    m_unkBool3 = 0;
-    m_unkHwnd = 0;
+    m_debugWndReady = 0;
+    m_mainHwnd = 0;
     m_msgID = RegisterWindowMessageA("ZSystemMessage");
 
     g_pSysCom = this;
@@ -28,10 +28,10 @@ ZSysCom::~ZSysCom()
 
 void ZSysCom::Destroy()
 {
-    if (!m_unkHwnd)
-        m_unkHwnd = HWND_BROADCAST;
+    if (!m_mainHwnd)
+        m_mainHwnd = HWND_BROADCAST;
 
-    PostMessageA(m_unkHwnd, m_msgID, (m_unkInt1 << 8) + 10, 0);
+    PostMessageA(m_mainHwnd, m_msgID, (m_unkInt1 << 8) + 10, 0);
 
     g_pSysCom = 0;
 }
@@ -88,7 +88,7 @@ void ZSysCom::ProcessDebugWnd(HWND p_hWnd)
                 DispatchMessageA(&l_msg);
             }
 
-            if (m_unkHwnd)
+            if (m_mainHwnd)
                 break;
 
             Sleep(5);
@@ -99,64 +99,64 @@ void ZSysCom::ProcessDebugWnd(HWND p_hWnd)
             }
         }
 
-        m_unkBool3 = 1;
+        m_debugWndReady = 1;
     }
     else
     {
-        m_unkBool3 = 1;
+        m_debugWndReady = 1;
     }
 }
 
 void ZSysCom::SendDebugMsg(WPARAM p_wParam, LPARAM p_lParam, boolean p_sendMessage)
 {
-    HWND l_unkHwnd = m_unkHwnd;
+    HWND l_mainHwnd = m_mainHwnd;
 
     if (p_sendMessage)
     {
-        if (l_unkHwnd)
+        if (l_mainHwnd)
             SendMessageA(0, m_msgID, p_wParam + (m_unkInt1 << 8), p_lParam);
     }
     else
     {
-        if (!l_unkHwnd)
-            l_unkHwnd = HWND_BROADCAST;
+        if (!l_mainHwnd)
+            l_mainHwnd = HWND_BROADCAST;
 
-        PostMessageA(l_unkHwnd, m_msgID, p_wParam + (m_unkInt1 << 8), p_lParam);
+        PostMessageA(l_mainHwnd, m_msgID, p_wParam + (m_unkInt1 << 8), p_lParam);
     }
 }
 
 i32 ZSysCom::ForwardWndProc(u32 p_msg, WPARAM p_wParam, LPARAM p_lParam)
 {
     char l_buffer[256];
-    int l_unused;
+    i32 l_unused;
 
     if ((p_wParam & 0xFFFFFF00) == 0 || p_wParam >> 8 == m_unkInt1)
     {
         switch (p_wParam)
         {
         case 2:
-            if (!m_unkHwnd)
-                m_unkHwnd = (HWND)p_lParam;
+            if (!m_mainHwnd)
+                m_mainHwnd = (HWND)p_lParam;
 
             break;
         case 3:
-            if (!m_unkHwnd)
+            if (!m_mainHwnd)
             {
-                m_unkHwnd = (HWND)p_lParam;
+                m_mainHwnd = (HWND)p_lParam;
 
                 SendDebugMsg(8, (LPARAM)m_debugHwnd, 0);
             }
 
             break;
         case 4:
-            if (m_unkHwnd == (HWND)p_lParam)
-                m_unkHwnd = 0;
+            if (m_mainHwnd == (HWND)p_lParam)
+                m_mainHwnd = 0;
 
             goto CASE_7;
         case 5:
             if (p_lParam)
             {
-                if (m_unkBool3)
+                if (m_debugWndReady)
                 {
                     GlobalGetAtomNameA(p_lParam, l_buffer, 255);
                     GlobalDeleteAtom(p_lParam);
@@ -237,7 +237,7 @@ void ZSysCom::DataToDebug(char *p_format, ...)
     va_list l_argList;
     va_start(l_argList, p_format);
 
-    if (m_unkHwnd)
+    if (m_mainHwnd)
     {
         vsprintf(l_buffer, p_format, l_argList);
 
@@ -271,7 +271,7 @@ void ZSysCom::LogMessage(char *p_format, ...)
     va_list l_argList;
     va_start(l_argList, p_format);
 
-    if ((!g_pSysInterface || g_pSysInterface->m_isMessagingEnabled || g_pSysInterface->m_enableDebugOptions != 0.0) && m_unkBool3)
+    if ((!g_pSysInterface || g_pSysInterface->m_isMessagingEnabled || g_pSysInterface->m_enableDebugOptions != 0.0) && m_debugWndReady)
     {
         while (m_sendingZMessage)
             ;
@@ -296,31 +296,31 @@ void ZSysCom::LogMessage(char *p_format, ...)
             l_console->AddCmdText(l_buffer);
         }
 
-        if (m_unkHwnd)
+        if (m_mainHwnd)
         {
             l_cds.cbData = strlen(l_buffer) + 1;
             l_cds.dwData = 0;
             l_cds.lpData = l_buffer;
 
-            SendMessageA(m_unkHwnd, 74u, 0, (LPARAM)&l_cds);
+            SendMessageA(m_mainHwnd, 74u, 0, (LPARAM)&l_cds);
         }
 
         m_sendingZMessage = 0;
     }
 }
 
-void ZSysCom::UnkFunc5(i32 p_unkInt, char *p_format, ...)
+void ZSysCom::UnkFunc5(i32 p_unused, char *p_format, ...)
 {
     char l_buffer[4096];
 
     va_list l_argList;
     va_start(l_argList, p_format);
 
-    if ((!g_pSysInterface || g_pSysInterface->m_isMessagingEnabled || g_pSysInterface->m_enableDebugOptions != 0.0) && m_unkBool3)
+    if ((!g_pSysInterface || g_pSysInterface->m_isMessagingEnabled || g_pSysInterface->m_enableDebugOptions != 0.0) && m_debugWndReady)
     {
         if (!m_logsArray)
         {
-            int l_unused = -1;
+            i32 l_unused = -1;
 
             m_logsArray = new StrRefTab(32, 0);
         }
@@ -356,7 +356,7 @@ void ZSysCom::SendZMessage(char *p_format, ...)
         if (!l_buffer[0] || *((char *)&l_copyData.lpData + strlen(l_buffer) + 3) != '\n')
             strcat(l_buffer, "\n");
 
-        HWND l_unkHwnd = m_unkHwnd;
+        HWND l_unkHwnd = m_mainHwnd;
 
         if (l_unkHwnd)
         {
@@ -375,7 +375,7 @@ void ZSysCom::SendZMessage(char *p_format, ...)
     }
 }
 
-void ZSysCom::UnkFunc7(char *p_format, ...)
+void ZSysCom::AddCmdText(char *p_format, ...)
 {
     char l_buffer[1024];
 

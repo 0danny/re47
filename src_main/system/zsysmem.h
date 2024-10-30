@@ -43,7 +43,7 @@ public:
     virtual i32 UnkFunc7(i32 param);
     virtual void *New(u32 allocSize);
     virtual void *NewWithRef(u32 allocSize);
-    virtual char *Delete(i32 *param);
+    virtual boolean Delete(void *p_mem);
     virtual u32 UnkFunc10(const void *param1, i32 param2, i32 param3);
     virtual u64 UnkFunc11(const void **param);
     virtual u32 UnkFunc12(u32 param);

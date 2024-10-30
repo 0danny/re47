@@ -11,7 +11,7 @@ ZDynamicLoader::~ZDynamicLoader()
     delete[] m_libName;
 }
 
-void ZDynamicLoader::NewLibrary(HMODULE p_hModule, const char *p_libName)
+void ZDynamicLoader::Set(HMODULE p_hModule, const char *p_libName)
 {
     if (m_libName)
     {
@@ -29,7 +29,7 @@ void ZDynamicLoader::NewLibrary(HMODULE p_hModule, const char *p_libName)
     m_hModule = p_hModule;
 }
 
-FARPROC ZDynamicLoader::GetProc(const char *p_procName)
+FARPROC ZDynamicLoader::GetAddress(const char *p_procName)
 {
     if (m_hModule)
         return GetProcAddress(m_hModule, p_procName);
@@ -37,57 +37,57 @@ FARPROC ZDynamicLoader::GetProc(const char *p_procName)
         return 0;
 }
 
-void ZDynamicLoader::Unknown1()
+void ZDynamicLoader::FreeMem()
 {
     return;
 }
 
-void ZDynamicLoader::Unknown2()
+void ZDynamicLoader::Init()
 {
     return;
 }
 
-void ZDynamicLoader::Unknown3()
+void ZDynamicLoader::End()
 {
     return;
 }
 
-void ZDynamicLoader::Unknown4()
+void ZDynamicLoader::PushScene()
 {
     return;
 }
 
-void ZDynamicLoader::Unknown5()
+void ZDynamicLoader::PopScene()
 {
     return;
 }
 
-void ZDynamicLoader::Unknown6()
+void ZDynamicLoader::AllocSequenceStart()
 {
     return;
 }
 
-void ZDynamicLoader::Unknown7()
+void ZDynamicLoader::AllocSequenceEnd()
 {
     return;
 }
 
-void ZDynamicLoader::Unknown8()
+void ZDynamicLoader::InsertStart()
 {
     return;
 }
 
-void ZDynamicLoader::Unknown9()
+void ZDynamicLoader::InsertEnd()
 {
     return;
 }
 
-void ZDynamicLoader::Unknown10()
+void ZDynamicLoader::CrashFree()
 {
     return;
 }
 
-void ZDynamicLoader::Unknown11()
+void ZDynamicLoader::PrintStatus()
 {
     return;
 }

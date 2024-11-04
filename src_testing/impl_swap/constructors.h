@@ -1,6 +1,7 @@
 #pragma once
 
 // Reftabs
+
 #include "zstdlib/reftab/reftab32.h"
 #include "zstdlib/reftab/allocreftab.h"
 #include "zstdlib/reftab/staticreftab.h"
@@ -12,6 +13,9 @@
 #include "zstdlib/trees/zvaltree.h"
 #include "zstdlib/zconsole/zconsole.h"
 #include "utilities.h"
+
+#include "system/zsyscom.h"
+#include "system/zsysfile.h"
 
 namespace Constructors
 {

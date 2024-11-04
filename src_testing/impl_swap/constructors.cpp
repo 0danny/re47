@@ -26,10 +26,11 @@ namespace Constructors
             printf("[CONSTRUCTOR HOOK]: Could not hook RefTab constructor.\n");
         }
 
+        /*
         if (MH_CreateHook(staticRefTabAddress, (LPVOID)&Constructors::StaticRefTabHook, reinterpret_cast<LPVOID *>(&originalStaticRefTab)) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook StaticRefTab constructor.\n");
-        }
+        }*/
 
         if (MH_CreateHook(equRefTabAddress, (LPVOID)&Constructors::EquRefTabHook, NULL) != MH_OK)
         {

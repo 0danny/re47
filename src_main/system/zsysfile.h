@@ -8,6 +8,7 @@
 class ZSysFile
 {
 public:
+    ZSysFile();
 };
 
 #pragma pack(pop)

@@ -2,7 +2,7 @@
 #define DIRECTPLAY_H
 
 #include "system/zsyscom.h"
-#include <dplay.h>
+#include <directx7/dplay.h>
 
 #pragma pack(push, 1)
 

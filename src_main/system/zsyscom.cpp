@@ -307,6 +307,8 @@ void ZSysCom::LogMessage(char *p_format, ...)
 
         m_sendingZMessage = 0;
     }
+
+    printf("[LogMessage] -> %s", l_buffer);
 }
 
 void ZSysCom::UnkFunc5(i32 p_unused, char *p_format, ...)

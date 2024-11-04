@@ -2,7 +2,7 @@
 #include "system/zsysmem.h"
 
 // Global mem alloc overloads
-inline void *operator new(size_t size)
+void *operator new(size_t size)
 {
     if (g_pSysMem)
         return g_pSysMem->New(size);
@@ -10,7 +10,7 @@ inline void *operator new(size_t size)
         return malloc(size);
 }
 
-inline void operator delete(void *ptr)
+void operator delete(void *ptr)
 {
     if (g_pSysMem)
     {

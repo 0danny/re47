@@ -7,7 +7,7 @@ if "%VS6_BIN_PATH%"=="" (
 
 cd /d %VS6_BIN_PATH%
 
-call VCVARS32.BAT x86
+call VCVARS32.BAT
 
 if "%errorlevel%" neq "0" (
     echo Failed to set up Visual Studio 6 environment

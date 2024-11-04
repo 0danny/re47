@@ -17,10 +17,10 @@ namespace Loader
         }
 
         /*
-                if (MH_CreateHookApi(L"user32", "RegisterWindowMessageA", &RegisterWindowMessageAHook, reinterpret_cast<LPVOID *>(&originalRegisterWindowMessageA)) != MH_OK)
-                {
-                    printf("[LOADER] -> Failed to hook RegisterWindowMessageA!\n");
-                }*/
+        if (MH_CreateHookApi(L"user32", "RegisterWindowMessageA", &RegisterWindowMessageAHook, reinterpret_cast<LPVOID *>(&originalRegisterWindowMessageA)) != MH_OK)
+        {
+            printf("[LOADER] -> Failed to hook RegisterWindowMessageA!\n");
+        }*/
 
         EnableHooks();
     }
@@ -31,7 +31,7 @@ namespace Loader
 
         if (g_enableSwaps)
         {
-            // Constructors::CreateHooks();
+            Constructors::CreateHooks();
             // Methods::CreateHooks();
             Menu::CreateHooks();
         }

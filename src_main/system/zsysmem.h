@@ -33,9 +33,9 @@ public:
     virtual ~ZSysMem();
     virtual void UnkFunc0(i32 param1, i32 param2);
     virtual char *UnkFunc1();
-    virtual i32 UnkFunc2(const char *param1, u64 param2);
+    virtual i32 UnkFunc2(const char *param1, u32 param2);
     virtual void AllocCheck();
-    virtual char UnkFunc4(u64 *param);
+    virtual char UnkFunc4(u32 *param);
     virtual i32 UnkFunc5();
     virtual void NullSub1();
     virtual void NullSub2();
@@ -45,7 +45,7 @@ public:
     virtual void *NewWithRef(u32 allocSize);
     virtual boolean Delete(void *p_mem);
     virtual u32 UnkFunc10(const void *param1, i32 param2, i32 param3);
-    virtual u64 UnkFunc11(const void **param);
+    virtual u32 UnkFunc11(const void **param);
     virtual u32 UnkFunc12(u32 param);
     virtual char *UnkFunc13(u32 param);
     virtual i32 UnkFunc14(i32 param1, i32 param2);
@@ -53,12 +53,12 @@ public:
     virtual i32 UnkFunc16(i32 param);
     virtual i32 UnkFunc17();
     virtual i32 UnkFunc18(char *param);
-    virtual i32 UnkFunc19(u64 *param1, i32 param2, i32 param3, i32 param4);
+    virtual i32 UnkFunc19(u32 *param1, i32 param2, i32 param3, i32 param4);
     virtual void UnkFunc20(i32 param);
     virtual u32 FindEqu(i32 value, boolean flag);
     virtual void AddEqu(u32 refNum, i32 refValue, boolean flag);
     virtual i32 UnkFunc23(u32 param);
-    virtual u64 *UnkFunc24(u64 *param1, u64 *param2);
+    virtual u32 *UnkFunc24(u32 *param1, u32 *param2);
 };
 
 #pragma pack(pop)

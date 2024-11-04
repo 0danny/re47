@@ -205,14 +205,14 @@ i32 ZSysInterface::UnkFunc35()
     return 0;
 }
 
-i64 ZSysInterface::UnkFunc36()
+i32 ZSysInterface::UnkFunc36()
 {
     return 0;
 }
 
 void ZSysInterface::UnkFunc37() {}
 
-void ZSysInterface::Sleep(u64 milliseconds)
+void ZSysInterface::Sleep(u32 milliseconds)
 {
     ::Sleep(milliseconds);
 }
@@ -343,7 +343,7 @@ ZSysInterface *ZSysInterface::UnkFunc66(const void *ptr, i32 param1, i32 param2,
     return 0;
 }
 
-u64 ZSysInterface::UnkFunc67(i32 param1, i32 param2)
+u32 ZSysInterface::UnkFunc67(i32 param1, i32 param2)
 {
     return 0;
 }

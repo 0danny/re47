@@ -20,7 +20,7 @@ char *ZSysMem::UnkFunc1()
     return 0;
 }
 
-i32 ZSysMem::UnkFunc2(const char *param1, u64 param2)
+i32 ZSysMem::UnkFunc2(const char *param1, u32 param2)
 {
     // Implementation
     return 0;
@@ -31,7 +31,7 @@ void ZSysMem::AllocCheck()
     // Implementation
 }
 
-char ZSysMem::UnkFunc4(u64 *param)
+char ZSysMem::UnkFunc4(u32 *param)
 {
     // Implementation
     return 0;
@@ -89,7 +89,7 @@ u32 ZSysMem::UnkFunc10(const void *param1, i32 param2, i32 param3)
     return 0;
 }
 
-u64 ZSysMem::UnkFunc11(const void **param)
+u32 ZSysMem::UnkFunc11(const void **param)
 {
     // Implementation
     return 0;
@@ -137,7 +137,7 @@ i32 ZSysMem::UnkFunc18(char *param)
     return 0;
 }
 
-i32 ZSysMem::UnkFunc19(u64 *param1, i32 param2, i32 param3, i32 param4)
+i32 ZSysMem::UnkFunc19(u32 *param1, i32 param2, i32 param3, i32 param4)
 {
     // Implementation
     return 0;
@@ -165,7 +165,7 @@ i32 ZSysMem::UnkFunc23(u32 param)
     return 0;
 }
 
-u64 *ZSysMem::UnkFunc24(u64 *param1, u64 *param2)
+u32 *ZSysMem::UnkFunc24(u32 *param1, u32 *param2)
 {
     // Implementation
     return 0;

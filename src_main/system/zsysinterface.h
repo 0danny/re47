@@ -52,10 +52,10 @@ public:
     virtual void UnkFunc33();
     virtual double UnkFunc34();
     virtual i32 UnkFunc35();
-    virtual i64 UnkFunc36();
+    virtual i32 UnkFunc36();
     virtual void UnkFunc37();
 
-    virtual void Sleep(u64 p_milliseconds);
+    virtual void Sleep(u32 p_milliseconds);
     virtual void Init(char *p_cmdLineArgs);
     virtual char Restart(i32);
 
@@ -86,7 +86,7 @@ public:
     virtual void UnkFunc64();
     virtual void UnkFunc65();
     virtual ZSysInterface *UnkFunc66(const void *, i32, i32, i32);
-    virtual u64 UnkFunc67(i32, i32);
+    virtual u32 UnkFunc67(i32, i32);
     virtual FARPROC UnkFunc68(i32);
 
     static LRESULT CALLBACK WndProc(HWND hwnd, u32 uMsg, WPARAM wParam, LPARAM lParam);
@@ -193,7 +193,7 @@ public:
     i32 unkInt53;
     i32 unkInt54;
     u8 unkPad21[120];
-    i32 unkInt55;
+    float unkInt55;
     i32 unkInt56;
     i32 unkInt58;
     i32 unkInt59;

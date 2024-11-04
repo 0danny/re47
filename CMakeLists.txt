@@ -103,6 +103,9 @@ add_library(common STATIC
 add_library(system SHARED
     src_main/system/dllmain.cpp
 
+    src_main/system/zsyscom.cpp
+    src_main/system/zsyscom.h
+
     src_main/system/zsysinterface.cpp
     src_main/system/zsysinterface.h
 
@@ -111,9 +114,6 @@ add_library(system SHARED
 
     src_main/system/zsysfile.cpp
     src_main/system/zsysfile.h
-
-    src_main/system/zsyscom.cpp
-    src_main/system/zsyscom.h
 )
 
 target_sources(system PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dll_defs/system.def)
@@ -130,9 +130,9 @@ add_library(directplay SHARED
     src_main/directplay/directplay.h
 )
 
-target_sources(directplay PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dll_defs/directplay.def)
 target_link_directories(directplay PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
-target_link_libraries(directplay globals common)
+target_link_libraries(directplay globals common dplayx dxguid)
+target_sources(directplay PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dll_defs/directplay.def)
 
 # Add globals dll
 add_library(globals SHARED src_main/globals/dllmain.cpp)
@@ -141,6 +141,19 @@ target_sources(globals PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dll_defs/globals.def)
 # Add the hitman executable
 add_executable(hitman WIN32 src_main/hitman/main.cpp ${RESOURCE_FILE})
 target_link_libraries(hitman globals common zlib)
+
+# Add the probe dll
+add_library(systemprobe SHARED
+    src_main/systemprobe/dllmain.cpp
+
+    src_main/systemprobe/csystemprobe.cpp
+    src_main/systemprobe/csystemprobe.h
+)
+
+target_link_directories(systemprobe PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
+target_link_libraries(systemprobe common globals ddraw dxguid opengl32 glide3x)
+target_sources(systemprobe PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dll_defs/systemprobe.def)
+set_target_properties(systemprobe PROPERTIES OUTPUT_NAME "systemprobedll")
 
 # Build the testing dll(s)
 add_library(impl_swap SHARED
@@ -165,4 +178,4 @@ add_library(impl_swap SHARED
 )
 
 target_link_directories(impl_swap PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
-target_link_libraries(impl_swap PRIVATE minhook_x86 globals kernel32 common opengl32)
+target_link_libraries(impl_swap PRIVATE system minhook_x86 globals kernel32 common opengl32)

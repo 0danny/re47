@@ -18,7 +18,7 @@ extern "C" __declspec(dllexport) void EditPrint(char *p_str)
     g_pSysCom->LogMessage("%s", p_str);
 }
 
-BOOL APIENTRY DllMain(HMODULE p_hinstDLL, u64 p_fdwReason, LPVOID p_lpReserved)
+BOOL APIENTRY DllMain(HMODULE p_hinstDLL, u32 p_fdwReason, LPVOID p_lpReserved)
 {
     i32 l_count = 0;
 

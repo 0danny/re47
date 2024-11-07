@@ -149,6 +149,6 @@ namespace Constructors
     {
         printf("[CONSTRUCTOR HOOK]: ZSysCom called\n");
 
-        return originalZSysCom(_this);
+        return new (_this) ZSysCom();
     }
 }

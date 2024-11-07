@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CONSTRUCTORS_H
+#define CONSTRUCTORS_H
 
 // Reftabs
 
@@ -79,3 +80,5 @@ namespace Constructors
 
     void CreateHooks();
 }
+
+#endif

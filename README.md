@@ -20,22 +20,26 @@ Join the discord server using the badge above to track the progress or if you ju
 
 Below each of the files in the decomp is discussed along with a percentage indicator of the progress.
 
+### Completed ✅
+
+**directplay.dll** [48kb]
+**100%** Completed - **22** out of **22** functions named.
+
+**globals.dll** [20kb]
+**100%** Completed - **1** out of **1** functions named.
+
+<br>
+
 ### Being Decompiled 📝
 
 **hitman.exe** [45kb]
 **99%** Completed - **3** out of **3** functions named.
-
-**globals.dll** [20kb]
-**100%** Completed - **1** out of **1** functions named. ✅
 
 **system.dll** [272kb]
 **20%** Completed - **525** out of **552** functions named.
 
 **systemprobedll.dll** [68kb]
 **99%** Completed - **53** out of **53** functions named.
-
-**directplay.dll ** [48kb]
-**100%** Completed - **22** out of **22** functions named. ✅
 
 **renderopengl.dll** [248kb]
 **0%** Completed - **240** out of **464** functions named.
@@ -62,10 +66,6 @@ Below each of the files in the decomp is discussed along with a percentage indic
 **sound.dll** [188kb]
 **0%** Completed
 
-<br>
-
-All of the functions marked with a "✅", are completed and functioning as the original.
-
 ## Prerequisites
 
 To build and run the decompiled version of Hitman Codename 47, you will need:
@@ -78,8 +78,8 @@ To build and run the decompiled version of Hitman Codename 47, you will need:
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/<your-username>/hitman-codename-47.git
-    cd hitman-codename-47
+    git clone https://github.com/0danny/re47.git
+    cd re47
     ```
 2. **Set the VS6_BIN_PATH Environment Variable:**
 
@@ -88,8 +88,6 @@ To build and run the decompiled version of Hitman Codename 47, you will need:
 3. **Run build.bat**
 
     The output files should be written to the "build" folder at the root directory.
-
-This project is in very early stages, a more streamlined build process is a future task.
 
 ## Reversing
 

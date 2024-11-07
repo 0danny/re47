@@ -1,8 +1,11 @@
-#pragma once
+#ifndef MENU_H
+#define MENU_H
 
 #include <windows.h>
-#include "impl_swap/utilities.h"
 #include <gl/GL.h>
+
+#include "impl_swap/utilities.h"
+#include "mods/freecam.h"
 
 namespace Menu
 {
@@ -36,3 +39,5 @@ namespace Menu
     void BuildFont(HDC hDC);
     void KillFont();
 }
+
+#endif

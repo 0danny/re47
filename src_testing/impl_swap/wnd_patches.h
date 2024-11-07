@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WND_PATCHES_H
+#define WND_PATCHES_H
 
 #include <windows.h>
 #include <minhook.h>
@@ -23,3 +24,5 @@ namespace WndPatches
 
     void CreateHooks();
 }
+
+#endif

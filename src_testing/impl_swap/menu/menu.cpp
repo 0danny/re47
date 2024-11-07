@@ -112,6 +112,8 @@ namespace Menu
         {
             menuItems[selectedIndex].selected = !menuItems[selectedIndex].selected;
         }
+
+        FreeCam::HandleInput();
     }
 
     void WINAPI hookedGlFinish()

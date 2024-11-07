@@ -16,12 +16,6 @@ namespace Loader
             printf("[LOADER] -> Failed to hook LoadLibraryA!\n");
         }
 
-        /*
-        if (MH_CreateHookApi(L"user32", "RegisterWindowMessageA", &RegisterWindowMessageAHook, reinterpret_cast<LPVOID *>(&originalRegisterWindowMessageA)) != MH_OK)
-        {
-            printf("[LOADER] -> Failed to hook RegisterWindowMessageA!\n");
-        }*/
-
         EnableHooks();
     }
 
@@ -31,7 +25,7 @@ namespace Loader
 
         if (g_enableSwaps)
         {
-            Constructors::CreateHooks();
+            // Constructors::CreateHooks();
             // Methods::CreateHooks();
             Menu::CreateHooks();
         }
@@ -48,16 +42,6 @@ namespace Loader
         HMODULE module = originalLoadLibraryA(lpLibFileName);
 
         return module;
-    }
-
-    UINT WINAPI RegisterWindowMessageAHook(LPCSTR lpString)
-    {
-        if (strcmp(lpString, "ZSystemMessage") == 0)
-        {
-            printf("[LOADER_HOOK]: RegisterWindowMessageA called with string: %s\n", lpString);
-        }
-
-        return originalRegisterWindowMessageA(lpString);
     }
 
     LPSTR __stdcall GetCommandLineAHook()

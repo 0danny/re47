@@ -151,7 +151,7 @@ add_library(systemprobe SHARED
 )
 
 target_link_directories(systemprobe PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
-target_link_libraries(systemprobe common globals ddraw dxguid opengl32 glide3x)
+target_link_libraries(systemprobe common globals ddraw dxguid opengl32 glu32 glide3x)
 target_sources(systemprobe PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dll_defs/systemprobe.def)
 set_target_properties(systemprobe PROPERTIES OUTPUT_NAME "systemprobedll")
 
@@ -175,6 +175,14 @@ add_library(impl_swap SHARED
     src_testing/impl_swap/loader.h
 
     src_testing/impl_swap/utilities.h
+
+    # Mods
+    src_testing/impl_swap/menu/mods/freecam.cpp
+    src_testing/impl_swap/menu/mods/freecam.h
+
+    # Statically link in ZSysCom
+    src_main/system/zsyscom.cpp
+    src_main/system/zsyscom.h
 )
 
 target_link_directories(impl_swap PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)

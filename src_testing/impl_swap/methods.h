@@ -1,4 +1,5 @@
-#pragma once
+#ifndef METHODS_H
+#define METHODS_H
 
 #include "utilities.h"
 #include "zstdlib/zmalloc.h"
@@ -21,3 +22,5 @@ namespace Methods
 
     void CreateHooks();
 }
+
+#endif

@@ -56,7 +56,6 @@ i32 WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, LPSTR p_lpCmdLine, 
         }
 
         g_pSysInterface->Init(l_cmdLinePtr);
-
         FreeLibrary(l_systemLib);
     }
 
@@ -68,11 +67,15 @@ i32 DoAlwaysNoConv(HINSTANCE instance)
     return 1;
 }
 
-// TODO: Handle these correctly, see functions in IDA
 void SignalHandler(i32 signal)
 {
-    // Show a messagebox.
-    MessageBoxA(0, "Unhandled exception -> " + signal, "Error", 0);
+    ZDynamicLoader *l_soundDLLBase = g_pSysInterface->m_soundDLLBase;
 
-    exit(-1);
+    if (l_soundDLLBase)
+        l_soundDLLBase->CrashFree();
+
+    ZDynamicLoader *l_drawDLLBase = g_pSysInterface->m_drawDLLBase;
+
+    if (l_drawDLLBase)
+        l_drawDLLBase->CrashFree();
 }

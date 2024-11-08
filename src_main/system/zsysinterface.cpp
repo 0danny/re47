@@ -18,7 +18,9 @@ i32 ZSysInterface::InitializeResources()
     return 0;
 }
 
-void ZSysInterface::UnkFunc3() {}
+void ZSysInterface::UnkFunc3()
+{
+}
 
 void ZSysInterface::ChangeDisplaySettings()
 {
@@ -31,14 +33,18 @@ i32 ZSysInterface::UnkFunc8()
     return 0;
 }
 
-void ZSysInterface::UnkFunc9() {}
+void ZSysInterface::UnkFunc9()
+{
+}
 
 void *ZSysInterface::InitActionMap()
 {
     return 0;
 }
 
-void ZSysInterface::FreeActionMap() {}
+void ZSysInterface::FreeActionMap()
+{
+}
 
 u8 *ZSysInterface::UnkFunc12()
 {
@@ -52,17 +58,18 @@ void ZSysInterface::UnkFunc13()
 boolean ZSysInterface::ProcessWindowMessages(HWND p_hWnd)
 {
     struct tagMSG message;
-    ZSysInterface *self = this;
 
-    if (this->m_messageFlag)
+    ZSysInterface *l_self = this;
+
+    if (m_messageFlag)
         return 1;
 
-    this->m_messageFlag = 1;
+    m_messageFlag = 1;
 
     if (!PeekMessageA(&message, p_hWnd, 0, 0, 0))
     {
     RETURN_LBL:
-        self->m_messageFlag = 0;
+        l_self->m_messageFlag = 0;
         return 1;
     }
 
@@ -73,7 +80,7 @@ boolean ZSysInterface::ProcessWindowMessages(HWND p_hWnd)
 
         if (!PeekMessageA(&message, p_hWnd, 0, 0, 0))
         {
-            self = this;
+            l_self = this;
             goto RETURN_LBL;
         }
     }
@@ -191,9 +198,13 @@ i32 ZSysInterface::UnkFunc31()
     return 0;
 }
 
-void ZSysInterface::GenerateUniqueFilename() {}
+void ZSysInterface::GenerateUniqueFilename()
+{
+}
 
-void ZSysInterface::UnkFunc33() {}
+void ZSysInterface::UnkFunc33()
+{
+}
 
 double ZSysInterface::UnkFunc34()
 {
@@ -210,7 +221,9 @@ i32 ZSysInterface::UnkFunc36()
     return 0;
 }
 
-void ZSysInterface::UnkFunc37() {}
+void ZSysInterface::UnkFunc37()
+{
+}
 
 void ZSysInterface::Sleep(u32 milliseconds)
 {
@@ -226,9 +239,13 @@ char ZSysInterface::Restart(i32 param)
     return 0;
 }
 
-void ZSysInterface::UnkFunc40(i32 param1, i32 param2, i32 param3) {}
+void ZSysInterface::UnkFunc40(i32 param1, i32 param2, i32 param3)
+{
+}
 
-void ZSysInterface::UnkFunc41(i32 param1, i32 param2) {}
+void ZSysInterface::UnkFunc41(i32 param1, i32 param2)
+{
+}
 
 i32 ZSysInterface::UnkFunc42(char *msg)
 {
@@ -240,7 +257,9 @@ char ZSysInterface::UnkFunc43(i32 param)
     return 0;
 }
 
-void ZSysInterface::UnkFunc44() {}
+void ZSysInterface::UnkFunc44()
+{
+}
 
 i32 ZSysInterface::UnkFunc45(i32 param1, i32 param2)
 {
@@ -285,7 +304,7 @@ i32 ZSysInterface::UnkFunc51(i32 param)
 
 ZConsole *ZSysInterface::GetConsole()
 {
-    return m_consoleInstance;
+    return m_console;
 }
 
 i32 ZSysInterface::UnkFunc53(i32 param1, i32 param2, i32 param3)
@@ -333,10 +352,21 @@ i32 ZSysInterface::UnkFunc61()
     return 0;
 }
 
-void ZSysInterface::UnkFunc62(const char *msg) {}
-void ZSysInterface::UnkFunc63(const char *msg) {}
-void ZSysInterface::UnkFunc64() {}
-void ZSysInterface::UnkFunc65() {}
+void ZSysInterface::UnkFunc62(const char *msg)
+{
+}
+
+void ZSysInterface::UnkFunc63(const char *msg)
+{
+}
+
+void ZSysInterface::UnkFunc64()
+{
+}
+
+void ZSysInterface::UnkFunc65()
+{
+}
 
 ZSysInterface *ZSysInterface::UnkFunc66(const void *ptr, i32 param1, i32 param2, i32 param3)
 {

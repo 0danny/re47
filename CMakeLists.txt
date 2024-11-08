@@ -97,6 +97,10 @@ add_library(common STATIC
 
     src_main/zstdlib/trees/zvaltree.cpp
     src_main/zstdlib/trees/zvaltree.h
+
+    # MyStr
+    src_main/zstdlib/mystr.cpp
+    src_main/zstdlib/mystr.h
 )
 
 # Add System DLL

@@ -26,7 +26,7 @@ public:
     virtual ~RefTab();
 
     virtual u32 *Add(u32 p_refNum);
-    virtual void AddUnique(u32 p_refNum);
+    virtual u32 *AddUnique(u32 p_refNum);
 
     virtual void Clear();
     virtual void ClearThis();

@@ -70,10 +70,14 @@ u32 *RefTab::Add(u32 p_refNum)
 }
 
 // MATCHED
-void RefTab::AddUnique(u32 p_refNum)
+u32 *RefTab::AddUnique(u32 p_refNum)
 {
-    if (!Find(p_refNum))
-        Add(p_refNum);
+    u32 *l_result = Find(p_refNum);
+
+    if (!l_result)
+        return Add(p_refNum);
+
+    return l_result;
 }
 
 // MATCHED

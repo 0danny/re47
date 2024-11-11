@@ -33,10 +33,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
             return FALSE;
         }
 
-        i64 result = GetRDTSC();
-
-        printf("Testing RDTSC: %lld\n", result);
-
         Loader::Init();
     }
     else if (ul_reason_for_call == DLL_PROCESS_DETACH)

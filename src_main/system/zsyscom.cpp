@@ -396,10 +396,9 @@ void ZSysCom::AddCmdText(char *p_format, ...)
     }
 }
 
-void *ZSysCom::UnkFunc8(char *p_unkChar)
+void ZSysCom::UnkFunc8()
 {
     printf("[ZSysCom::UnkFunc8] UNIMPLEMENTED\n");
-    return 0;
 }
 
 void ZSysCom::UnkFunc9()

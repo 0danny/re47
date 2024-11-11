@@ -13,7 +13,7 @@ public:
 
     // Overriden
     u32 *Add(u32 p_refNum);
-    void AddUnique(u32 p_refNum);
+    u32 *AddUnique(u32 p_refNum);
 
     void Clear();
     void ClearThis();

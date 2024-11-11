@@ -54,7 +54,7 @@ public:
     virtual void UnkFunc5(i32 p_unused, char *p_format, ...);
     virtual void SendZMessage(char *p_format, ...);
     virtual void AddCmdText(char *p_format, ...);
-    virtual void *UnkFunc8(char *p_unkChar);
+    virtual void UnkFunc8();
     virtual void UnkFunc9();
 };
 

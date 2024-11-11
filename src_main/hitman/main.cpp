@@ -38,7 +38,7 @@ i32 WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, LPSTR p_lpCmdLine, 
 
             HANDLE l_iniFile = CreateFileA(l_filePath, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
-            if (l_iniFile == (HANDLE)-1)
+            if (l_iniFile == INVALID_HANDLE_VALUE)
             {
                 // Fallback to @main.ini
                 l_cmdLinePtr = "@main.ini";

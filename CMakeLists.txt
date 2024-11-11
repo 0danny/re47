@@ -99,8 +99,11 @@ add_library(common STATIC
     src_main/zstdlib/trees/zvaltree.h
 
     # MyStr
-    src_main/zstdlib/mystr.cpp
     src_main/zstdlib/mystr.h
+
+    # CFastLookup2
+    src_main/zstdlib/cfastlookup2.cpp
+    src_main/zstdlib/cfastlookup2.h
 )
 
 # Add System DLL

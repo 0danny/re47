@@ -77,7 +77,7 @@ i32 __stdcall EnumSessions(LPCDPSESSIONDESC2 lpThisSD, LPDWORD lpdwTimeOut, DWOR
 i32 DirectPlay::FindSession()
 {
     LPDIRECTPLAY l_lpDP;
-    DirectPlayCreate(this->m_tcpGUID, &l_lpDP, 0);
+    DirectPlayCreate(m_tcpGUID, &l_lpDP, 0);
 
     l_lpDP->QueryInterface(IID_IDirectPlay2, (void **)&m_lpDP);
 

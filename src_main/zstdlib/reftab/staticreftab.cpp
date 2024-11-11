@@ -116,12 +116,14 @@ u32 *StaticRefTab::Add(u32 p_refNum)
     return l_nxtRefPtr + 1;
 }
 
-void StaticRefTab::AddUnique(u32 p_refNum)
+u32 *StaticRefTab::AddUnique(u32 p_refNum)
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 616);
     l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 616);
 
     DebugBreak();
+
+    return 0;
 }
 
 void StaticRefTab::Clear()

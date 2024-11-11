@@ -6,6 +6,11 @@ namespace Methods
     {
         printf("[METHOD HOOK]: Creating method hooks...\n");
 
+        if (MH_CreateHook(cFastLookup_Remove, (LPVOID)&Methods::CFastLookup_RemoveHook, NULL) != MH_OK)
+        {
+            printf("[METHOD HOOK]: Could not hook CFastLookup_Remove method.\n");
+        }
+
         /*
                 if (MH_CreateHook(zMalloc_RemoveFreeHeaderFromBins, (LPVOID)&Methods::ZMalloc_RemoveFreeHeaderFromBinsHook, NULL) != MH_OK)
                 {
@@ -53,5 +58,10 @@ namespace Methods
     void __fastcall ZMalloc_RemoveFreeHeaderFromBinsHook(ZMalloc *_this, void *_EDX, SMallocFreeHeader *p_freeHeader, SBinTreeNode *p_mallocBin)
     {
         _this->RemoveFreeHeaderFromBins(p_freeHeader, p_mallocBin);
+    }
+
+    void __fastcall CFastLookup_RemoveHook(CFastLookup2 *_this, void *_EDX, const char *p_str, i32 p_strSize)
+    {
+        _this->Remove(p_str, p_strSize);
     }
 }

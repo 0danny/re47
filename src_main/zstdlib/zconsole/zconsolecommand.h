@@ -5,7 +5,7 @@
 #include "common.h"
 
 class ZCmdHandler;
-class ZCmdHandlerBase;
+class ZHelpCommand;
 
 struct ZCmdNode
 {
@@ -24,7 +24,7 @@ class ZConsoleCommand
 {
 public:
     ZCmdNode *m_cmdNodeRoot;
-    ZCmdHandler *m_cmdHandler;
+    ZHelpCommand *m_helpCommand;
 
     ZConsoleCommand();
 
@@ -38,29 +38,36 @@ public:
     void Destroy();
 };
 
-class ZCmdHandlerBase
+class ZCmdHandler
 {
 public:
-    ZCmdHandlerBase();
+    inline ZCmdHandler(char *p_cmdName)
+    {
+        m_cmdName = new char[strlen(p_cmdName) + 1];
+        strcpy(m_cmdName, p_cmdName);
+    }
 
-    virtual ~ZCmdHandlerBase();
+    virtual ~ZCmdHandler();
     virtual void UnkFunc0();
-    virtual void PrintStatus(char *p_cmdValue) = 0;
+    virtual void ExecuteCommand(char *p_cmdValue) = 0;
 
     char *m_cmdName;
 };
 
-class ZCmdHandler : public ZCmdHandlerBase
+class ZHelpCommand : public ZCmdHandler
 {
 public:
-    ZCmdHandler(ZConsoleCommand *p_consoleCmd);
+    inline ZHelpCommand(char *p_cmdName, ZConsoleCommand *p_consoleCommand) : ZCmdHandler(p_cmdName)
+    {
+        m_consoleCommand = p_consoleCommand;
+    }
 
-    virtual ~ZCmdHandler();
-    void PrintStatus(char *p_cmdValue);
+    virtual ~ZHelpCommand();
+    void ExecuteCommand(char *p_cmdValue);
 
     void Destroy();
 
-    ZConsoleCommand *m_consoleCmd;
+    ZConsoleCommand *m_consoleCommand;
 };
 
 #endif

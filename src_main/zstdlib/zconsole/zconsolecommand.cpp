@@ -4,14 +4,16 @@
 
 ZConsoleCommand::ZConsoleCommand()
 {
-    m_cmdHandler = new ZCmdHandler(this);
+    // First command is the "<COMMANDS> which displays all of the available commands."
+    m_helpCommand = new ZHelpCommand("commands", this);
+
     m_cmdNodeRoot = new ZCmdNode();
 
     m_cmdNodeRoot->next = 0;
     m_cmdNodeRoot->prev = 0;
     m_cmdNodeRoot->prevSameCommand = 0;
     m_cmdNodeRoot->nextSameCommand = 0;
-    m_cmdNodeRoot->cmdHandler = m_cmdHandler;
+    m_cmdNodeRoot->cmdHandler = m_helpCommand;
 }
 
 ZCmdNode *ZConsoleCommand::RegisterCommand(ZCmdHandler *p_handler)
@@ -207,7 +209,7 @@ boolean ZConsoleCommand::ExecuteCommand(char *p_cmd, char *p_cmdValue)
 
     do
     {
-        l_cmdStruct->cmdHandler->PrintStatus(p_cmdValue);
+        l_cmdStruct->cmdHandler->ExecuteCommand(p_cmdValue);
 
         l_cmdStruct = l_cmdStruct->nextSameCommand;
 
@@ -238,10 +240,10 @@ void ZConsoleCommand::Destroy()
     ZCmdNode *l_rootNode;
     char *l_cmdName;
 
-    UnregisterCommand(m_cmdHandler);
+    UnregisterCommand(m_helpCommand);
 
-    if (m_cmdHandler)
-        m_cmdHandler->~ZCmdHandler();
+    if (m_helpCommand)
+        m_helpCommand->~ZHelpCommand();
 
     for (ZCmdNode *l_curNode = m_cmdNodeRoot; l_curNode; l_curNode = m_cmdNodeRoot)
     {
@@ -274,43 +276,32 @@ void ZConsoleCommand::Destroy()
     }
 }
 
-/* ------------ ZCmdHandler ----------------*/
+/* ------------ ZHelpCommand ----------------*/
 
-ZCmdHandler::ZCmdHandler(ZConsoleCommand *p_consoleCmd) : ZCmdHandlerBase()
-{
-    m_consoleCmd = p_consoleCmd;
-}
-
-ZCmdHandler::~ZCmdHandler()
+ZHelpCommand::~ZHelpCommand()
 {
     Destroy();
 }
 
-void ZCmdHandler::PrintStatus(char *p_cmdValue)
+void ZHelpCommand::ExecuteCommand(char *p_cmdValue)
 {
-    m_consoleCmd->PrintStatus(p_cmdValue);
+    m_consoleCommand->PrintStatus(p_cmdValue);
 }
 
-void ZCmdHandler::Destroy()
+void ZHelpCommand::Destroy()
 {
-    ZCmdHandlerBase::~ZCmdHandlerBase();
+    ZCmdHandler::~ZCmdHandler();
 }
 
-/* ------------ ZCmdHandlerBase ------------ */
+/* ------------ ZCmdHandler ------------ */
 
-ZCmdHandlerBase::ZCmdHandlerBase()
+ZCmdHandler::~ZCmdHandler()
 {
-    m_cmdName = new char[strlen("commands") + 1];
-    strcpy(m_cmdName, "commands");
-}
-
-ZCmdHandlerBase::~ZCmdHandlerBase()
-{
-    delete[] m_cmdName;
+    delete m_cmdName;
 }
 
 // NULLSUB
-void ZCmdHandlerBase::UnkFunc0()
+void ZCmdHandler::UnkFunc0()
 {
     return;
 }

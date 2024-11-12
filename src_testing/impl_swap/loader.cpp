@@ -25,9 +25,9 @@ namespace Loader
 
         if (g_enableSwaps)
         {
-            // Constructors::CreateHooks();
-            Methods::CreateHooks();
-            // Menu::CreateHooks();
+            Constructors::CreateHooks();
+            // Methods::CreateHooks();
+            //  Menu::CreateHooks();
         }
 
         WndPatches::CreateHooks();

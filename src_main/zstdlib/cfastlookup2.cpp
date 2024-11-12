@@ -18,7 +18,6 @@ CFastLookup2::~CFastLookup2()
 
 void CFastLookup2::Clear()
 {
-    i32 *l_unkInt;
     RefRun l_refRun;
 
     while (1)
@@ -38,9 +37,7 @@ void CFastLookup2::Clear()
             {
                 if (l_item->isAllocated)
                 {
-                    l_unkInt = (i32 *)l_item->stringPtr;
-
-                    delete l_unkInt;
+                    delete l_item->stringPtr;
                 }
             }
 
@@ -160,7 +157,7 @@ CFastLink *CFastLookup2::FindFastLink(LinkRefTab *p_linkTab, const char *p_str, 
     return l_result;
 }
 
-inline void CFastLookup2::Set(const char *p_str, i32 p_size)
+inline void CFastLookup2::Set(const char *p_str, u32 p_ref)
 {
     CFastLink *l_fastLinkPtr;
 
@@ -223,8 +220,58 @@ inline void CFastLookup2::Set(const char *p_str, i32 p_size)
 
     l_fastLinkPtr->stringLength = l_size;
     l_fastLinkPtr->stringPtr = l_str;
-    l_fastLinkPtr->unkSize = p_size;
+    l_fastLinkPtr->reference = p_ref;
     l_fastLinkPtr->isAllocated = 1;
+}
+
+inline u32 CFastLookup2::Get(const char *p_str)
+{
+    RefRun l_refRun;
+
+    u32 l_reference;
+    u32 l_pointerSize = strlen(p_str) + 1;
+    u32 l_pointerSizeMinus1 = l_pointerSize - 1;
+    i32 l_count = (l_pointerSize - 1) >> 2;
+    i32 l_key = l_pointerSize - 1;
+
+    CFastLink *l_nextRef;
+
+    if (l_count)
+    {
+        const char *l_ptrIncrement = p_str;
+
+        do
+        {
+            l_key += *l_ptrIncrement;
+            l_ptrIncrement += 4;
+            --l_count;
+        } while (l_count);
+    }
+
+    for (u32 l_keyItem = l_pointerSizeMinus1 & 0xFFFFFFFC; l_keyItem != l_pointerSizeMinus1; ++l_keyItem)
+        l_key += p_str[l_keyItem];
+
+    LinkRefTab *l_initRef = (LinkRefTab *)this->m_valTree->GetKeyVal(l_key);
+
+    if (l_initRef && (l_initRef->RunInitNxtRef(&l_refRun), (l_nextRef = (CFastLink *)l_initRef->RunNxtRefPtr(&l_refRun)) != 0))
+    {
+        while (l_nextRef->stringLength != l_pointerSizeMinus1 || memcmp(l_nextRef->stringPtr, p_str, l_pointerSize - 1))
+        {
+            l_nextRef = (CFastLink *)l_initRef->RunNxtRefPtr(&l_refRun);
+
+            if (!l_nextRef)
+                goto NULL_LABEL;
+        }
+
+        l_reference = l_nextRef->reference;
+    }
+    else
+    {
+    NULL_LABEL:
+        l_reference = 0;
+    }
+
+    return l_reference;
 }
 
 void CFastLookup2::RemoveLowerCase(const char *p_str, u32 p_size)
@@ -237,23 +284,31 @@ void CFastLookup2::RemoveLowerCase(const char *p_str, u32 p_size)
     // This is an inlined constructor, inferred from debug symbols of Hitman 2.
     MyStr l_myStr(p_str);
 
-    const char *l_pointer = l_myStr.operator*();
+    const char *l_pointer = *l_myStr;
 
     l_myStr.ToLower();
 
     Remove(l_pointer, l_size);
-
-    l_myStr.~MyStr();
 }
 
-void CFastLookup2::SetLowerCase(const char *p_str, u32 p_size)
+void CFastLookup2::SetLowerCase(const char *p_str, u32 p_ref)
 {
     MyStr l_myStr(p_str);
     l_myStr.ToLower();
 
-    const char *l_pointer = l_myStr.operator*();
+    const char *l_pointer = *l_myStr;
 
-    Set(l_pointer, p_size);
+    Set(l_pointer, p_ref);
+}
 
-    l_myStr.~MyStr();
+u32 CFastLookup2::GetLowerCase(const char *p_str)
+{
+    MyStr l_myStr(p_str);
+    l_myStr.ToLower();
+
+    const char *l_pointer = *l_myStr;
+
+    u32 l_reference = Get(l_pointer);
+
+    return l_reference;
 }

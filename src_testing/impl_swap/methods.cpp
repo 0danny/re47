@@ -6,9 +6,14 @@ namespace Methods
     {
         printf("[METHOD HOOK]: Creating method hooks...\n");
 
-        if (MH_CreateHook(cFastLookup_Remove, (LPVOID)&Methods::CFastLookup_RemoveHook, NULL) != MH_OK)
+        if (MH_CreateHook(cFastLookup_RemoveLowerCase, (LPVOID)&Methods::CFastLookup_RemoveLowerCaseHook, NULL) != MH_OK)
         {
-            printf("[METHOD HOOK]: Could not hook CFastLookup_Remove method.\n");
+            printf("[METHOD HOOK]: Could not hook CFastLookup_RemoveLowerCase method.\n");
+        }
+
+        if (MH_CreateHook(cFastLookup_GetLowerCase, (LPVOID)&Methods::CFastLookup_GetLowerCaseHook, NULL) != MH_OK)
+        {
+            printf("[METHOD HOOK]: Could not hook CFastLookup_GetLowerCase method.\n");
         }
 
         /*
@@ -60,8 +65,17 @@ namespace Methods
         _this->RemoveFreeHeaderFromBins(p_freeHeader, p_mallocBin);
     }
 
-    void __fastcall CFastLookup_RemoveHook(CFastLookup2 *_this, void *_EDX, const char *p_str, i32 p_strSize)
+    void __fastcall CFastLookup_RemoveLowerCaseHook(CFastLookup2 *_this, void *_EDX, const char *p_str, u32 p_size)
     {
-        _this->Remove(p_str, p_strSize);
+        printf("[METHOD HOOK]: CFastLookup_RemoveLowerCaseHook called, [%s]\n", p_str);
+
+        _this->RemoveLowerCase(p_str, p_size);
+    }
+
+    void __fastcall CFastLookup_GetLowerCaseHook(CFastLookup2 *_this, void *_EDX, const char *p_str)
+    {
+        printf("[METHOD HOOK]: CFastLookup_GetLowerCaseHook called, [%s]\n", p_str);
+
+        _this->GetLowerCase(p_str);
     }
 }

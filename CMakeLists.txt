@@ -104,6 +104,10 @@ add_library(common STATIC
     # CFastLookup2
     src_main/zstdlib/cfastlookup2.cpp
     src_main/zstdlib/cfastlookup2.h
+
+    # CFastLookupFileCache
+    src_main/zstdlib/cfastlookupfilecache.cpp
+    src_main/zstdlib/cfastlookupfilecache.h
 )
 
 # Add System DLL

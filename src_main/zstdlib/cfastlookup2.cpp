@@ -7,6 +7,11 @@ CFastLookup2::CFastLookup2(i32 p_poolSize)
 
 CFastLookup2::~CFastLookup2()
 {
+    Destroy();
+}
+
+void CFastLookup2::Destroy()
+{
     Clear();
 
     if (m_valTree)

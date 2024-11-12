@@ -134,8 +134,6 @@ public:
 
         MyStr l_result(l_temp);
 
-        l_temp.~MyStr();
-
         return l_result;
     }
 

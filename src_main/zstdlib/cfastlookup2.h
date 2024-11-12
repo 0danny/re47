@@ -35,6 +35,8 @@ public:
     void RemoveLowerCase(const char *p_str, u32 p_size);
     void SetLowerCase(const char *p_str, u32 p_ref);
     u32 GetLowerCase(const char *p_str);
+
+    void Destroy();
 };
 
 #endif

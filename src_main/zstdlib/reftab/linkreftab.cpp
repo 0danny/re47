@@ -387,9 +387,9 @@ u32 *LinkRefTab::AddStart(u32 p_refNum)
     return l_nextRefNum + 1;
 }
 
-void LinkRefTab::AddEnd(u32 p_refNum)
+u32 *LinkRefTab::AddEnd(u32 p_refNum)
 {
-    AddUnique(p_refNum);
+    return AddUnique(p_refNum);
 }
 
 u32 *LinkRefTab::InsertBefore(u32 *p_uintPtr, u32 p_refNum)

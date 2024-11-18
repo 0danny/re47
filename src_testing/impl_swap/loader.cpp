@@ -25,9 +25,9 @@ namespace Loader
 
         if (g_enableSwaps)
         {
-            Constructors::CreateHooks();
-            // Methods::CreateHooks();
-            //  Menu::CreateHooks();
+            // Constructors::CreateHooks();
+            //  Methods::CreateHooks();
+            //   Menu::CreateHooks();
         }
 
         WndPatches::CreateHooks();
@@ -40,6 +40,17 @@ namespace Loader
         printf("[LOADER_HOOK]: Library Loaded -> %s\n", Utilities::GetFileName(lpLibFileName));
 
         HMODULE module = originalLoadLibraryA(lpLibFileName);
+
+        // check if we are loading renderopengl.dll
+
+        if (strcmp(Utilities::GetFileName(lpLibFileName), "RenderOpenGL.dll") == 0)
+        {
+            printf("[LOADER_HOOK]: renderopengl.dll loaded.\n");
+
+            Constructors::CreateRenderingHooks();
+
+            EnableHooks();
+        }
 
         return module;
     }

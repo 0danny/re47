@@ -9,6 +9,7 @@
 #include "zstdlib/reftab/equreftab.h"
 #include "zstdlib/reftab/strreftab.h"
 #include "zstdlib/reftab/linkreftab.h"
+#include "zstdlib/reftab/linksortreftab.h"
 
 #include "zstdlib/trees/zrbtree.h"
 #include "zstdlib/trees/zvaltree.h"
@@ -20,6 +21,9 @@
 
 namespace Constructors
 {
+    // renderopengl.dll
+    static LPVOID linkSortRefTabAddress = (LPVOID)0x0FB94FF0;
+
     // Addresses
     static LPVOID refTabAddress = (LPVOID)0x0FFBED50;
     static LPVOID ref32RefTabAddress = (LPVOID)0x0FFBF5B0;
@@ -47,6 +51,8 @@ namespace Constructors
     typedef StrRefTab *(__fastcall *StrRefTabConstructor)(StrRefTab *_this, int p_poolSize, int p_size);
     typedef LinkRefTab *(__fastcall *LinkRefTabConstructor)(LinkRefTab *_this, int p_poolSize, int p_size);
 
+    typedef LinkSortRefTab *(__fastcall *LinkSortRefTabConstructor)(LinkSortRefTab *_this, int p_poolSize, int p_size);
+
     typedef ZRBTree *(__fastcall *ZRBTreeConstructor)(ZRBTree *_this);
     typedef ZValTree *(__fastcall *ZValTreeConstructor)(ZValTree *_this, int p_poolSize);
 
@@ -70,6 +76,7 @@ namespace Constructors
     EquRefTab *__fastcall EquRefTabHook(EquRefTab *_this, void *_EDX, int p_poolSize, int p_size);
     StrRefTab *__fastcall StrRefTabHook(StrRefTab *_this, void *_EDX, int p_poolSize, int p_size);
     LinkRefTab *__fastcall LinkRefTabHook(LinkRefTab *_this, void *_EDX, int p_poolSize, int p_size);
+    LinkSortRefTab *__fastcall LinkSortRefTabHook(LinkSortRefTab *_this, void *_EDX, int p_poolSize, int p_size);
 
     ZRBTree *__fastcall ZRBTreeConstructorHook(ZRBTree *_this, void *_EDX);
     ZValTree *__fastcall ZValTreeConstructorHook(ZValTree *_this, void *_EDX, int p_poolSize);
@@ -79,6 +86,7 @@ namespace Constructors
     ZSysCom *__fastcall ZSysComConstructorHook(ZSysCom *_this, void *_EDX);
 
     void CreateHooks();
+    void CreateRenderingHooks();
 }
 
 #endif

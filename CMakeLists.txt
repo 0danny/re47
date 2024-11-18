@@ -74,6 +74,9 @@ add_library(common STATIC
     src_main/zstdlib/reftab/linkreftab.cpp
     src_main/zstdlib/reftab/linkreftab.h
 
+    src_main/zstdlib/reftab/linksortreftab.cpp
+    src_main/zstdlib/reftab/linksortreftab.h
+
     src_main/zstdlib/reftab/staticreftab.cpp
     src_main/zstdlib/reftab/staticreftab.h
 

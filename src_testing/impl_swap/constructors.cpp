@@ -5,6 +5,17 @@
 
 namespace Constructors
 {
+    // These hooks get injected once the render dll is loaded
+    void CreateRenderingHooks()
+    {
+        printf("[CONSTRUCTOR HOOK]: Creating rendering constructor hooks...\n");
+
+        if (MH_CreateHook(linkSortRefTabAddress, (LPVOID)&Constructors::LinkSortRefTabHook, NULL) != MH_OK)
+        {
+            printf("[CONSTRUCTOR HOOK]: Could not hook LinkSortRefTab constructor.\n");
+        }
+    }
+
     void CreateHooks()
     {
         printf("[CONSTRUCTOR HOOK]: Creating constructor hooks...\n");
@@ -118,6 +129,15 @@ namespace Constructors
         // printf("[CONSTRUCTOR HOOK]: LinkRefTab called -> Pool Size: %d, Size: %d\n", p_poolSize, p_size);
 
         return new (_this) LinkRefTab(p_poolSize, p_size);
+    }
+
+    LinkSortRefTab *__fastcall LinkSortRefTabHook(LinkSortRefTab *_this, void *_EDX, int p_poolSize, int p_size)
+    {
+        LinkSortRefTab *newPtr = new (_this) LinkSortRefTab(p_poolSize, p_size);
+
+        printf("[CONSTRUCTOR HOOK]: LinkSortRefTab called -> Pool Size: %d, Size: %d\n", newPtr->m_poolSize, newPtr->m_size);
+
+        return newPtr;
     }
 
     ZRBTree *__fastcall ZRBTreeConstructorHook(ZRBTree *_this, void *_EDX)

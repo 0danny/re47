@@ -2,6 +2,7 @@
 #define DIRECTPLAY_H
 
 #include "system/zsyscom.h"
+#include "common.h"
 #include <directx7/dplay.h>
 
 #pragma pack(push, 1)
@@ -9,13 +10,13 @@
 class DirectPlay
 {
 public:
-    boolean m_foundSession;
-    char *m_sessionName;
-    char *m_str2;
-    char *m_str3;
-    i32 m_unused;
-    LPDIRECTPLAY2 m_lpDP;
-    GUID *m_tcpGUID;
+    boolean m_foundSession; // 4
+    char *m_sessionName;    // 5
+    char *m_str2;           // 9
+    char *m_str3;           // 13
+    i32 m_unused;           // 17
+    LPDIRECTPLAY2 m_lpDP;   // 21
+    GUID *m_tcpGUID;        // 25
 
     DirectPlay();
     virtual ~DirectPlay();

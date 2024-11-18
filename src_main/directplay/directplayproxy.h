@@ -13,8 +13,8 @@ public:
     virtual ~DirectPlayProxy();
 
     // Overrides
-    void Unknown2();
-    void Unknown3();
+    void Init();
+    void End();
 };
 
 #endif

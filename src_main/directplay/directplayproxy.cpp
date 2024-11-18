@@ -5,12 +5,12 @@ DirectPlayProxy::~DirectPlayProxy()
     ZDynamicLoader::~ZDynamicLoader();
 }
 
-void DirectPlayProxy::Unknown2()
+void DirectPlayProxy::Init()
 {
     m_directPlay = new DirectPlay();
 }
 
-void DirectPlayProxy::Unknown3()
+void DirectPlayProxy::End()
 {
     if (m_directPlay)
     {

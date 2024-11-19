@@ -26,9 +26,6 @@ struct CFileCache
     u32 data;
 };
 
-// TODO: This class is actually 176 bytes in size, but even with the lookup and reftab it only comes to 48.
-// It either means that RefTab32 members are wrong, and theres more. Which I haven't seen anywhere, or
-// there is more to this class.
 class CFastLookupFileCache
 {
 public:

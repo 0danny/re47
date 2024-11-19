@@ -17,5 +17,6 @@ public:
 
     void Destroy();
 };
+// TODO: 168 in size, as confirmed by enginedata.dll (0x0FF6DEFF)
 
 #endif

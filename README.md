@@ -22,6 +22,9 @@ Below each of the files in the decomp is discussed along with a percentage indic
 
 ### Completed ✅
 
+**hitman.exe** [45kb]
+**99%** Completed - **3** out of **3** functions named.
+
 **directplay.dll** [48kb]
 **100%** Completed - **22** out of **22** functions named.
 
@@ -32,9 +35,6 @@ Below each of the files in the decomp is discussed along with a percentage indic
 
 ### Being Decompiled 📝
 
-**hitman.exe** [45kb]
-**99%** Completed - **3** out of **3** functions named.
-
 **system.dll** [272kb]
 **20%** Completed - **525** out of **552** functions named.
 
@@ -44,14 +44,14 @@ Below each of the files in the decomp is discussed along with a percentage indic
 **renderopengl.dll** [248kb]
 **0%** Completed - **240** out of **464** functions named.
 
+**enginedata.dll** [244kb]
+**0%** Completed - **147** out of **565** functions named.
+
 <br>
 
 ### Untouched ❌
 
 **hitmandlc.dlc** [2,496kb]
-**0%** Completed
-
-**enginedata.dll** [244kb]
 **0%** Completed
 
 **locale.dll** [92kb]

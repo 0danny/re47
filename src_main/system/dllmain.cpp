@@ -21,8 +21,6 @@ extern "C" __declspec(dllexport) void EditPrint(char *p_str)
 
 BOOL APIENTRY DllMain(HMODULE p_hinstDLL, u32 p_fdwReason, LPVOID p_lpReserved)
 {
-    LinkSortRefTab *l_sortRefTab = new LinkSortRefTab(0, 0);
-
     i32 l_count = 0;
 
     if (p_fdwReason == 1)

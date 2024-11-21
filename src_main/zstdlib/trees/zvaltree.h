@@ -16,13 +16,13 @@ public:
     StaticRefTab *m_refTab;
 
     // Overriden
-    SBinTreeNode *Delete(SBinTreeNode *p_binNode);
-    void CopyData(SBinTreeNode *p_binNode, SBinTreeNode *p_binNode2);
+    SBinTreeNode *Delete(SBinTreeNode *p_binNode) override;
+    void CopyData(SBinTreeNode *p_binNode, SBinTreeNode *p_binNode2) override;
 
     // Added
     virtual void InsertKey(i32 p_key, i32 p_data);
     virtual void DeleteKey(i32 p_key);
-    virtual int GetKeyVal(i32 p_key);
+    virtual i32 GetKeyVal(i32 p_key);
 };
 
 #pragma pack(pop)

@@ -26,8 +26,8 @@ namespace Loader
         if (g_enableSwaps)
         {
             // Constructors::CreateHooks();
-            //  Methods::CreateHooks();
-            //   Menu::CreateHooks();
+            //    Methods::CreateHooks();
+            //     Menu::CreateHooks();
         }
 
         WndPatches::CreateHooks();
@@ -48,6 +48,7 @@ namespace Loader
             printf("[LOADER_HOOK]: renderopengl.dll loaded.\n");
 
             Constructors::CreateRenderingHooks();
+            // Methods::CreateRenderingHooks();
 
             EnableHooks();
         }

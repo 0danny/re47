@@ -11,10 +11,10 @@ public:
     virtual ~StrRefTab();
 
     // Overriden
-    virtual void Clear();
-    virtual void ClearThis();
-    virtual void PrintStatus();
-    virtual void RunDelRef(RefRun *p_refRun);
+    virtual void Clear() override;
+    virtual void ClearThis() override;
+    virtual void PrintStatus() override;
+    virtual void RunDelRef(RefRun *p_refRun) override;
 
     // Added
     virtual char *FindStr(char *const p_str);

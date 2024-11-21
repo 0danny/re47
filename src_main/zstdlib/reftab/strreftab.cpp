@@ -98,7 +98,7 @@ void StrRefTab::RunDelRef(RefRun *p_refRun)
     }
     else
     {
-        i32 l_size = this->m_size;
+        i32 l_size = m_size;
 
         i32 l_dataOffset = (i32)p_refRun->next - l_size;
 
@@ -107,10 +107,10 @@ void StrRefTab::RunDelRef(RefRun *p_refRun)
         if (l_dataOffset < 0)
         {
             l_prev = l_prev->prev;
-            l_dataOffset = this->m_blockCapacity - l_size;
+            l_dataOffset = m_blockCapacity - l_size;
         }
 
-        l_dataPtr = (char *)*(&l_prev->data + l_dataOffset);
+        l_dataPtr = (char *)l_prev->data[l_dataOffset];
     }
 
     delete[] l_dataPtr;

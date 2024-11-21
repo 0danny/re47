@@ -11,7 +11,7 @@ public:
     virtual ~EquRefTab();
 
     // Overriden
-    void PrintStatus();
+    void PrintStatus() override;
 
     // Added
     virtual u32 *FindEqu(i32 p_value);

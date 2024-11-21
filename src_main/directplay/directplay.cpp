@@ -43,7 +43,7 @@ DirectPlay::~DirectPlay()
     FreeData();
 }
 
-i32 __stdcall EnumCallback(LPGUID lpguidSP, LPSTR lpSPName, DWORD dwMajorVersion, DWORD dwMinorVersion, LPVOID lpContext)
+i32 __stdcall DirectPlay::EnumCallback(LPGUID lpguidSP, LPSTR lpSPName, DWORD dwMajorVersion, DWORD dwMinorVersion, LPVOID lpContext)
 {
     if (!strstr(lpSPName, "TCP"))
         return 1;
@@ -57,7 +57,7 @@ i32 __stdcall EnumCallback(LPGUID lpguidSP, LPSTR lpSPName, DWORD dwMajorVersion
     return 0;
 }
 
-i32 __stdcall EnumSessions(LPCDPSESSIONDESC2 lpThisSD, LPDWORD lpdwTimeOut, DWORD dwFlags, LPVOID lpContext)
+i32 __stdcall DirectPlay::EnumSessions(LPCDPSESSIONDESC2 lpThisSD, LPDWORD lpdwTimeOut, DWORD dwFlags, LPVOID lpContext)
 {
     if (dwFlags)
     {

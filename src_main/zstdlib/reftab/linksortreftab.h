@@ -13,13 +13,14 @@ public:
     virtual ~LinkSortRefTab();
 
     // Overriden
-    virtual void Clear();
-    virtual void ClearThis();
+    virtual void Clear() override;
+    virtual void ClearThis() override;
 
-    virtual void DelRefPtr(u32 *p_refPtr);
-    virtual void PrintStatus();
-    virtual void RunDelRef(RefRun *p_refRun);
+    virtual void DelRefPtr(u32 *p_refPtr) override;
+    virtual void PrintStatus() override;
+    virtual void RunDelRef(RefRun *p_refRun) override;
 
+    // Added
     virtual float *AddSort(u32 p_refNum, float p_sortKey, i32 p_insertMode);
     virtual float GetSort(u32 *p_refPtr);
     virtual void SetSortNr(u32 *p_refPtr, float p_sortKey);

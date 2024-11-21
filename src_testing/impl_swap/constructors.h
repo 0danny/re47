@@ -14,6 +14,7 @@
 #include "zstdlib/trees/zrbtree.h"
 #include "zstdlib/trees/zvaltree.h"
 #include "zstdlib/zconsole/zconsole.h"
+#include "drawing/zcounter.h"
 #include "utilities.h"
 
 #include "system/zsyscom.h"
@@ -23,6 +24,8 @@ namespace Constructors
 {
     // renderopengl.dll
     static LPVOID linkSortRefTabAddress = (LPVOID)0x0FB94FF0;
+    static LPVOID linkRefTabRenderingAddress = (LPVOID)0x0FB94700;
+    static LPVOID zCounterAddress = (LPVOID)0x0FB9BFB0;
 
     // Addresses
     static LPVOID refTabAddress = (LPVOID)0x0FFBED50;
@@ -53,6 +56,8 @@ namespace Constructors
 
     typedef LinkSortRefTab *(__fastcall *LinkSortRefTabConstructor)(LinkSortRefTab *_this, int p_poolSize, int p_size);
 
+    typedef ZCounter *(__fastcall *ZCounterConstructor)(ZCounter *_this);
+
     typedef ZRBTree *(__fastcall *ZRBTreeConstructor)(ZRBTree *_this);
     typedef ZValTree *(__fastcall *ZValTreeConstructor)(ZValTree *_this, int p_poolSize);
 
@@ -64,6 +69,7 @@ namespace Constructors
     static RefTab32Constructor originalRefTab32 = 0;
     static StaticRefTabConstructor originalStaticRefTab = 0;
     static AllocRefTabConstructor originalAllocRefTab = 0;
+    static ZCounterConstructor originalZCounter = 0;
 
     static ZSysComConstructor originalZSysCom = 0;
 
@@ -84,6 +90,8 @@ namespace Constructors
     ZConsole *__fastcall ZConsoleConstructorHook(ZConsole *_this, void *_EDX);
 
     ZSysCom *__fastcall ZSysComConstructorHook(ZSysCom *_this, void *_EDX);
+
+    ZCounter *__fastcall ZCounterConstructorHook(ZCounter *_this, void *_EDX);
 
     void CreateHooks();
     void CreateRenderingHooks();

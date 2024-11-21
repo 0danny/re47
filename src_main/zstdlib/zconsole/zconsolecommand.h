@@ -63,7 +63,7 @@ public:
     }
 
     virtual ~ZHelpCommand();
-    void ExecuteCommand(char *p_cmdValue);
+    virtual void ExecuteCommand(char *p_cmdValue) override;
 
     void Destroy();
 

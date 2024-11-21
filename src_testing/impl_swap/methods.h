@@ -5,6 +5,7 @@
 #include "zstdlib/zmalloc.h"
 #include "system/zsysmem.h"
 #include "zstdlib/cfastlookup2.h"
+#include "drawing/zcounter.h"
 
 #include <minhook.h>
 
@@ -28,6 +29,7 @@ namespace Methods
     void __fastcall CFastLookup_GetLowerCaseHook(CFastLookup2 *_this, void *_EDX, const char *p_str);
 
     void CreateHooks();
+    void CreateRenderingHooks();
 }
 
 #endif

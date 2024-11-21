@@ -12,33 +12,33 @@ public:
     virtual ~StaticRefTab();
 
     // Overriden
-    virtual u32 *Add(u32 p_refNum);
-    virtual u32 *AddUnique(u32 p_refNum);
+    virtual u32 *Add(u32 p_refNum) override;
+    virtual u32 *AddUnique(u32 p_refNum) override;
 
-    virtual void Clear();
-    virtual void ClearThis();
+    virtual void Clear() override;
+    virtual void ClearThis() override;
 
-    virtual void DelRefPtr(u32 *p_refNum);
-    virtual boolean Exists(u32 p_refNum);
-    virtual u32 *Find(u32 p_refNum);
+    virtual void DelRefPtr(u32 *p_refNum) override;
+    virtual boolean Exists(u32 p_refNum) override;
+    virtual u32 *Find(u32 p_refNum) override;
 
-    virtual u32 GetRefNr(i32 p_refIndex);
-    virtual u32 *GetRefPtrNr(i32 p_refIndex);
+    virtual u32 GetRefNr(i32 p_refIndex) override;
+    virtual u32 *GetRefPtrNr(i32 p_refIndex) override;
 
-    virtual void PrintStatus();
+    virtual void PrintStatus() override;
 
-    virtual void Remove(u32 p_refNum);
-    virtual boolean RemoveIfExists(u32 p_refNum);
+    virtual void Remove(u32 p_refNum) override;
+    virtual boolean RemoveIfExists(u32 p_refNum) override;
 
-    virtual void RunDelRef(RefRun *p_refRun);
-    virtual void RunInitNxtRef(RefRun *p_refRun);
-    virtual void RunInitPrevRef(RefRun *p_refRun);
+    virtual void RunDelRef(RefRun *p_refRun) override;
+    virtual void RunInitNxtRef(RefRun *p_refRun) override;
+    virtual void RunInitPrevRef(RefRun *p_refRun) override;
 
-    virtual u32 RunNxtRef(RefRun *p_refRun);
-    virtual u32 *RunNxtRefPtr(RefRun *p_refRun);
+    virtual u32 RunNxtRef(RefRun *p_refRun) override;
+    virtual u32 *RunNxtRefPtr(RefRun *p_refRun) override;
 
-    virtual u32 RunPrevRef(RefRun *p_refRun);
-    virtual u32 *RunPrevRefPtr(RefRun *p_refRun);
+    virtual u32 RunPrevRef(RefRun *p_refRun) override;
+    virtual u32 *RunPrevRefPtr(RefRun *p_refRun) override;
 
     void Destroy();
 };

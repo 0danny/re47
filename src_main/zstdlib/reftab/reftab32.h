@@ -12,8 +12,8 @@ public:
     virtual ~RefTab32();
 
     // Overriden
-    virtual void DeleteBlock(void *p_lpMem);
-    virtual RefRun *NewBlock();
+    virtual void DeleteBlock(void *p_lpMem) override;
+    virtual RefRun *NewBlock() override;
 
     void Destroy();
 };

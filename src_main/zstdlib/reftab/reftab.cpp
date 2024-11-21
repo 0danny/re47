@@ -57,7 +57,7 @@ u32 *RefTab::Add(u32 p_refNum)
         newBlock->usedUnits = 0;
     }
 
-    u32 *data = reinterpret_cast<u32 *>(&m_tail->data + m_tail->usedUnits);
+    u32 *data = &m_tail->data[m_tail->usedUnits];
 
     *data = p_refNum;
 
@@ -204,7 +204,7 @@ u32 RefTab::GetRefNr(i32 p_refIndex)
     for (i = m_head; p_refIndex >= poolRes; p_refIndex -= poolRes)
         i = i->next;
 
-    return *((u32 *)&i->data + p_refIndex * m_size);
+    return i->data[p_refIndex * m_size];
 }
 
 // MATCHED
@@ -221,7 +221,7 @@ u32 *RefTab::GetRefPtrNr(i32 p_refIndex)
     for (i = m_head; p_refIndex >= poolRes; p_refIndex -= poolRes)
         i = i->next;
 
-    return ((u32 *)&i->data + p_refIndex * m_size);
+    return &i->data[p_refIndex * m_size];
 }
 
 // MATCHED
@@ -247,7 +247,7 @@ void RefTab::PrintStatus()
 
     for (currentBlock = m_head; currentBlock; currentBlock = currentBlock->next)
     {
-        data = (u32 *)&currentBlock->data;
+        data = currentBlock->data;
         l_count = 0;
 
         if (currentBlock->usedUnits)
@@ -343,8 +343,8 @@ void RefTab::RunDelRef(RefRun *p_refRun)
 
     if (m_count)
     {
-        u32 *l_flag = (u32 *)(&m_tail->data + m_tail->usedUnits);
-        u32 *l_flag2 = (u32 *)(&p_refRun->prev->data + (i32)p_refRun->next);
+        u32 *l_flag = &m_tail->data[m_tail->usedUnits];
+        u32 *l_flag2 = &p_refRun->prev->data[(i32)p_refRun->next];
 
         if (l_flag != l_flag2)
             memcpy(l_flag2, l_flag, 4 * m_size);
@@ -415,11 +415,11 @@ u32 *RefTab::RunNxtRefPtr(RefRun *p_refRun)
 {
     if (m_poolSize < 0)
     {
-        ZSysCom *com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 373);
-        com->LogMessage("ERROR: Illegal operation inside REFTAB loop");
+        ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 373);
+        l_sysCom->LogMessage("ERROR: Illegal operation inside REFTAB loop");
 
-        com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 374);
-        com->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 374);
+        l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 374);
+        l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 374);
 
         DebugBreak();
     }
@@ -432,17 +432,17 @@ u32 *RefTab::RunNxtRefPtr(RefRun *p_refRun)
         p_refRun->prev = prevTmp->next;
     }
 
-    RefRun *prev = p_refRun->prev;
+    RefRun *l_prev = p_refRun->prev;
 
     if (p_refRun->prev)
     {
-        i32 next = (i32)p_refRun->next;
+        i32 l_next = (i32)p_refRun->next;
 
-        if (next != m_tail->usedUnits || prev->next)
+        if (l_next != m_tail->usedUnits || l_prev->next)
         {
-            p_refRun->next = (RefRun *)(next + m_size);
+            p_refRun->next = (RefRun *)(l_next + m_size);
 
-            return (u32 *)((char *)prev + sizeof(u32) * next + 12);
+            return (u32 *)((char *)l_prev + sizeof(u32) * l_next + 12);
         }
         else
         {
@@ -451,7 +451,7 @@ u32 *RefTab::RunNxtRefPtr(RefRun *p_refRun)
         }
     }
 
-    return (u32 *)prev;
+    return (u32 *)l_prev;
 }
 
 // MATCHED
@@ -466,11 +466,11 @@ u32 *RefTab::RunPrevRefPtr(RefRun *p_refRun)
 {
     if (m_poolSize < 0)
     {
-        ZSysCom *com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 424);
-        com->LogMessage("ERROR: Illegal operation inside REFTAB loop");
+        ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 424);
+        l_sysCom->LogMessage("ERROR: Illegal operation inside REFTAB loop");
 
-        com = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 425);
-        com->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 425);
+        l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 425);
+        l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 425);
 
         DebugBreak();
     }
@@ -496,13 +496,13 @@ u32 *RefTab::RunPrevRefPtr(RefRun *p_refRun)
         p_refRun->next = (RefRun *)(m_blockCapacity - m_size);
     }
 
-    return (u32 *)(&p_refRun->prev->data + (i32)p_refRun->next);
+    return &p_refRun->prev->data[(i32)p_refRun->next];
 }
 
 // MATCHED
 u32 *RefTab::RunToRefPtr(RefRun *p_refRun)
 {
-    return (u32 *)(&p_refRun->prev->data + (i32)p_refRun->next);
+    return &p_refRun->prev->data[(i32)p_refRun->next];
 }
 
 // MATCHED
@@ -514,7 +514,6 @@ void RefTab::DeleteBlock(void *p_lpMem)
 // MATCHED
 RefRun *RefTab::NewBlock()
 {
-    i32 newSize = sizeof(u32) * m_blockCapacity + 12;
-
+    i32 newSize = sizeof(RefRun) + sizeof(u32) * m_blockCapacity;
     return reinterpret_cast<RefRun *>(operator new(newSize));
 }

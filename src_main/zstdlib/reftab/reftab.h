@@ -8,7 +8,7 @@ struct RefRun
     RefRun *prev;
     RefRun *next;
     i32 usedUnits;
-    u32 *data;
+    u32 data[];
 };
 
 class RefTab

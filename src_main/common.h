@@ -34,9 +34,9 @@ static FILE *LockedFileOpen(const char *p_fileName, const char *p_mode)
 }
 
 // We don't have x86intrin.h, so we have to inline the rdtsc ASM syscall manually.
-static __inline i64 GetRDTSC(void)
+static __inline u64 GetRDTSC(void)
 {
-    i64 cycles;
+    u64 cycles;
     __asm {
             _emit 0x0F // RDTSC instruction (0F 31)
             _emit 0x31
@@ -46,18 +46,10 @@ static __inline i64 GetRDTSC(void)
     return cycles;
 }
 
-static void DebugLogFormatted(const char *format, ...)
-{
-    char buffer[512];
-    va_list args;
-    va_start(args, format);
-
-    _vsnprintf(buffer, sizeof(buffer), format, args);
-
-    va_end(args);
-
-    OutputDebugStringA(buffer);
-}
+// Lets use compile using override keyword with VS6 (used for intellisense)
+#if __cplusplus < 201103L
+#define override
+#endif
 
 // Exceptions
 class ZArrayRangeError

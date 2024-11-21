@@ -14,24 +14,24 @@ public:
     virtual ~LinkRefTab();
 
     // Overriden
-    virtual u32 *Add(u32 p_refNum);
+    virtual u32 *Add(u32 p_refNum) override;
 
-    virtual void Clear();
-    virtual void ClearThis();
-    virtual i32 GetCount();
-    virtual void DelRefPtr(u32 *p_refNum);
+    virtual void Clear() override;
+    virtual void ClearThis() override;
+    virtual i32 GetCount() override;
+    virtual void DelRefPtr(u32 *p_refNum) override;
 
-    virtual u32 GetRefNr(i32 p_refIndex);
-    virtual u32 *GetRefPtrNr(i32 p_refIndex);
-    virtual void PrintStatus();
+    virtual u32 GetRefNr(i32 p_refIndex) override;
+    virtual u32 *GetRefPtrNr(i32 p_refIndex) override;
+    virtual void PrintStatus() override;
 
-    virtual void RunDelRef(RefRun *p_refRun);
-    virtual void RunInitNxtRef(RefRun *p_refRun);
-    virtual void RunInitPrevRef(RefRun *p_refRun);
+    virtual void RunDelRef(RefRun *p_refRun) override;
+    virtual void RunInitNxtRef(RefRun *p_refRun) override;
+    virtual void RunInitPrevRef(RefRun *p_refRun) override;
 
-    virtual u32 *RunNxtRefPtr(RefRun *p_refRun);
-    virtual u32 *RunPrevRefPtr(RefRun *p_refRun);
-    virtual u32 *RunToRefPtr(RefRun *p_refRun);
+    virtual u32 *RunNxtRefPtr(RefRun *p_refRun) override;
+    virtual u32 *RunPrevRefPtr(RefRun *p_refRun) override;
+    virtual u32 *RunToRefPtr(RefRun *p_refRun) override;
 
     // Added
     virtual u32 *AddStart(u32 p_refNum);

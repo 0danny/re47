@@ -63,7 +63,7 @@ void ZValTree::DeleteKey(i32 p_key)
     }
 }
 
-int ZValTree::GetKeyVal(i32 p_key)
+i32 ZValTree::GetKeyVal(i32 p_key)
 {
     SBinTreeNode *l_searchRes = Search(p_key, 0);
 

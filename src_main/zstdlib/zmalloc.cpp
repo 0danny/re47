@@ -25,9 +25,9 @@ void ZMalloc::RemoveFreeHeaderFromBins(SMallocFreeHeader *p_freeHeader, SBinTree
     SBinTreeNode *l_rightNode = p_freeHeader->right;
 
     if (l_rightNode)
-        l_rightNode->key = (int)p_freeHeader->left;
+        l_rightNode->key = (i32)p_freeHeader->left;
     else
-        l_searchNode->data = (int)p_freeHeader->left;
+        l_searchNode->data = (i32)p_freeHeader->left;
 
     SBinTreeNode *l_leftNode = p_freeHeader->left;
 
@@ -50,7 +50,7 @@ inline void ZMalloc::FreeMallocBin(SBinTreeNode *p_mallocBin)
     }
     else
     {
-        m_nodeArray[m_unkInt2 + 16] = (int)p_mallocBin;
+        m_nodeArray[m_unkInt2 + 16] = (i32)p_mallocBin;
         ++m_unkInt2;
     }
 }
@@ -59,7 +59,7 @@ inline void ZMalloc::MarkFree(void *p_marked)
 {
     free(p_marked);
 
-    SBinTreeNode *l_searchRes = m_rbTree2.Search((int)p_marked, 0);
+    SBinTreeNode *l_searchRes = m_rbTree2.Search((i32)p_marked, 0);
 
     if (!l_searchRes)
     {

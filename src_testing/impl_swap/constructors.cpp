@@ -10,9 +10,22 @@ namespace Constructors
     {
         printf("[CONSTRUCTOR HOOK]: Creating rendering constructor hooks...\n");
 
+        /*
         if (MH_CreateHook(linkSortRefTabAddress, (LPVOID)&Constructors::LinkSortRefTabHook, NULL) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook LinkSortRefTab constructor.\n");
+        }
+
+
+        if (MH_CreateHook(linkRefTabRenderingAddress, (LPVOID)&Constructors::LinkRefTabHook, NULL) != MH_OK)
+        {
+            printf("[CONSTRUCTOR HOOK]: Could not hook LinkRefTab rendering constructor.\n");
+        }
+        */
+
+        if (MH_CreateHook(zCounterAddress, (LPVOID)&Constructors::ZCounterConstructorHook, reinterpret_cast<LPVOID *>(&originalZCounter)) != MH_OK)
+        {
+            printf("[CONSTRUCTOR HOOK]: Could not hook ZCounter constructor.\n");
         }
     }
 
@@ -20,17 +33,27 @@ namespace Constructors
     {
         printf("[CONSTRUCTOR HOOK]: Creating constructor hooks...\n");
 
-        // When the RefTab32 and AllocRefTab hooks are both active at the same time, it causes a crash. However, alone they work fine, weird....
+        if (MH_CreateHook(linkRefTabAddress, (LPVOID)&Constructors::LinkRefTabHook, NULL) != MH_OK)
+        {
+            printf("[CONSTRUCTOR HOOK]: Could not hook LinkRefTab constructor.\n");
+        }
         /*
-                if (MH_CreateHook(ref32RefTabAddress, (LPVOID)&Constructors::RefTab32Hook, reinterpret_cast<LPVOID *>(&originalRefTab32)) != MH_OK)
-                {
-                    printf("[CONSTRUCTOR HOOK]: Could not hook RefTab32 constructor.\n");
-                }*/
+               if (MH_CreateHook(refTabAddress, (LPVOID)&Constructors::RefTabHook, NULL) != MH_OK)
+               {
+                   printf("[CONSTRUCTOR HOOK]: Could not hook RefTab constructor.\n");
+               }
+
+               // When the RefTab32 and AllocRefTab hooks are both active at the same time, it causes a crash. However, alone they work fine, weird....
+
+                       if (MH_CreateHook(ref32RefTabAddress, (LPVOID)&Constructors::RefTab32Hook, reinterpret_cast<LPVOID *>(&originalRefTab32)) != MH_OK)
+                       {
+                           printf("[CONSTRUCTOR HOOK]: Could not hook RefTab32 constructor.\n");
+                       }*/
         /*
              if (MH_CreateHook(staticRefTabAddress, (LPVOID)&Constructors::StaticRefTabHook, reinterpret_cast<LPVOID *>(&originalStaticRefTab)) != MH_OK)
              {
                  printf("[CONSTRUCTOR HOOK]: Could not hook StaticRefTab constructor.\n");
-             }*/
+             }
 
         if (MH_CreateHook(zConsoleAddress, (LPVOID)&Constructors::ZConsoleConstructorHook, reinterpret_cast<LPVOID *>(&originalZConsole)) != MH_OK)
         {
@@ -42,10 +65,7 @@ namespace Constructors
                     printf("[CONSTRUCTOR HOOK]: Could not hook ZSysCom constructor.\n");
                 }
 
-                      if (MH_CreateHook(refTabAddress, (LPVOID)&Constructors::RefTabHook, NULL) != MH_OK)
-                      {
-                          printf("[CONSTRUCTOR HOOK]: Could not hook RefTab constructor.\n");
-                      }
+
 
 
                              if (MH_CreateHook(equRefTabAddress, (LPVOID)&Constructors::EquRefTabHook, NULL) != MH_OK)
@@ -58,10 +78,6 @@ namespace Constructors
                                  printf("[CONSTRUCTOR HOOK]: Could not hook StrRefTab constructor.\n");
                              }
 
-                             if (MH_CreateHook(linkRefTabAddress, (LPVOID)&Constructors::LinkRefTabHook, NULL) != MH_OK)
-                             {
-                                 printf("[CONSTRUCTOR HOOK]: Could not hook LinkRefTab constructor.\n");
-                             }
 
 
 
@@ -84,7 +100,7 @@ namespace Constructors
 
     RefTab *__fastcall RefTabHook(RefTab *_this, void *_EDX, int p_poolSize, int p_size)
     {
-        // printf("[CONSTRUCTOR HOOK]: RefTab called -> Pool Size: %d, Size: %d\n", p_poolSize, p_size); //spams the console
+        printf("[CONSTRUCTOR HOOK]: RefTab called -> Pool Size: %d, Size: %d\n", p_poolSize, p_size); // spams the console
 
         return new (_this) RefTab(p_poolSize, p_size);
     }
@@ -126,7 +142,7 @@ namespace Constructors
 
     LinkRefTab *__fastcall LinkRefTabHook(LinkRefTab *_this, void *_EDX, int p_poolSize, int p_size)
     {
-        // printf("[CONSTRUCTOR HOOK]: LinkRefTab called -> Pool Size: %d, Size: %d\n", p_poolSize, p_size);
+        printf("[CONSTRUCTOR HOOK]: LinkRefTab called -> Pool Size: %d, Size: %d\n", p_poolSize, p_size);
 
         return new (_this) LinkRefTab(p_poolSize, p_size);
     }
@@ -135,7 +151,7 @@ namespace Constructors
     {
         LinkSortRefTab *newPtr = new (_this) LinkSortRefTab(p_poolSize, p_size);
 
-        printf("[CONSTRUCTOR HOOK]: LinkSortRefTab called -> Pool Size: %d, Size: %d\n", newPtr->m_poolSize, newPtr->m_size);
+        // printf("[CONSTRUCTOR HOOK]: LinkSortRefTab called -> Pool Size: %d, Size: %d\n", newPtr->m_poolSize, newPtr->m_size);
 
         return newPtr;
     }
@@ -174,5 +190,12 @@ namespace Constructors
         // return originalZSysCom(_this);
 
         return new (_this) ZSysCom();
+    }
+
+    ZCounter *__fastcall ZCounterConstructorHook(ZCounter *_this, void *_EDX)
+    {
+        printf("[CONSTRUCTOR HOOK]: ZCounter called\n");
+
+        return new (_this) ZCounter();
     }
 }

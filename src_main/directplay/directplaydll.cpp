@@ -1,16 +1,16 @@
-#include "directplayproxy.h"
+#include "directplaydll.h"
 
-DirectPlayProxy::~DirectPlayProxy()
+DirectPlayDll::~DirectPlayDll()
 {
     ZDynamicLoader::~ZDynamicLoader();
 }
 
-void DirectPlayProxy::Init()
+void DirectPlayDll::Init()
 {
     m_directPlay = new DirectPlay();
 }
 
-void DirectPlayProxy::End()
+void DirectPlayDll::End()
 {
     if (m_directPlay)
     {

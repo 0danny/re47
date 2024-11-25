@@ -9,15 +9,15 @@
 
 struct IOZip_LocalFileHeader
 {
-    u32 signature;
-    u16 compressionMethod;
-    u16 fatTime;
-    u16 fatDate;
-    u32 lastModTime;
-    u32 crc32;
-    u32 compressedSize;
-    u16 uncompressedSize;
-    u16 fileNameLength;
+    u32 unkInt1;
+    u16 unkInt2;
+    u16 unkInt3;
+    u16 unkInt4;
+    u32 unkInt5;
+    u32 unkInt6;
+    u32 unkInt7;
+    u16 unkInt8;
+    u16 unkInt9;
 };
 
 struct CFileCache

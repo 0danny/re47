@@ -5,6 +5,7 @@
 #include "zstdlib/zdynamicloader.h"
 #include "zstdlib/mystr.h"
 #include "zstdlib/reftab/reftab.h"
+#include "zstdlib/input/zinputactions.h"
 #include "common.h"
 
 class ZSysInterface
@@ -178,7 +179,7 @@ public:
     i32 unkInt74;
     u8 unkPad22[3840];
     u8 unkPad23[7680];
-    i32 m_zInputActions;
+    ZInputActions *m_zInputActions;
     i32 unkInt76;
     i32 unkInt77;
     i32 unkInt78;

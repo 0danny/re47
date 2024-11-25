@@ -10,6 +10,7 @@
 #include "zstdlib/reftab/strreftab.h"
 #include "zstdlib/reftab/linkreftab.h"
 #include "zstdlib/reftab/linksortreftab.h"
+#include "zstdlib/input/zinputaction.h"
 
 #include "zstdlib/trees/zrbtree.h"
 #include "zstdlib/trees/zvaltree.h"
@@ -43,6 +44,8 @@ namespace Constructors
 
     static LPVOID zSysComAddress = (LPVOID)0x0FFA4570;
 
+    static LPVOID zInputActionDefCtor = (LPVOID)0x0FFA2DA0;
+
     // Typedefs
     typedef RefTab *(__fastcall *RefTabConstructor)(RefTab *_this, int p_poolSize, int p_size);
     typedef RefTab32 *(__fastcall *RefTab32Constructor)(RefTab32 *_this);
@@ -64,6 +67,8 @@ namespace Constructors
     typedef ZConsole *(__fastcall *ZConsoleConstructor)(ZConsole *_this);
 
     typedef ZSysCom *(__fastcall *ZSysComConstructor)(ZSysCom *_this);
+
+    typedef void(__fastcall *ZInputActionDefCtor)(ZInputAction *_this, ZActionMap *p_actionMap, ZActionDefinition *p_actionDefinition);
 
     static ZConsoleConstructor originalZConsole = 0;
     static RefTab32Constructor originalRefTab32 = 0;
@@ -92,6 +97,8 @@ namespace Constructors
     ZSysCom *__fastcall ZSysComConstructorHook(ZSysCom *_this, void *_EDX);
 
     ZCounter *__fastcall ZCounterConstructorHook(ZCounter *_this, void *_EDX);
+
+    ZInputAction *__fastcall ZInputActionDefCtorHook(ZInputAction *_this, void *_EDX, ZActionMap *p_actionMap, ZActionDefinition *p_actionDefinition);
 
     void CreateHooks();
     void CreateRenderingHooks();

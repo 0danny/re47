@@ -5,12 +5,12 @@
 #include "zstdlib/zdynamicloader.h"
 #include "directplay.h"
 
-class DirectPlayProxy : public ZDynamicLoader
+class DirectPlayDll : public ZDynamicLoader
 {
 public:
     DirectPlay *m_directPlay;
 
-    virtual ~DirectPlayProxy();
+    virtual ~DirectPlayDll();
 
     // Overrides
     void Init() override;

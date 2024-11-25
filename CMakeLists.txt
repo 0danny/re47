@@ -117,6 +117,15 @@ add_library(common STATIC
     # CFastLookupFileCache
     src_main/zstdlib/cfastlookupfilecache.cpp
     src_main/zstdlib/cfastlookupfilecache.h
+
+    # Input
+    src_main/zstdlib/input/zinputaction.cpp
+    src_main/zstdlib/input/zinputaction.h
+
+    src_main/zstdlib/input/zactionmap.cpp
+    src_main/zstdlib/input/zactionmap.h
+
+    src_main/zstdlib/input/zactionmapdefinition.h
 )
 
 # Add System DLL
@@ -143,8 +152,8 @@ target_link_libraries(system globals common)
 add_library(directplay SHARED
     src_main/directplay/dllmain.cpp
 
-    src_main/directplay/directplayproxy.cpp
-    src_main/directplay/directplayproxy.h
+    src_main/directplay/directplaydll.cpp
+    src_main/directplay/directplaydll.h
 
     src_main/directplay/directplay.cpp
     src_main/directplay/directplay.h

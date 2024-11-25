@@ -11,7 +11,8 @@ public:
 
     inline MyStr()
     {
-        m_pointer = NULL;
+        m_pointer = m_buffer;
+        m_buffer[0] = '\0';
     }
 
     inline MyStr(const char *p_str)

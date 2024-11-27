@@ -162,73 +162,6 @@ CFastLink *CFastLookup2::FindFastLink(LinkRefTab *p_linkTab, const char *p_str, 
     return l_result;
 }
 
-inline void CFastLookup2::Set(const char *p_str, u32 p_ref)
-{
-    CFastLink *l_fastLinkPtr;
-
-    i32 l_strLen = strlen(p_str) + 1;
-    char *l_buffer = new char[l_strLen];
-
-    char *l_str = l_buffer;
-    strcpy(l_buffer, p_str);
-
-    i32 l_size = strlen(l_buffer);
-
-    i32 l_count = l_size >> 2;
-    i32 l_key = l_size;
-
-    if (l_size >> 2)
-    {
-        char *l_strPtr = l_str;
-
-        do
-        {
-            l_key += *l_strPtr;
-            l_strPtr += 4;
-            --l_count;
-        } while (l_count);
-    }
-
-    for (u32 l_checkSumIter = l_size & 0xFFFFFFFC; l_checkSumIter != l_size; ++l_checkSumIter)
-        l_key += l_str[l_checkSumIter];
-
-    LinkRefTab *l_val = (LinkRefTab *)m_valTree->GetKeyVal(l_key);
-
-    if (l_val)
-    {
-        CFastLink *l_fastLink = FindFastLink(l_val, l_str, l_size);
-        l_fastLinkPtr = l_fastLink;
-
-        if (l_fastLink)
-        {
-            if (l_fastLink->isAllocated)
-            {
-                char *l_unkStr = l_fastLink->stringPtr;
-
-                delete l_unkStr;
-
-                l_fastLinkPtr->stringPtr = 0;
-            }
-        }
-        else
-        {
-            l_fastLinkPtr = (CFastLink *)(l_val->AddUnique(0) - 1);
-        }
-    }
-    else
-    {
-        LinkRefTab *l_linkRef = new LinkRefTab(128, 3);
-
-        m_valTree->InsertKey(l_key, (i32)l_linkRef);
-        l_fastLinkPtr = (CFastLink *)(l_linkRef->AddUnique(0) - 1);
-    }
-
-    l_fastLinkPtr->stringLength = l_size;
-    l_fastLinkPtr->stringPtr = l_str;
-    l_fastLinkPtr->reference = p_ref;
-    l_fastLinkPtr->isAllocated = 1;
-}
-
 inline u32 CFastLookup2::Get(const char *p_str)
 {
     RefRun l_refRun;
@@ -256,7 +189,7 @@ inline u32 CFastLookup2::Get(const char *p_str)
     for (u32 l_keyItem = l_pointerSizeMinus1 & 0xFFFFFFFC; l_keyItem != l_pointerSizeMinus1; ++l_keyItem)
         l_key += p_str[l_keyItem];
 
-    LinkRefTab *l_initRef = (LinkRefTab *)this->m_valTree->GetKeyVal(l_key);
+    LinkRefTab *l_initRef = (LinkRefTab *)m_valTree->GetKeyVal(l_key);
 
     if (l_initRef && (l_initRef->RunInitNxtRef(&l_refRun), (l_nextRef = (CFastLink *)l_initRef->RunNxtRefPtr(&l_refRun)) != 0))
     {
@@ -296,6 +229,73 @@ void CFastLookup2::RemoveLowerCase(const char *p_str, u32 p_size)
     Remove(l_pointer, l_size);
 }
 
+inline void CFastLookup2::Set(const char *p_str, u32 p_ref)
+{
+    CFastLink *l_fastLinkPtr;
+
+    i32 l_strLen = strlen(p_str) + 1;
+    char *l_buffer = new char[l_strLen];
+
+    char *l_str = l_buffer;
+    strcpy(l_buffer, p_str);
+
+    i32 l_size = strlen(l_buffer);
+
+    i32 l_count = l_size >> 2;
+    i32 l_key = l_size;
+
+    if (l_size >> 2)
+    {
+        char *l_strPtr = l_str;
+
+        do
+        {
+            l_key += *(u32 *)l_strPtr;
+            l_strPtr += 4;
+            --l_count;
+        } while (l_count);
+    }
+
+    for (u32 l_checkSumIter = l_size & 0xFFFFFFFC; l_checkSumIter != l_size; ++l_checkSumIter)
+        l_key += l_str[l_checkSumIter];
+
+    LinkRefTab *l_val = (LinkRefTab *)m_valTree->GetKeyVal(l_key);
+
+    if (l_val)
+    {
+        CFastLink *l_fastLink = FindFastLink(l_val, l_str, l_size);
+        l_fastLinkPtr = l_fastLink;
+
+        if (l_fastLink)
+        {
+            if (l_fastLink->isAllocated)
+            {
+                char *l_stringPtr = l_fastLink->stringPtr;
+
+                delete l_stringPtr;
+
+                l_fastLinkPtr->stringPtr = 0;
+            }
+        }
+        else
+        {
+            l_fastLinkPtr = (CFastLink *)(l_val->Add(0) - 1);
+        }
+    }
+    else
+    {
+        LinkRefTab *l_linkRef = new LinkRefTab(128, 3);
+
+        m_valTree->InsertKey(l_key, (i32)l_linkRef);
+        l_fastLinkPtr = (CFastLink *)(l_linkRef->Add(0) - 1);
+    }
+
+    l_fastLinkPtr->stringLength = l_size;
+    l_fastLinkPtr->stringPtr = l_str;
+    l_fastLinkPtr->reference = p_ref;
+    l_fastLinkPtr->isAllocated = 1;
+}
+
 void CFastLookup2::SetLowerCase(const char *p_str, u32 p_ref)
 {
     MyStr l_myStr(p_str);
@@ -313,7 +313,5 @@ u32 CFastLookup2::GetLowerCase(const char *p_str)
 
     const char *l_pointer = *l_myStr;
 
-    u32 l_reference = Get(l_pointer);
-
-    return l_reference;
+    return Get(l_pointer);
 }

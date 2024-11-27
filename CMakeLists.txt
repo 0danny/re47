@@ -122,10 +122,14 @@ add_library(common STATIC
     src_main/zstdlib/input/zinputaction.cpp
     src_main/zstdlib/input/zinputaction.h
 
+    src_main/zstdlib/input/zinputactions.cpp
+    src_main/zstdlib/input/zinputactions.h
+
     src_main/zstdlib/input/zactionmap.cpp
     src_main/zstdlib/input/zactionmap.h
 
     src_main/zstdlib/input/zactionmapdefinition.h
+    src_main/zstdlib/input/sinputnode.h
 )
 
 # Add System DLL
@@ -216,5 +220,5 @@ add_library(impl_swap SHARED
 
 target_link_directories(impl_swap PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
 target_link_libraries(impl_swap PRIVATE system minhook_x86 globals kernel32 common drawing opengl32)
-set_target_properties(impl_swap PROPERTIES LINK_FLAGS "/BASE:0x0230000")
+#set_target_properties(impl_swap PROPERTIES LINK_FLAGS "/BASE:0x0230000")
 

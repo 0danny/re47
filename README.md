@@ -6,7 +6,7 @@
   <h1>Re47</h1>
 </div>
 
-[![](https://dcbadge.limes.pink/api/server/https://discord.gg/bcaWWF9Tb5)](https://discord.gg/bcaWWF9Tb5)
+[Discord Server](https://discord.gg/bcaWWF9Tb5)
 
 ### Hitman Codename 47 (2000) - Decompilation
 

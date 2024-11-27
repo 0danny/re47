@@ -33,12 +33,17 @@ namespace Constructors
     {
         printf("[CONSTRUCTOR HOOK]: Creating constructor hooks...\n");
 
+        if (MH_CreateHook(zActionMapAddress, (LPVOID)&Constructors::ZActionMapConstructorHook, reinterpret_cast<LPVOID *>(&originalZActionMap)) != MH_OK)
+        {
+            printf("[CONSTRUCTOR HOOK]: Could not hook ZActionMap constructor.\n");
+        }
+
+        /*
         if (MH_CreateHook(zInputActionDefCtor, (LPVOID)&Constructors::ZInputActionDefCtorHook, NULL) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook ZInputAction constructor.\n");
         }
 
-        /*
         if (MH_CreateHook(linkRefTabAddress, (LPVOID)&Constructors::LinkRefTabHook, NULL) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook LinkRefTab constructor.\n");
@@ -198,10 +203,17 @@ namespace Constructors
         return new (_this) ZCounter();
     }
 
-    ZInputAction *__fastcall ZInputActionDefCtorHook(ZInputAction *_this, void *_EDX, ZActionMap *p_actionMap, ZActionDefinition *p_actionDefinition)
+    ZInputAction *__fastcall ZInputActionDefCtorHook(ZInputAction *_this, void *_EDX, ZActionMap *p_actionMap, SActionOverride *p_actionOverride)
     {
-        // printf("[CONSTRUCTOR HOOK]: ZInputAction called\n");
+        printf("[CONSTRUCTOR HOOK]: ZInputAction called\n");
 
-        return new (_this) ZInputAction(p_actionMap, p_actionDefinition);
+        return new (_this) ZInputAction(p_actionMap, p_actionOverride);
+    }
+
+    ZActionMap *__fastcall ZActionMapConstructorHook(ZActionMap *_this, void *_EDX, ZInputActions *p_inputActions, ZActionMapDefinition *p_actionMapDef, char *p_mapName)
+    {
+        printf("[CONSTRUCTOR HOOK]: ZActionMap called\n");
+
+        return new (_this) ZActionMap(p_inputActions, p_actionMapDef, p_mapName);
     }
 }

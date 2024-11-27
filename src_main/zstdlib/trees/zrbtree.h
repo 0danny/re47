@@ -6,34 +6,27 @@
 
 #pragma pack(push, 1)
 
-// 17 in size (not 17 because of data, but 17 because of the struct size)
 struct SBinTreeNode
 {
-    SBinTreeNode *parent;
-    SBinTreeNode *left;
-    SBinTreeNode *right;
-    i32 key;
-    u8 color;
-    i32 data;
-};
+    SBinTreeNode *parent; // 0
+    SBinTreeNode *left;   // 4
+    SBinTreeNode *right;  // 8
+    i32 key;              // 12
+    u8 color;             // 16
+    i32 data[];           // 17
+}; // 17 in size
 
-#pragma pack(pop)
-
-#pragma pack(push, 2) // m_unkByte is apparently a u8, so we need to align it to 2 bytes
-
-// 30 in size
 class ZRBTree
 {
 public:
-    SBinTreeNode *m_rootNode;
-    SBinTreeNode *m_nullNode;
-    SBinTreeNode *m_dummyNode;
+    SBinTreeNode *m_rootNode;  // 4
+    SBinTreeNode *m_nullNode;  // 8
+    SBinTreeNode *m_dummyNode; // 12
 
-    // TODO: Fix names
-    i32 m_unkInt3;
-    i32 m_unkInt4;
-    i32 m_unkInt5;
-    u8 m_unkByte;
+    i32 m_unkInt3; // 16
+    i32 m_unkInt4; // 20
+    i32 m_unkInt5; // 24
+    u8 m_unkByte;  // 28
 
     ZRBTree();
 
@@ -53,7 +46,7 @@ public:
 
     void BaseInsert(SBinTreeNode *p_binNode);
     void RBDeleteFixup(SBinTreeNode *p_binNode);
-};
+}; // 29 in size
 
 #pragma pack(pop)
 

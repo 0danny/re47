@@ -1,6 +1,6 @@
 #include "zinputaction.h"
 
-ZInputAction::ZInputAction(ZActionMap *p_actionMap, ZActionOverride *p_actionOverride)
+ZInputAction::ZInputAction(ZActionMap *p_actionMap, SActionOverride *p_actionOverride)
 {
     m_actionMap = p_actionMap;
     m_actionName = 0;
@@ -84,7 +84,7 @@ ZInputAction::ZInputAction(ZActionMap *p_actionMap, ZActionOverride *p_actionOve
     }
 }
 
-ZInputAction::ZInputAction(ZActionMap *p_actionMap, ZActionDefinition *p_actionDefinition)
+ZInputAction::ZInputAction(ZActionMap *p_actionMap, SInputActionDefinition *p_actionDefinition)
 {
     m_actionMap = p_actionMap;
     m_actionName = 0;
@@ -242,10 +242,10 @@ void ZInputAction::AddNode(i32 p_refNum, boolean p_flag)
     {
         RefTab *l_refTab = l_inputActions->m_inputNodeList[p_refNum].m_refTab;
 
-        ZInputActionBinding *l_actionUnk = (ZInputActionBinding *)(l_refTab->Add(0) - 1);
+        ZInputActionBinding *l_binding = (ZInputActionBinding *)(l_refTab->Add(0) - 1);
 
-        l_actionUnk->inputAction = this;
-        l_actionUnk->flag = p_flag;
+        l_binding->inputAction = this;
+        l_binding->flag = p_flag;
 
         if (p_flag == m_actionMap->m_inputActions->m_inputNodeList[p_refNum].m_isToggleNode)
             ++m_activeNodeCount;
@@ -408,7 +408,7 @@ void ZInputAction::UnlockInputNode(char *p_vkKey, boolean p_flag, boolean p_loca
     }
 }
 
-void ZInputAction::MakeActionExclusiveOwnerOfNodes(boolean p_flag)
+void ZInputAction::MakeActionExclusiveOwnerOfNodes(boolean p_lock)
 {
     RefRun l_refRun;
     RefRun l_refRun2;
@@ -429,14 +429,14 @@ void ZInputAction::MakeActionExclusiveOwnerOfNodes(boolean p_flag)
                 {
                     if (l_item->inputAction != this)
                     {
-                        i32 l_newUnkInt2;
+                        i32 l_lockCount;
 
-                        if (p_flag)
-                            l_newUnkInt2 = l_item->inputAction->m_lockCount + 1;
+                        if (p_lock)
+                            l_lockCount = l_item->inputAction->m_lockCount + 1;
                         else
-                            l_newUnkInt2 = l_item->inputAction->m_lockCount - 1;
+                            l_lockCount = l_item->inputAction->m_lockCount - 1;
 
-                        l_item->inputAction->m_lockCount = l_newUnkInt2;
+                        l_item->inputAction->m_lockCount = l_lockCount;
                     }
                 }
             }

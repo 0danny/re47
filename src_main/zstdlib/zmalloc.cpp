@@ -27,14 +27,14 @@ void ZMalloc::RemoveFreeHeaderFromBins(SMallocFreeHeader *p_freeHeader, SBinTree
     if (l_rightNode)
         l_rightNode->key = (i32)p_freeHeader->left;
     else
-        l_searchNode->data = (i32)p_freeHeader->left;
+        l_searchNode->data[0] = (i32)p_freeHeader->left;
 
     SBinTreeNode *l_leftNode = p_freeHeader->left;
 
     if (l_leftNode)
         l_leftNode->right = p_freeHeader->right;
 
-    if (!l_searchNode->data)
+    if (!l_searchNode->data[0])
     {
         SBinTreeNode *l_deletedNode = m_rbTree1.Delete(l_searchNode);
 

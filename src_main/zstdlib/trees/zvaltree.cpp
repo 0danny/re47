@@ -7,25 +7,19 @@ ZValTree::ZValTree(i32 p_poolSize) : ZRBTree()
 
 ZValTree::~ZValTree()
 {
-    SBinTreeNode *l_result;
-    SBinTreeNode *l_nodeDeleted;
-
     while (1)
     {
-        l_result = m_rootNode;
-
-        if (l_result == m_nullNode || !l_result)
+        if (m_rootNode == m_nullNode || !m_rootNode)
             break;
 
-        l_nodeDeleted = ZRBTree::Delete(m_rootNode);
+        SBinTreeNode *l_nodeDeleted = ZRBTree::Delete(m_rootNode);
 
         m_refTab->DelRefPtr((u32 *)l_nodeDeleted);
-
         m_refTab->DelRefPtr(0);
     }
 
     if (m_refTab)
-        m_refTab->~StaticRefTab();
+        m_refTab->Destroy();
 }
 
 SBinTreeNode *ZValTree::Delete(SBinTreeNode *p_binNode)
@@ -38,7 +32,7 @@ SBinTreeNode *ZValTree::Delete(SBinTreeNode *p_binNode)
 
 void ZValTree::CopyData(SBinTreeNode *p_binNode, SBinTreeNode *p_binNode2)
 {
-    p_binNode->data = p_binNode2->data;
+    p_binNode->data[0] = p_binNode2->data[0];
 }
 
 void ZValTree::InsertKey(i32 p_key, i32 p_data)
@@ -46,7 +40,7 @@ void ZValTree::InsertKey(i32 p_key, i32 p_data)
     SBinTreeNode *l_dataPtr = (SBinTreeNode *)(m_refTab->Add(0) - 1);
 
     l_dataPtr->key = p_key;
-    l_dataPtr->data = p_data;
+    l_dataPtr->data[0] = p_data;
 
     Insert(l_dataPtr);
 }
@@ -68,7 +62,7 @@ i32 ZValTree::GetKeyVal(i32 p_key)
     SBinTreeNode *l_searchRes = Search(p_key, 0);
 
     if (l_searchRes)
-        return l_searchRes->data;
+        return l_searchRes->data[0];
     else
         return 0;
 }

@@ -1,4 +1,5 @@
 #include "zinputactions.h"
+#include "zinputaction.h"
 
 ZInputActions::ZInputActions()
 {
@@ -12,11 +13,11 @@ void ZInputActions::OverrideActions(RefTab *l_actionsList)
 {
 }
 
-void ZInputActions::OverrideAction(ZActionOverride *p_actionOverride)
+void ZInputActions::OverrideAction(SActionOverride *p_actionOverride)
 {
 }
 
-ZActionOverride *ZInputActions::FindOverriden(char *p_str)
+SActionOverride *ZInputActions::FindOverriden(char *p_str)
 {
     return 0;
 }
@@ -55,7 +56,7 @@ void ZInputActions::UnkFunc9(i32 p_unkInt)
 {
 }
 
-u32 *ZInputActions::UnkFunc10(const char *p_str)
+ZInputAction *ZInputActions::GetInputAction(char *p_actionName)
 {
     return 0;
 }

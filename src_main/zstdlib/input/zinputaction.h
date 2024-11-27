@@ -33,8 +33,8 @@ public:
     u8 m_unkByte3;             // 50
     RefTab *m_dependentNodes;  // 51
 
-    ZInputAction(ZActionMap *p_actionMap, ZActionOverride *p_actionOverride);
-    ZInputAction(ZActionMap *p_actionMap, ZActionDefinition *p_actionDefinition);
+    ZInputAction(ZActionMap *p_actionMap, SActionOverride *p_actionOverride);
+    ZInputAction(ZActionMap *p_actionMap, SInputActionDefinition *p_actionDefinition);
 
     ~ZInputAction();
 
@@ -47,7 +47,7 @@ public:
     virtual void LockInputNode(char *p_vkKey, boolean p_flag, boolean p_localMapOnly);
     virtual void UnlockInputNode(char *p_vkKey, boolean p_flag, boolean p_localMapOnly);
 
-    virtual void MakeActionExclusiveOwnerOfNodes(boolean p_flag);
+    virtual void MakeActionExclusiveOwnerOfNodes(boolean p_lock);
 
     void DependOnActionsNodes(const char *p_str, boolean p_flag);
     void DependOnActionNodes(const char *p_str, boolean p_flag);

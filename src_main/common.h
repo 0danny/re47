@@ -34,7 +34,7 @@ static FILE *LockedFileOpen(const char *p_fileName, const char *p_mode)
 }
 
 // We don't have x86intrin.h, so we have to inline the rdtsc ASM syscall manually.
-static __inline u64 GetRDTSC(void)
+static inline u64 GetRDTSC(void)
 {
     u64 cycles;
     __asm {

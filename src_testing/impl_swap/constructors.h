@@ -11,6 +11,7 @@
 #include "zstdlib/reftab/linkreftab.h"
 #include "zstdlib/reftab/linksortreftab.h"
 #include "zstdlib/input/zinputaction.h"
+#include "zstdlib/input/zactionmap.h"
 
 #include "zstdlib/trees/zrbtree.h"
 #include "zstdlib/trees/zvaltree.h"
@@ -29,6 +30,8 @@ namespace Constructors
     static LPVOID zCounterAddress = (LPVOID)0x0FB9BFB0;
 
     // Addresses
+
+    static LPVOID cFastLookup2Address = (LPVOID)0x0FFB9A00;
     static LPVOID refTabAddress = (LPVOID)0x0FFBED50;
     static LPVOID ref32RefTabAddress = (LPVOID)0x0FFBF5B0;
     static LPVOID staticRefTabAddress = (LPVOID)0x0FFBF710;
@@ -44,7 +47,8 @@ namespace Constructors
 
     static LPVOID zSysComAddress = (LPVOID)0x0FFA4570;
 
-    static LPVOID zInputActionDefCtor = (LPVOID)0x0FFA2DA0;
+    static LPVOID zInputActionDefCtor = (LPVOID)0x0FFA3240;
+    static LPVOID zActionMapAddress = (LPVOID)0x0FFA2640;
 
     // Typedefs
     typedef RefTab *(__fastcall *RefTabConstructor)(RefTab *_this, int p_poolSize, int p_size);
@@ -68,7 +72,8 @@ namespace Constructors
 
     typedef ZSysCom *(__fastcall *ZSysComConstructor)(ZSysCom *_this);
 
-    typedef void(__fastcall *ZInputActionDefCtor)(ZInputAction *_this, ZActionMap *p_actionMap, ZActionDefinition *p_actionDefinition);
+    typedef ZInputAction *(__fastcall *ZInputActionDefCtor)(ZInputAction *_this, ZActionMap *p_actionMap, SActionOverride *p_actionOverride);
+    typedef ZActionMap *(__fastcall *ZActionMapConstructor)(ZActionMap *_this, void *_EDX, ZInputActions *p_inputActions, ZActionMapDefinition *p_actionMapDef, char *p_mapName);
 
     static ZConsoleConstructor originalZConsole = 0;
     static RefTab32Constructor originalRefTab32 = 0;
@@ -77,6 +82,7 @@ namespace Constructors
     static ZCounterConstructor originalZCounter = 0;
 
     static ZSysComConstructor originalZSysCom = 0;
+    static ZActionMapConstructor originalZActionMap = 0;
 
     // Functions
     RefTab *__fastcall RefTabHook(RefTab *_this, void *_EDX, int p_poolSize, int p_size);
@@ -98,7 +104,8 @@ namespace Constructors
 
     ZCounter *__fastcall ZCounterConstructorHook(ZCounter *_this, void *_EDX);
 
-    ZInputAction *__fastcall ZInputActionDefCtorHook(ZInputAction *_this, void *_EDX, ZActionMap *p_actionMap, ZActionDefinition *p_actionDefinition);
+    ZInputAction *__fastcall ZInputActionDefCtorHook(ZInputAction *_this, void *_EDX, ZActionMap *p_actionMap, SActionOverride *p_actionOverride);
+    ZActionMap *__fastcall ZActionMapConstructorHook(ZActionMap *_this, void *_EDX, ZInputActions *p_inputActions, ZActionMapDefinition *p_actionMapDef, char *p_mapName);
 
     void CreateHooks();
     void CreateRenderingHooks();

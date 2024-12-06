@@ -1248,7 +1248,7 @@ i32 CSystemProbe::IntDivide(float p_float, i32 p_int)
 float CSystemProbe::GetCPUSpeed()
 {
     if (g_pSysInterface)
-        return g_pSysInterface->unkInt55;
+        return g_pSysInterface->m_unkInt55;
 
     i64 l_cycles = GetRDTSC();
 

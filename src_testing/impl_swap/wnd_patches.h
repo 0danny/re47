@@ -23,6 +23,7 @@ namespace WndPatches
                                       HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
 
     void CreateHooks();
+    void CreateRenderingHooks();
 }
 
 #endif

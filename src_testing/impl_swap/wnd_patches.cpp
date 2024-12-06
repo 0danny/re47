@@ -22,6 +22,11 @@ namespace WndPatches
         }
     }
 
+    void CreateRenderingHooks()
+    {
+        printf("[WND_PATCH]: Creating rendering hooks...\n");
+    }
+
     LONG WINAPI HookedSetWindowLongA(HWND hWnd, int nIndex, LONG dwNewLong)
     {
         printf("[WND_PATCH]: Diverting SetWindowLongA!\n");

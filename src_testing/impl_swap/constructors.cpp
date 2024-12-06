@@ -8,6 +8,8 @@ namespace Constructors
     // These hooks get injected once the render dll is loaded
     void CreateRenderingHooks()
     {
+        ZMasterControl *control = new ZMasterControl();
+
         printf("[CONSTRUCTOR HOOK]: Creating rendering constructor hooks...\n");
 
         /*
@@ -33,12 +35,23 @@ namespace Constructors
     {
         printf("[CONSTRUCTOR HOOK]: Creating constructor hooks...\n");
 
+        if (MH_CreateHook(zInputActionsCtor, (LPVOID)&Constructors::ZInputActionsConstructorHook, reinterpret_cast<LPVOID *>(&originalZInputActions)) != MH_OK)
+        {
+            printf("[CONSTRUCTOR HOOK]: Could not hook ZInputActions constructor.\n");
+        }
+
+        /*
+        if (MH_CreateHook(zMasterControlAddress, (LPVOID)&Constructors::ZMasterControlConstructorHook, NULL) != MH_OK)
+        {
+            printf("[CONSTRUCTOR HOOK]: Could not hook ZMasterControl constructor.\n");
+        }
+
+
         if (MH_CreateHook(zActionMapAddress, (LPVOID)&Constructors::ZActionMapConstructorHook, reinterpret_cast<LPVOID *>(&originalZActionMap)) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook ZActionMap constructor.\n");
         }
 
-        /*
         if (MH_CreateHook(zInputActionDefCtor, (LPVOID)&Constructors::ZInputActionDefCtorHook, NULL) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook ZInputAction constructor.\n");
@@ -215,5 +228,19 @@ namespace Constructors
         printf("[CONSTRUCTOR HOOK]: ZActionMap called\n");
 
         return new (_this) ZActionMap(p_inputActions, p_actionMapDef, p_mapName);
+    }
+
+    ZInputActions *__fastcall ZInputActionsConstructorHook(ZInputActions *_this, void *_EDX)
+    {
+        printf("[CONSTRUCTOR HOOK]: ZInputActions called\n");
+
+        return new (_this) ZInputActions();
+    }
+
+    ZMasterControl *__fastcall ZMasterControlConstructorHook(ZMasterControl *_this, void *_EDX)
+    {
+        printf("[CONSTRUCTOR HOOK]: ZMasterControl called\n");
+
+        return new (_this) ZMasterControl();
     }
 }

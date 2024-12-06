@@ -46,6 +46,13 @@ static inline u64 GetRDTSC(void)
     return cycles;
 }
 
+static __inline u32 GetReturnAddress()
+{
+    __asm {
+        mov eax, [ebp+4]
+    }
+}
+
 // Lets use compile using override keyword with VS6 (used for intellisense)
 #if __cplusplus < 201103L
 #define override

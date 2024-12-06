@@ -13,8 +13,8 @@ ZInputAction::ZInputAction(ZActionMap *p_actionMap, SActionOverride *p_actionOve
     m_pressHandlers = 0;
     m_holdHandlers = 0;
     m_releaseHandlers = 0;
-    m_unkInt6 = 0;
-    m_unkInt7 = 0;
+    m_unkFloat1 = 0;
+    m_unkFloat2 = 0;
     m_lockCount = 0;
     m_unkByte3 = 0;
 
@@ -97,8 +97,8 @@ ZInputAction::ZInputAction(ZActionMap *p_actionMap, SInputActionDefinition *p_ac
     m_pressHandlers = 0;
     m_holdHandlers = 0;
     m_releaseHandlers = 0;
-    m_unkInt6 = 0;
-    m_unkInt7 = 0;
+    m_unkFloat1 = 0;
+    m_unkFloat2 = 0;
     m_lockCount = 0;
     m_unkByte3 = p_actionMap->m_unkByte;
 
@@ -525,4 +525,47 @@ void ZInputAction::DependOnActionNodes(const char *p_str, boolean p_flag)
 
     strcpy(l_nodeNameBuffer, p_str);
     l_actionNode->flag = p_flag;
+}
+
+boolean ZInputAction::CheckDependencies()
+{
+    ZInputAction *l_actionBase1;
+    RefRun l_refRun;
+
+    if (!m_dependentNodes)
+        return 1;
+
+    m_dependentNodes->RunInitNxtRef(&l_refRun);
+    ZActionNode *l_nxtRef = (ZActionNode *)m_dependentNodes->RunNxtRefPtr(&l_refRun);
+
+    if (!l_nxtRef)
+        return 1;
+
+    char *l_nodeName;
+
+    while (1)
+    {
+        l_nodeName = l_nxtRef->nodeName;
+
+        if (!l_nxtRef->flag)
+            break;
+
+        l_actionBase1 = m_actionMap->GetActionBase(l_nodeName);
+
+        if (l_actionBase1 && !l_actionBase1->m_unkByte1)
+            return 0;
+    LABEL_9:
+
+        l_nxtRef = (ZActionNode *)m_dependentNodes->RunNxtRefPtr(&l_refRun);
+
+        if (!l_nxtRef)
+            return 1;
+    }
+
+    ZInputAction *l_actionBase2 = m_actionMap->GetActionBase(l_nodeName);
+
+    if (!l_actionBase2 || !l_actionBase2)
+        goto LABEL_9;
+
+    return 0;
 }

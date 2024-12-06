@@ -130,6 +130,10 @@ add_library(common STATIC
 
     src_main/zstdlib/input/zactionmapdefinition.h
     src_main/zstdlib/input/sinputnode.h
+
+    # Master Control
+    src_main/zstdlib/zmastercontrol.cpp
+    src_main/zstdlib/zmastercontrol.h
 )
 
 # Add System DLL

@@ -5,28 +5,32 @@ namespace Methods
     void CreateHooks()
     {
         printf("[METHOD HOOK]: Creating method hooks...\n");
+
+        if (MH_CreateHook(zInputActions_OverrideAction, (LPVOID)&Methods::ZInputActions_OverrideActionHook, reinterpret_cast<LPVOID *>(&originalZInputActions_OverrideAction)) != MH_OK)
+        {
+            printf("[METHOD HOOK]: Could not hook ZInputActions_OverrideAction method.\n");
+        }
+
         /*
-               if (MH_CreateHook(cFastLookup_RemoveLowerCase, (LPVOID)&Methods::CFastLookup_RemoveLowerCaseHook, NULL) != MH_OK)
-               {
-                   printf("[METHOD HOOK]: Could not hook CFastLookup_RemoveLowerCase method.\n");
-               }
+        if (MH_CreateHook(cFastLookup_RemoveLowerCase, (LPVOID)&Methods::CFastLookup_RemoveLowerCaseHook, NULL) != MH_OK)
+        {
+            printf("[METHOD HOOK]: Could not hook CFastLookup_RemoveLowerCase method.\n");
+        }
 
-               if (MH_CreateHook(cFastLookup_GetLowerCase, (LPVOID)&Methods::CFastLookup_GetLowerCaseHook, NULL) != MH_OK)
-               {
-                   printf("[METHOD HOOK]: Could not hook CFastLookup_GetLowerCase method.\n");
-               }
+        if (MH_CreateHook(cFastLookup_GetLowerCase, (LPVOID)&Methods::CFastLookup_GetLowerCaseHook, NULL) != MH_OK)
+        {
+            printf("[METHOD HOOK]: Could not hook CFastLookup_GetLowerCase method.\n");
+        }
 
+        if (MH_CreateHook(zMalloc_RemoveFreeHeaderFromBins, (LPVOID)&Methods::ZMalloc_RemoveFreeHeaderFromBinsHook, NULL) != MH_OK)
+        {
+            printf("[METHOD HOOK]: Could not hook ZMalloc_RemoveFreeHeaderFromBins method.\n");
+        }
 
-                       if (MH_CreateHook(zMalloc_RemoveFreeHeaderFromBins, (LPVOID)&Methods::ZMalloc_RemoveFreeHeaderFromBinsHook, NULL) != MH_OK)
-                       {
-                           printf("[METHOD HOOK]: Could not hook ZMalloc_RemoveFreeHeaderFromBins method.\n");
-                       }
-
-
-                       if (MH_CreateHook(zSysMem_NewRef, (LPVOID)&Methods::ZSysMem_NewRefHook, reinterpret_cast<LPVOID *>(&originalZSysMem_NewRef)) != MH_OK)
-                       {
-                           printf("[METHOD HOOK]: Could not hook ZSysMem_NewRef method.\n");
-                       }*/
+        if (MH_CreateHook(zSysMem_NewRef, (LPVOID)&Methods::ZSysMem_NewRefHook, reinterpret_cast<LPVOID *>(&originalZSysMem_NewRef)) != MH_OK)
+        {
+            printf("[METHOD HOOK]: Could not hook ZSysMem_NewRef method.\n");
+        }*/
     }
 
     void CreateRenderingHooks()
@@ -81,5 +85,13 @@ namespace Methods
         printf("[METHOD HOOK]: CFastLookup_GetLowerCaseHook called, [%s]\n", p_str);
 
         _this->GetLowerCase(p_str);
+    }
+
+    void __fastcall ZInputActions_OverrideActionHook(ZInputActions *_this, void *_EDX, SActionOverride *p_actionOverride)
+    {
+        printf("[METHOD HOOK]: ZInputActions_OverrideActionHook called for %s\n", p_actionOverride->actionName.m_pointer);
+
+        printf("[METHOD HOOK]: Address of this %p\n", _this);
+        // originalZInputActions_OverrideAction(_this, _EDX, p_actionOverride);
     }
 }

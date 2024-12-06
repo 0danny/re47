@@ -40,7 +40,7 @@ public:
     {
         char *l_string;
 
-        if (strlen(p_targetStr) + 1 <= 124)
+        if (strlen(p_targetStr) + 1 <= sizeof(m_buffer))
         {
             // If we have enough space, use the buffer.
             l_string = m_buffer;
@@ -105,7 +105,7 @@ public:
     {
         if (this != &p_instance && &p_instance)
         {
-            if (m_pointer == m_buffer && (strlen(m_pointer) + strlen(*p_instance) + 1) < 124)
+            if (m_pointer == m_buffer && (strlen(m_pointer) + strlen(*p_instance) + 1) < sizeof(m_buffer))
             {
                 strcat(m_pointer, *p_instance);
             }

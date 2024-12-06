@@ -178,7 +178,7 @@ i32 ZSysCom::ForwardWndProc(u32 p_msg, WPARAM p_wParam, LPARAM p_lParam)
             {
                 m_linkRefTab = new LinkRefTab(128, 5);
 
-                ++g_pSysInterface->unkInt99;
+                ++g_pSysInterface->m_unkInt99;
             }
 
             m_unkBool1 = 1;
@@ -189,7 +189,7 @@ i32 ZSysCom::ForwardWndProc(u32 p_msg, WPARAM p_wParam, LPARAM p_lParam)
             if (m_linkRefTab)
             {
                 UnkFunc9();
-                --g_pSysInterface->unkInt99;
+                --g_pSysInterface->m_unkInt99;
             }
 
             m_unkBool1 = 0;

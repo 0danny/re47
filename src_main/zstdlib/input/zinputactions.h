@@ -6,6 +6,7 @@
 #include "zstdlib/cfastlookup2.h"
 #include "zstdlib/input/sinputnode.h"
 #include "zstdlib/input/zactionmapdefinition.h"
+#include "system/zsysinterface.h"
 
 class ZActionMap;
 class ZInputAction;
@@ -14,24 +15,18 @@ class ZInputAction;
 
 struct SInputEntry
 {
-    char *vkName;
-    int index;
-    char *entryName;
-};
+    char *vkName;    // 0
+    i32 index;       // 4
+    char *entryName; // 8
+}; // 12 in size.
 
 struct SInputList
 {
-    i32 totalCount;
-    char *listName;
-    SInputEntry *list;
-    i32 listSize;
-};
-
-struct SInputLists
-{
-    SInputList keyList;
-    SInputList mouseList;
-};
+    i32 totalCount;    // 0
+    char *listName;    // 4
+    SInputEntry *list; // 8
+    i32 listSize;      // 12
+}; // 16 in size.
 
 static SInputEntry g_keysInputList[] = {
     {"VK_ESCAPE", 1, "Escape"},
@@ -207,9 +202,16 @@ static SInputEntry g_mouseInputList[] = {
     {0, 0, 0},
 };
 
-static SInputLists g_inputLists = {
+static SInputList g_inputLists[] = {
     {0, "KeysInputList", g_keysInputList, 165},
     {0, "MouseWheelInputList", g_mouseInputList, 3},
+    {0, 0, 0, 0},
+};
+
+struct SInputNodeList
+{
+    i32 count;
+    SInputNode *nodes;
 };
 
 class ZInputActions
@@ -221,10 +223,10 @@ public:
     i32 m_inputNodeCount;           // 16
     RefTab *m_actionMapDefinitions; // 20
     RefTab *m_refTab2;              // 24
-    i32 m_unkInt5;                  // 28
-    i32 m_unkInt6;                  // 32
+    char *m_unkStr;                 // 28
+    float m_unkFloat1;              // 32
     i32 m_unkInt7;                  // 36
-    i32 m_unkInt8;                  // 40
+    float m_unkFloat2;              // 40
     CFastLookup2 *m_fastLookup;     // 44
     ZActionMap *m_actionMap;        // 48
     RefTab *m_overrideList;         // 52
@@ -236,7 +238,7 @@ public:
     virtual void OverrideAction(SActionOverride *p_actionOverride);
 
     virtual SActionOverride *FindOverriden(char *p_str);
-    virtual void AddActionMap(ZActionMapDefinition *p_actionMapDef, const char *p_str);
+    virtual void AddActionMap(ZActionMapDefinition *p_actionMapDef, char *p_str);
 
     virtual void RemoveActionMap(ZActionMap *p_actionMap);
     virtual void RemoveActionMap(char *p_actionStr);
@@ -244,13 +246,13 @@ public:
     virtual void RemoveActionMaps();
 
     virtual boolean UnkFunc7(i32 p_unkInt, i32 p_unkInt2);
-    virtual boolean UnkFunc8(char *p_actionName, i32 p_unkInt);
+    virtual boolean UnkFunc8(char *p_actionName, u32 p_refNum);
     virtual void UnkFunc9(i32 p_unkInt);
     virtual ZInputAction *GetInputAction(char *p_actionName);
 
     virtual ZActionMap *GetActionMap(ZActionMapDefinition *p_actionMapDef);
     virtual ZActionMap *GetActionMap(char *p_str);
-    virtual u32 GetInputNode(char *p_str);
+    virtual i32 GetInputNode(char *p_vkName);
 
     virtual void EnableActions();
     virtual void DisableActions();
@@ -258,8 +260,10 @@ public:
     virtual void ActivateMap(char *p_str);
     virtual void DeactivateMap(char *p_str);
 
-    virtual void UnkFunc18(i32 p_unkInt, i32 p_unkInt2);
-    virtual void *UnkFunc19(i32 p_unkInt);
+    virtual void MakeActionExclusiveOwner(char *p_vkName, bool p_flag);
+    virtual SInputEntry *GetListByIndex(i32 p_index);
+
+    void RemoveOverrideList();
 
 }; // 56 in size.
 

@@ -192,7 +192,7 @@ void StrRefTab::RemoveStr(char *const p_str)
     }
 }
 
-boolean StrRefTab::Exists(char *const p_str)
+bool StrRefTab::Exists(char *const p_str)
 {
     if (!this)
         return 0;
@@ -285,7 +285,7 @@ i32 StrRefTab::Compare(const void *p_a, const void *p_b)
     return StrRefTab::CompareCall(*(char **)p_a, *(char **)p_b) != 0 ? 1 : -1;
 }
 
-boolean StrRefTab::CompareCall(const char *p_str1, const char *p_str2)
+bool StrRefTab::CompareCall(const char *p_str1, const char *p_str2)
 {
     if (!_strcmpi(p_str1, p_str2))
         return 0;

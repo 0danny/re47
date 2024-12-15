@@ -34,7 +34,7 @@ public:
     virtual i32 GetCount();
 
     virtual void DelRefPtr(u32 *p_refNum);
-    virtual boolean Exists(u32 p_refNum);
+    virtual bool Exists(u32 p_refNum);
     virtual u32 *Find(u32 p_refNum);
 
     virtual u32 GetRefNr(i32 p_refIndex);
@@ -43,7 +43,7 @@ public:
     virtual void PrintStatus();
 
     virtual void Remove(u32 p_refNum);
-    virtual boolean RemoveIfExists(u32 p_refNum);
+    virtual bool RemoveIfExists(u32 p_refNum);
 
     virtual void RunDelRef(RefRun *p_refRun);
     virtual void RunInitNxtRef(RefRun *p_refRun);

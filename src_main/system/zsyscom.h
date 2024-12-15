@@ -18,15 +18,15 @@ public:
     u32 m_msgID;              // 0x4
     i32 m_unkInt1;            // 0x8
     LinkRefTab *m_linkRefTab; // 0xC
-    boolean m_unkBool1;       // 0x10
+    bool m_unkBool1;          // 0x10
 
-    boolean m_sendingZMessage; // 0x11
-    boolean m_debugWndReady;   // 0x12
-    char *m_filePath;          // 0x16
-    i32 m_lineNum;             // 0x1A
-    HWND m_debugHwnd;          // 0x1E
-    HWND m_mainHwnd;           // 0x22
-    StrRefTab *m_logsArray;    // 0x26
+    bool m_sendingZMessage; // 0x11
+    bool m_debugWndReady;   // 0x12
+    char *m_filePath;       // 0x16
+    i32 m_lineNum;          // 0x1A
+    HWND m_debugHwnd;       // 0x1E
+    HWND m_mainHwnd;        // 0x22
+    StrRefTab *m_logsArray; // 0x26
 
     // Overrides
     virtual i32 FormatString(char *p_resultBuffer, char *p_format, ...);
@@ -42,7 +42,7 @@ public:
 
     // Debug window stuff
     virtual void ProcessDebugWnd(HWND p_hWnd);
-    virtual void SendDebugMsg(WPARAM p_wParam, LPARAM p_lParam, boolean p_sendMessage);
+    virtual void SendDebugMsg(WPARAM p_wParam, LPARAM p_lParam, bool p_sendMessage);
     virtual i32 ForwardWndProc(u32 p_msg, WPARAM p_wParam, LPARAM p_lParam);
 
     // Logging

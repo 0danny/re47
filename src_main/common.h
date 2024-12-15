@@ -9,8 +9,6 @@
 #include <stdio.h>
 
 // Typedefs
-typedef byte boolean;
-
 typedef char i8;
 typedef short i16;
 typedef int i32;
@@ -26,9 +24,6 @@ typedef double f64;
 
 static char *g_emptyArray = new char[264];
 static char *g_emptyDelimiter = new char[4];
-
-// Static class size assert macro
-#define DECOMP_SIZE(type, size) static_assert(sizeof(type) == size, "Size does not match.");
 
 // Static Helper Functions
 static FILE *LockedFileOpen(const char *p_fileName, const char *p_mode)

@@ -158,7 +158,7 @@ void ZConsoleCommand::UnregisterCommand(ZCmdHandler *p_handler)
     }
 }
 
-ZCmdNode *ZConsoleCommand::FindCommand(char *p_commandName, boolean p_searchForward, boolean p_exactMatch, ZCmdNode *p_startNode)
+ZCmdNode *ZConsoleCommand::FindCommand(char *p_commandName, bool p_searchForward, bool p_exactMatch, ZCmdNode *p_startNode)
 {
     ZCmdNode *l_cmdStruct;
 
@@ -200,7 +200,7 @@ ZCmdNode *ZConsoleCommand::FindCommand(char *p_commandName, boolean p_searchForw
     return l_cmdStruct;
 }
 
-boolean ZConsoleCommand::ExecuteCommand(char *p_cmd, char *p_cmdValue)
+bool ZConsoleCommand::ExecuteCommand(char *p_cmd, char *p_cmdValue)
 {
     ZCmdNode *l_cmdStruct = FindCommand(p_cmd, 1, 1, 0);
 

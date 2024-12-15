@@ -77,7 +77,7 @@ void *ZSysMem::NewWithRef(u32 allocSize)
     return 0;
 }
 
-boolean ZSysMem::Delete(void *p_mem)
+bool ZSysMem::Delete(void *p_mem)
 {
     // Implementation
     return 0;
@@ -148,13 +148,13 @@ void ZSysMem::UnkFunc20(i32 param)
     // Implementation
 }
 
-u32 ZSysMem::FindEqu(i32 value, boolean flag)
+u32 ZSysMem::FindEqu(i32 value, bool flag)
 {
     // Implementation
     return 0;
 }
 
-void ZSysMem::AddEqu(u32 refNum, i32 refValue, boolean flag)
+void ZSysMem::AddEqu(u32 refNum, i32 refValue, bool flag)
 {
     // Implementation
 }

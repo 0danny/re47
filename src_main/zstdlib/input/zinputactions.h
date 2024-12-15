@@ -200,14 +200,11 @@ static SInputEntry g_mouseInputList[] = {
     {0, 0, 0},
 };
 
-/*
 static SInputList g_inputLists[] = {
     {0, "KeysInputList", g_keysInputList, 165},
     {0, "MouseWheelInputList", g_mouseInputList, 3},
     {0, 0, 0, 0},
-};*/
-
-static SInputList *g_inputLists = (SInputList *)0x0FFD8828;
+};
 
 struct SInputNodeList
 {
@@ -220,14 +217,14 @@ class ZInputActions
 public:
     SInputNode *m_inputNodeList;    // 4
     i32 m_unkInt2;                  // 8
-    i32 m_unkInt3;                  // 12
+    i32 m_activeCount;              // 12
     i32 m_inputNodeCount;           // 16
     RefTab *m_actionMapDefinitions; // 20
-    RefTab *m_refTab2;              // 24
-    u8 *m_curStates;                // 28
-    f32 m_unkFloat1;                // 32
-    f32 m_unkFloat2;                // 36
-    f32 m_unkFloat3;                // 40
+    RefTab *m_activeActions;        // 24
+    bool *m_curStates;              // 28
+    f32 m_lastUpdateTime;           // 32
+    i32 m_unkInt4;                  // 36
+    f32 m_timeSinceLastUpdate;      // 40
     CFastLookup2 *m_fastLookup;     // 44
     ZActionMap *m_actionMap;        // 48
     RefTab *m_overrideList;         // 52
@@ -246,9 +243,9 @@ public:
     virtual void RemoveActionMap(ZActionMapDefinition *p_actionMapDef);
     virtual void RemoveActionMaps();
 
-    virtual boolean UnkFunc7(ZInputAction *p_action, i32 p_refNum);
-    virtual boolean UnkFunc8(char *p_actionName, u32 p_refNum);
-    virtual void UnkFunc9(RefTab *p_tab1, RefTab *p_tab2);
+    virtual bool RegisterInputAction(ZInputAction *p_action, i32 p_refNum);
+    virtual bool RegisterInputActionByName(char *p_actionName, u32 p_refNum);
+    virtual void RefreshKeyStates(RefTab *p_tab1, RefTab *p_unused);
 
     virtual ZInputAction *GetInputAction(char *p_actionName);
     virtual ZActionMap *GetActionMap(ZActionMapDefinition *p_actionMapDef);
@@ -265,7 +262,7 @@ public:
     virtual SInputEntry *GetListByIndex(i32 p_index);
 
     void RemoveOverrideList();
-    void UnkFunc20();
+    void RefreshMouseStates();
 
 }; // 56 in size.
 

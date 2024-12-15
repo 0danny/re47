@@ -107,7 +107,7 @@ void ZSysCom::ProcessDebugWnd(HWND p_hWnd)
     }
 }
 
-void ZSysCom::SendDebugMsg(WPARAM p_wParam, LPARAM p_lParam, boolean p_sendMessage)
+void ZSysCom::SendDebugMsg(WPARAM p_wParam, LPARAM p_lParam, bool p_sendMessage)
 {
     HWND l_mainHwnd = m_mainHwnd;
 

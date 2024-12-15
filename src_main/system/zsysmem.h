@@ -43,7 +43,7 @@ public:
     virtual i32 UnkFunc7(i32 param);
     virtual void *New(u32 allocSize);
     virtual void *NewWithRef(u32 allocSize);
-    virtual boolean Delete(void *p_mem);
+    virtual bool Delete(void *p_mem);
     virtual u32 UnkFunc10(const void *param1, i32 param2, i32 param3);
     virtual u32 UnkFunc11(const void **param);
     virtual u32 UnkFunc12(u32 param);
@@ -55,8 +55,8 @@ public:
     virtual i32 UnkFunc18(char *param);
     virtual i32 UnkFunc19(u32 *param1, i32 param2, i32 param3, i32 param4);
     virtual void UnkFunc20(i32 param);
-    virtual u32 FindEqu(i32 value, boolean flag);
-    virtual void AddEqu(u32 refNum, i32 refValue, boolean flag);
+    virtual u32 FindEqu(i32 value, bool flag);
+    virtual void AddEqu(u32 refNum, i32 refValue, bool flag);
     virtual i32 UnkFunc23(u32 param);
     virtual u32 *UnkFunc24(u32 *param1, u32 *param2);
 };

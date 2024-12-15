@@ -21,7 +21,7 @@ ZInputAction::ZInputAction(ZActionMap *p_actionMap, SActionOverride *p_actionOve
     char *l_actionNamePtr = p_actionOverride->actionName.m_pointer;
 
     i32 l_count = -1;
-    boolean l_flag;
+    bool l_flag;
 
     if (p_actionOverride->actionName.m_pointer)
     {
@@ -213,7 +213,7 @@ ZInputAction::~ZInputAction()
         m_nodeReferences->~RefTab();
 }
 
-void ZInputAction::AddNode(char *p_vkKey, boolean p_flag)
+void ZInputAction::AddNode(char *p_vkKey, bool p_flag)
 {
     i32 l_nodeIndex = m_actionMap->m_inputActions->GetInputNode(p_vkKey);
 
@@ -234,7 +234,7 @@ void ZInputAction::AddNode(char *p_vkKey, boolean p_flag)
     }
 }
 
-void ZInputAction::AddNode(i32 p_refNum, boolean p_flag)
+void ZInputAction::AddNode(i32 p_refNum, bool p_flag)
 {
     ZInputActions *l_inputActions = m_actionMap->m_inputActions;
 
@@ -245,9 +245,9 @@ void ZInputAction::AddNode(i32 p_refNum, boolean p_flag)
         ZInputActionBinding *l_binding = (ZInputActionBinding *)(l_refTab->Add(0) - 1);
 
         l_binding->inputAction = this;
-        l_binding->flag = p_flag;
+        l_binding->state = p_flag;
 
-        if (p_flag == m_actionMap->m_inputActions->m_inputNodeList[p_refNum].m_isToggleNode)
+        if (p_flag == m_actionMap->m_inputActions->m_inputNodeList[p_refNum].m_nodeState)
             ++m_activeNodeCount;
 
         m_nodeReferences->Add(p_refNum);
@@ -259,7 +259,7 @@ void ZInputAction::AddNode(i32 p_refNum, boolean p_flag)
     }
 }
 
-void ZInputAction::AddNodes(i32 *p_ref, boolean p_flag)
+void ZInputAction::AddNodes(i32 *p_ref, bool p_flag)
 {
     for (i32 l_item = 0; l_item != 4; ++l_item)
     {
@@ -270,7 +270,7 @@ void ZInputAction::AddNodes(i32 *p_ref, boolean p_flag)
     }
 }
 
-void ZInputAction::AddNodes(const char *p_str, boolean p_flag)
+void ZInputAction::AddNodes(const char *p_str, bool p_flag)
 {
     char *l_strBuffer;
     char l_currChar;
@@ -336,7 +336,7 @@ void ZInputAction::AddNodes(const char *p_str, boolean p_flag)
     }
 }
 
-void ZInputAction::LockInputNode(char *p_vkKey, boolean p_flag, boolean p_localMapOnly)
+void ZInputAction::LockInputNode(char *p_vkKey, bool p_flag, bool p_localMapOnly)
 {
     RefTab *l_nodeListTab;
     RefRun l_refRun;
@@ -355,7 +355,7 @@ void ZInputAction::LockInputNode(char *p_vkKey, boolean p_flag, boolean p_localM
 
             for (ZInputActionBinding *l_item = (ZInputActionBinding *)l_inputNodeRefTab->RunNxtRefPtr(&l_refRun); l_item; l_item = (ZInputActionBinding *)l_nodeListTab->RunNxtRefPtr(&l_refRun))
             {
-                if (l_item->flag == p_flag)
+                if (l_item->state == p_flag)
                 {
                     if ((!p_localMapOnly || l_item->inputAction->m_actionMap == m_actionMap) && l_item->inputAction != this)
                         ++l_item->inputAction->m_lockCount;
@@ -372,7 +372,7 @@ void ZInputAction::LockInputNode(char *p_vkKey, boolean p_flag, boolean p_localM
     }
 }
 
-void ZInputAction::UnlockInputNode(char *p_vkKey, boolean p_flag, boolean p_localMapOnly)
+void ZInputAction::UnlockInputNode(char *p_vkKey, bool p_flag, bool p_localMapOnly)
 {
     RefTab *l_nodeListTab;
     RefRun l_refRun;
@@ -391,7 +391,7 @@ void ZInputAction::UnlockInputNode(char *p_vkKey, boolean p_flag, boolean p_loca
 
             for (ZInputActionBinding *l_item = (ZInputActionBinding *)l_inputNodeRefTab->RunNxtRefPtr(&l_refRun); l_item; l_item = (ZInputActionBinding *)l_nodeListTab->RunNxtRefPtr(&l_refRun))
             {
-                if (l_item->flag == p_flag)
+                if (l_item->state == p_flag)
                 {
                     if ((!p_localMapOnly || l_item->inputAction->m_actionMap == m_actionMap) && l_item->inputAction != this)
                         --l_item->inputAction->m_lockCount;
@@ -408,7 +408,7 @@ void ZInputAction::UnlockInputNode(char *p_vkKey, boolean p_flag, boolean p_loca
     }
 }
 
-void ZInputAction::MakeActionExclusiveOwnerOfNodes(boolean p_lock)
+void ZInputAction::MakeActionExclusiveOwnerOfNodes(bool p_lock)
 {
     RefRun l_refRun;
     RefRun l_refRun2;
@@ -444,7 +444,7 @@ void ZInputAction::MakeActionExclusiveOwnerOfNodes(boolean p_lock)
     }
 }
 
-void ZInputAction::DependOnActionsNodes(const char *p_str, boolean p_flag)
+void ZInputAction::DependOnActionsNodes(const char *p_str, bool p_flag)
 {
     char *l_strBuffer;
     char l_currChar;
@@ -510,7 +510,7 @@ void ZInputAction::DependOnActionsNodes(const char *p_str, boolean p_flag)
     }
 }
 
-void ZInputAction::DependOnActionNodes(const char *p_str, boolean p_flag)
+void ZInputAction::DependOnActionNodes(const char *p_str, bool p_flag)
 {
     if (!m_dependentNodes)
     {
@@ -527,45 +527,46 @@ void ZInputAction::DependOnActionNodes(const char *p_str, boolean p_flag)
     l_actionNode->flag = p_flag;
 }
 
-boolean ZInputAction::CheckDependencies()
+bool ZInputAction::CheckDependencies()
 {
-    ZInputAction *l_actionBase1;
     RefRun l_refRun;
 
     if (!m_dependentNodes)
-        return 1;
+        return true;
 
     m_dependentNodes->RunInitNxtRef(&l_refRun);
-    ZActionNode *l_nxtRef = (ZActionNode *)m_dependentNodes->RunNxtRefPtr(&l_refRun);
+    ZActionNode *l_nextNode = (ZActionNode *)m_dependentNodes->RunNxtRefPtr(&l_refRun);
 
-    if (!l_nxtRef)
-        return 1;
+    if (!l_nextNode)
+        return true;
 
     char *l_nodeName;
+    ZInputAction *l_actionBase1;
 
-    while (1)
+    while (true)
     {
-        l_nodeName = l_nxtRef->nodeName;
+        l_nodeName = l_nextNode->nodeName;
 
-        if (!l_nxtRef->flag)
+        if (!l_nextNode->flag)
             break;
 
         l_actionBase1 = m_actionMap->GetActionBase(l_nodeName);
 
         if (l_actionBase1 && !l_actionBase1->m_unkByte1)
-            return 0;
-    LABEL_9:
+            return false;
 
-        l_nxtRef = (ZActionNode *)m_dependentNodes->RunNxtRefPtr(&l_refRun);
+    NEXT_REF_LBL:
 
-        if (!l_nxtRef)
-            return 1;
+        l_nextNode = (ZActionNode *)m_dependentNodes->RunNxtRefPtr(&l_refRun);
+
+        if (!l_nextNode)
+            return true;
     }
 
     ZInputAction *l_actionBase2 = m_actionMap->GetActionBase(l_nodeName);
 
-    if (!l_actionBase2 || !l_actionBase2)
-        goto LABEL_9;
+    if (!l_actionBase2 || !l_actionBase2->m_unkByte1)
+        goto NEXT_REF_LBL;
 
-    return 0;
+    return false;
 }

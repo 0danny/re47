@@ -26,9 +26,9 @@ public:
     ZMasterControl();
     virtual ~ZMasterControl();
 
-    virtual void UnkFunc1(char *p_bankName, char *p_fileName, boolean p_flag);
-    virtual boolean UnkFunc2(i32 p_bankId, i32 p_objectId);
-    virtual boolean UnkFunc3(i32 p_masterBank, char *p_str);
+    virtual void UnkFunc1(char *p_bankName, char *p_fileName, bool p_flag);
+    virtual bool UnkFunc2(i32 p_bankId, i32 p_objectId);
+    virtual bool UnkFunc3(i32 p_masterBank, char *p_str);
     virtual u32 *UnkFunc4(char *p_str, i32 p_unkInt);
     virtual MyStr *UnkFunc5(MyStr *p_str, char *p_str2);
     virtual char *UnkFunc6(i32 p_unkInt1, i32 p_unkInt2);

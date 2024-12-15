@@ -9,7 +9,7 @@ ZActionMap::ZActionMap(ZInputActions *p_inputActions, ZActionMapDefinition *p_ac
     m_unkInt1 = 1;
     m_actionMapDef = p_actionMapDef;
     m_mapName = 0;
-    m_unkInt3 = 0;
+    m_activeCount = 0;
 
     i32 l_bindingCount = 0;
 
@@ -192,7 +192,7 @@ ZInputAction *ZActionMap::GetActionBase(char *p_actionName)
     return l_ref;
 }
 
-void ZActionMap::LockActions(char *p_str, boolean p_flag)
+void ZActionMap::LockActions(char *p_str, bool p_flag)
 {
     RefTab *l_nxtRef;
     RefRun l_refRun;
@@ -207,7 +207,7 @@ void ZActionMap::LockActions(char *p_str, boolean p_flag)
 
         for (ZInputActionBinding *l_item = (ZInputActionBinding *)l_refTab->RunNxtRefPtr(&l_refRun); l_item; l_item = (ZInputActionBinding *)l_nxtRef->RunNxtRefPtr(&l_refRun))
         {
-            if (l_item->flag == p_flag)
+            if (l_item->state == p_flag)
             {
                 ZInputAction *l_binding = l_item->inputAction;
 
@@ -220,7 +220,7 @@ void ZActionMap::LockActions(char *p_str, boolean p_flag)
     }
 }
 
-void ZActionMap::UnlockActions(char *p_str, boolean p_flag)
+void ZActionMap::UnlockActions(char *p_str, bool p_flag)
 {
     RefTab *l_nxtRef;
     RefRun l_refRun;
@@ -235,7 +235,7 @@ void ZActionMap::UnlockActions(char *p_str, boolean p_flag)
 
         for (ZInputActionBinding *l_item = (ZInputActionBinding *)l_refTab->RunNxtRefPtr(&l_refRun); l_item; l_item = (ZInputActionBinding *)l_nxtRef->RunNxtRefPtr(&l_refRun))
         {
-            if (l_item->flag == p_flag)
+            if (l_item->state == p_flag)
             {
                 ZInputAction *l_binding = l_item->inputAction;
 
@@ -250,15 +250,15 @@ void ZActionMap::UnlockActions(char *p_str, boolean p_flag)
 
 void ZActionMap::ActivateMap()
 {
-    --m_unkInt3;
+    --m_activeCount;
 }
 
 void ZActionMap::DeactivateMap()
 {
-    ++m_unkInt3;
+    ++m_activeCount;
 }
 
-boolean ZActionMap::IsActivated()
+bool ZActionMap::IsActivated()
 {
-    return m_unkInt3 > 0;
+    return m_activeCount > 0;
 }

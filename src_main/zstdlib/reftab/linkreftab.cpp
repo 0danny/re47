@@ -435,7 +435,7 @@ u32 *LinkRefTab::InsertBefore(u32 *p_uintPtr, u32 p_refNum)
     else
     {
         RefRun *l_dataRefRun = (RefRun *)*l_data2;
-        boolean l_check = *l_data2 == 0;
+        bool l_check = *l_data2 == 0;
         l_data->prev = (RefRun *)*l_data2;
 
         l_data->next = (RefRun *)l_data2;

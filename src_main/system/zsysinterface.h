@@ -9,17 +9,19 @@
 #include "zstdlib/zmastercontrol.h"
 #include "common.h"
 
+#pragma pack(push, 1)
+
 class ZSysInterface
 {
 public:
     ZSysInterface(HINSTANCE p_dllHinst);
 
-    virtual boolean UnkFunc0();
+    virtual bool UnkFunc0();
 
     virtual ~ZSysInterface();
 
     virtual i32 InitializeResources();
-    virtual boolean ProcessWindowMessages(HWND p_hWnd);
+    virtual bool ProcessWindowMessages(HWND p_hWnd);
     virtual void UnkFunc3();
     virtual LRESULT DispatchAndAllocateMessage(WPARAM, const void *, i32);
     virtual char UnkFunc5(const char *, i32);
@@ -37,7 +39,7 @@ public:
     virtual char UnkFunc15(i32);
     virtual char UnkFunc16(i32);
 
-    virtual boolean IsKeyPressed(i32 p_vKey);
+    virtual bool IsKeyPressed(i32 p_vKey);
     virtual char UnkFunc18(i32);
     virtual char UnkFunc19(i32);
     virtual WORD ConvertVirtualKeyToAscii(UINT p_keyCode);
@@ -199,7 +201,7 @@ public:
     u8 m_disableTextures;
     u8 m_unkByte25;
     u8 m_isInitialized;
-    boolean m_isMessagingEnabled;
+    bool m_isMessagingEnabled;
     u8 m_disableConfig;
     u8 m_unkByte27;
     u8 m_unkByte28;
@@ -242,6 +244,8 @@ public:
     i32 m_unkInt120;
     void *m_subFFAE110;
 };
+
+#pragma pack(pop)
 
 extern __declspec(dllimport) ZSysInterface *g_pSysInterface;
 

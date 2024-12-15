@@ -938,7 +938,7 @@ void CSystemProbe::ClassifyCPU()
 
 i32 CSystemProbe::LoadDDraw()
 {
-    boolean l_validLoad = 0;
+    bool l_validLoad = 0;
 
     g_ddrawHandle = GetModuleHandleA("DDRAW");
 
@@ -1053,7 +1053,7 @@ BOOL CALLBACK CSystemProbe::EnumDDCallback(GUID FAR *p_lpGUID, LPSTR p_lpDriverD
 
 i32 CSystemProbe::LoadOpenGL()
 {
-    boolean l_flag = 0;
+    bool l_flag = 0;
 
     g_openGLHandle = GetModuleHandleA("OPENGL32");
 
@@ -1143,7 +1143,7 @@ i32 CSystemProbe::LoadGlide()
     // TODO: Add ZRender VT call, see original function.
 
     i32 l_numBoards = 0;
-    boolean l_glideLoaded = 0;
+    bool l_glideLoaded = 0;
 
     HMODULE l_glideHandle = GetModuleHandleA("GLIDE3X");
     g_glideHandle = l_glideHandle;

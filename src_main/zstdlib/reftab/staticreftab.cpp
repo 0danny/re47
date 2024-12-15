@@ -193,7 +193,7 @@ void StaticRefTab::DelRefPtr(u32 *p_refNum)
     }
 }
 
-boolean StaticRefTab::Exists(u32 p_refNum)
+bool StaticRefTab::Exists(u32 p_refNum)
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 668);
     l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 668);
@@ -245,7 +245,7 @@ void StaticRefTab::Remove(u32 p_refNum)
     DebugBreak();
 }
 
-boolean StaticRefTab::RemoveIfExists(u32 p_refNum)
+bool StaticRefTab::RemoveIfExists(u32 p_refNum)
 {
     ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 696);
     l_sysCom->LogMessage("INT3 in %s at line %d", "Z:\\Engine\\ZStdLib\\Source\\RefTab.cpp", 696);

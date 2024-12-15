@@ -36,7 +36,7 @@ public:
 
     virtual ~CFastLookupFileCache();
     virtual void Add(const char *p_str, IOZip_LocalFileHeader *p_localFileHeader, u32 p_data);
-    virtual boolean Lookup(const char *p_str, IOZip_LocalFileHeader *p_localFileHeader, u32 *p_result);
+    virtual bool Lookup(const char *p_str, IOZip_LocalFileHeader *p_localFileHeader, u32 *p_result);
     virtual void Invalidate(const char *p_str);
     virtual void Flush();
 

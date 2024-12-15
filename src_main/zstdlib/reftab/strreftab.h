@@ -21,11 +21,11 @@ public:
     virtual char *AddStr(char *const p_str);
     virtual char *AddAlways(char *const p_str);
     virtual void RemoveStr(char *const p_str);
-    virtual boolean Exists(char *const p_str);
+    virtual bool Exists(char *const p_str);
     virtual void Sort();
 
     static i32 Compare(const void *p_a, const void *p_b);
-    static boolean CompareCall(const char *p_str1, const char *p_str2);
+    static bool CompareCall(const char *p_str1, const char *p_str2);
 
     void Destroy();
 };

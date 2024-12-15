@@ -3,9 +3,6 @@
 
 ZInputActions::ZInputActions()
 {
-    // Yes this is intentional,
-    // You would think that it would set the total count of the keys input list to 165,
-    // but instead it sets it to 0 and sets the mouse input list count to 165.
     if (g_inputLists[0].list)
     {
         SInputList *l_curList = &g_inputLists[0];
@@ -37,7 +34,7 @@ ZInputActions::ZInputActions()
 
     m_inputNodeCount = l_mainNodeCount;
 
-    m_curStates = new u8[m_inputNodeCount];
+    m_curStates = new bool[m_inputNodeCount];
     memset(m_curStates, 0, m_inputNodeCount);
 
     SInputNodeList *l_listAlloc = new SInputNodeList;
@@ -64,13 +61,13 @@ ZInputActions::ZInputActions()
     m_actionMapDefinitions = new RefTab(4, 0);
     m_unkInt2 = 0;
 
-    m_refTab2 = new RefTab(4, 0);
-    m_unkFloat3 = 0.0;
-    m_unkFloat1 = g_pSysInterface->m_unkInt70;
-    m_unkFloat2 = 0.0;
+    m_activeActions = new RefTab(4, 0);
+    m_timeSinceLastUpdate = 0.0;
+    m_lastUpdateTime = g_pSysInterface->m_unkInt70;
+    m_unkInt4 = 0;
 
     m_fastLookup = new CFastLookup2(32);
-    m_unkInt3 = 0;
+    m_activeCount = 0;
     m_actionMap = 0;
     m_overrideList = 0;
 }
@@ -81,8 +78,8 @@ ZInputActions::~ZInputActions()
 
     RemoveOverrideList();
 
-    if (m_refTab2)
-        m_refTab2->~RefTab();
+    if (m_activeActions)
+        m_activeActions->~RefTab();
 
     if (m_actionMapDefinitions)
     {
@@ -120,8 +117,6 @@ ZInputActions::~ZInputActions()
 
 void ZInputActions::OverrideActions(RefTab *l_actionsList)
 {
-    printf("[HOOK]: ZInputActions::OverrideActions called\n");
-
     RefRun l_refRun;
 
     if (l_actionsList)
@@ -137,14 +132,6 @@ void ZInputActions::OverrideActions(RefTab *l_actionsList)
 
 void ZInputActions::OverrideAction(SActionOverride *p_actionOverride)
 {
-    printf("[HOOK]: ZInputActions::OverrideAction called -> %s\n", p_actionOverride->actionName.m_pointer);
-
-    /*
-    typedef void(__fastcall * OverrideAction_t)(ZInputActions * _this, void *EDX, SActionOverride *p_actionOverride);
-    OverrideAction_t OverrideAction = (OverrideAction_t)0x0FFA14A0;
-    OverrideAction(this, 0, p_actionOverride);
-    return;*/
-
     RefRun l_refRun;
     SActionOverride *l_actionOverridePtr;
     SActionOverride *l_actionOverride;
@@ -196,24 +183,22 @@ COPY_OVERRIDE:
 
     i32 l_index = 0;
     i32 *l_arrayPtr = p_actionOverride->unkArray;
-    i32 l_offset = (char *)l_actionOverride - (char *)p_actionOverride;
+    i32 l_offset = (char *)l_actionOverride - (char *)p_actionOverride; // yes, this actually is the difference between the two pointers
 
     while (*l_arrayPtr)
     {
-        i32 listSize = l_keysInputList->listSize;
         i32 l_list = 0;
-        i32 l_loopCount = 0;
         i32 l_finalIndex = 0;
 
-        if (listSize)
+        if (l_keysInputList->listSize)
         {
-            for (i32 l_list = 0; l_list < listSize; ++l_list)
+            for (l_list = 0; l_list < l_keysInputList->listSize; ++l_list)
             {
                 if (l_keysInputListPtr->list[l_list].index == *l_arrayPtr)
                     break;
             }
 
-            if (l_list == listSize)
+            if (l_list == l_keysInputList->listSize)
                 goto NEGATIVE_INDEX;
 
             l_finalIndex = l_list + l_keysInputListPtr->totalCount;
@@ -224,7 +209,8 @@ COPY_OVERRIDE:
             l_finalIndex = -1;
         }
 
-        *(i32 *)((char *)l_arrayPtr + l_offset) = l_finalIndex;
+        *(i32 *)((char *)l_arrayPtr + l_offset) = l_finalIndex; // no idea
+        // l_offset cant be array index, during debugging the number is very large.
 
         if (l_finalIndex == -1)
         {
@@ -387,26 +373,22 @@ void ZInputActions::RemoveActionMaps()
     }
 }
 
-// Disable frame pointer omission
-// These functions access the return address for some reason
-// Therefore we need to ensure its a stack frame
+// Disable frame pointer omission, These functions access the return address for some reason, Therefore we need to ensure its a stack frame
 #pragma optimize("y", off)
 
-boolean ZInputActions::UnkFunc7(ZInputAction *p_action, i32 p_refNum)
+bool ZInputActions::RegisterInputAction(ZInputAction *p_action, i32 p_refNum)
 {
     RefRun l_refRun;
 
     u32 l_refNum = p_refNum;
 
     if (!p_refNum)
-    {
         l_refNum = GetReturnAddress();
-    }
 
     if (!p_action)
         return 0;
 
-    if (m_unkInt3)
+    if (m_activeCount)
         return 0;
 
     if (p_action->m_actionMap->IsActivated())
@@ -503,7 +485,7 @@ ADD_PRESS_REF:
     return 1;
 }
 
-boolean ZInputActions::UnkFunc8(char *p_actionName, u32 p_refNum)
+bool ZInputActions::RegisterInputActionByName(char *p_actionName, u32 p_refNum)
 {
     if (!p_refNum)
         p_refNum = GetReturnAddress();
@@ -512,7 +494,7 @@ boolean ZInputActions::UnkFunc8(char *p_actionName, u32 p_refNum)
 
     if (l_ref)
     {
-        return !l_ref->m_actionMap->IsActivated() && UnkFunc7(l_ref, p_refNum);
+        return !l_ref->m_actionMap->IsActivated() && RegisterInputAction(l_ref, p_refNum);
     }
     else
     {
@@ -533,197 +515,168 @@ boolean ZInputActions::UnkFunc8(char *p_actionName, u32 p_refNum)
 
 #pragma optimize("", on) // Enable frame pointer omission
 
-// Function not working yet
-void ZInputActions::UnkFunc9(RefTab *p_tab1, RefTab *p_tab2)
+void ZInputActions::RefreshKeyStates(RefTab *p_tab1, RefTab *p_unused)
 {
-    printf("[HOOK]: ZInputActions::UnkFunc9 called\n");
+    // This function runs every single frame, its responsible for detecting the key presses
+    // and mouse presses and updating the actions accordingly.
 
-    typedef void(__fastcall * UnkFunc9_t)(ZInputActions * _this, void *EDX, RefTab *p_tab1, RefTab *p_tab2);
-    UnkFunc9_t UnkFunc9 = (UnkFunc9_t)0x0FFA1E80;
-    UnkFunc9(this, 0, p_tab1, p_tab2);
-    return;
+    RefRun l_refRun1;
+    RefRun l_refRun2;
+    RefRun l_refRun3;
+    RefRun l_refRun4;
 
-    RefTab *l_refTab2;           // ecx
-    ZInputAction *i;             // eax
-    SInputEntry *list;           // eax
-    int v7;                      // esi
-    SInputEntry **l_list;        // ecx
-    SInputList *v9;              // esi
-    int totalCount;              // edx
-    int v11;                     // ecx
-    int v12;                     // esi
-    int v13;                     // ebp
-    SInputNode *l_inputNodeList; // edx
-    u8 v15;                      // bl
-    RefTab *l_refTab;            // ecx
-    RefTab *l_refTab3;           // ecx
-    ZInputActionBinding *v18;    // eax
-    bool v19;                    // zf
-    ZInputAction *inputAction;   // esi
-    int l_activeNodeCount;       // eax
-    int v22;                     // eax
-    RefTab *l_refTab4;           // ecx
-    RefTab *l_refTab2_1;         // ecx
-    ZInputAction *j;             // esi
-    u8 l_unkByte2;               // al
-    RefTab *l_holdHandlers;      // ecx
-    RefTab *l_pressHandlers;     // ecx
-    RefTab *l_releaseHandlers;   // ecx
-    int listSize;                // [esp+38h] [ebp-34h]
-    int v31;                     // [esp+38h] [ebp-34h]
-    RefRun v32;                  // [esp+3Ch] [ebp-30h] BYREF
-    RefRun v33;                  // [esp+48h] [ebp-24h] BYREF
-    RefRun v34;                  // [esp+54h] [ebp-18h] BYREF
-    RefRun v35;                  // [esp+60h] [ebp-Ch] BYREF
-
-    l_refTab2 = this->m_refTab2;
-    if (l_refTab2)
+    // Clear the state of any active actions
+    if (m_activeActions)
     {
-        l_refTab2->RunInitNxtRef(&v32);
-        for (i = (ZInputAction *)this->m_refTab2->RunNxtRef(&v32);
-             v32.prev;
-             i = (ZInputAction *)this->m_refTab2->RunNxtRef(&v32))
+        m_activeActions->RunInitNxtRef(&l_refRun1);
+
+        for (ZInputAction *l_activeAction = (ZInputAction *)m_activeActions->RunNxtRef(&l_refRun1); l_refRun1.prev; l_activeAction = (ZInputAction *)m_activeActions->RunNxtRef(&l_refRun1))
         {
-            i->m_unkByte2 = i->m_unkByte1;
-            this->m_refTab2->RunDelRef(&v32);
+            l_activeAction->m_unkByte2 = l_activeAction->m_unkByte1;
+            m_activeActions->RunDelRef(&l_refRun1);
         }
     }
 
-    list = g_inputLists[0].list;
-    v7 = 0;
-    if (g_inputLists[0].list)
-    {
-        l_list = &g_inputLists[0].list;
-        while (list != g_inputLists[0].list)
-        {
-            list = l_list[4];
-            l_list += 4;
-            ++v7;
-            if (!list)
-                goto LABEL_8;
-        }
-        v9 = &g_inputLists[v7];
-    }
-    else
-    {
-    LABEL_8:
-        v9 = 0;
-    }
+    // Update the input states using curStates (0 or 1) (pressed or not pressed)
+    // Both the mouse and keyboard states are housed in curStates
+    // Where the first 165 elements are the keyboard states and the last 3 are the mouse states
+    SInputList *l_keysList = &g_inputLists[0];
+    i32 l_totalCount = l_keysList->totalCount;
 
-    totalCount = v9->totalCount;
-
-    if (v9->listSize)
+    if (l_keysList->listSize)
     {
-        v11 = 0;
-        listSize = v9->listSize;
+        i32 l_stateIndex = 0;
+        i32 l_keysListSize = l_keysList->listSize;
+
         do
         {
-            m_curStates[totalCount++] = g_pSysInterface->m_unkPad23[15 * v9->list[v11++].index + 6];
-            --listSize;
-        } while (listSize);
+            // TODO: Reverse this struct
+            // Its presuably a struct that contains the input states
+            m_curStates[l_totalCount++] = (bool)g_pSysInterface->m_unkPad23[15 * l_keysList->list[l_stateIndex++].index + 6];
+            --l_keysListSize;
+
+        } while (l_keysListSize);
     }
 
-    UnkFunc20();
+    // Update the mouse states
+    RefreshMouseStates();
 
-    v12 = 0;
-    v31 = 0;
+    i32 l_curNodeIndex = 0;
+
     if (m_inputNodeCount)
     {
-        v13 = 0;
         do
         {
-            l_inputNodeList = m_inputNodeList;
-            v15 = m_curStates[v12];
-            if (l_inputNodeList[v13].m_isToggleNode != v15)
+            bool l_curState = m_curStates[l_curNodeIndex];
+
+            // Check if the state of the current node has changed
+            if (m_inputNodeList[l_curNodeIndex].m_nodeState != l_curState)
             {
-                l_inputNodeList[v13].m_isToggleNode = v15;
-                l_refTab = m_inputNodeList[v13].m_refTab;
-                if (l_refTab)
+                m_inputNodeList[l_curNodeIndex].m_nodeState = l_curState;
+
+                if (m_inputNodeList[l_curNodeIndex].m_refTab)
                 {
-                    l_refTab->RunInitNxtRef(&v35);
-                    l_refTab3 = m_inputNodeList[v13].m_refTab;
-                    v18 = (ZInputActionBinding *)l_refTab3->RunNxtRefPtr(&v35);
-                    if (v18)
+                    m_inputNodeList[l_curNodeIndex].m_refTab->RunInitNxtRef(&l_refRun4);
+
+                    ZInputActionBinding *l_nextRefPtr = (ZInputActionBinding *)m_inputNodeList[l_curNodeIndex].m_refTab->RunNxtRefPtr(&l_refRun4);
+
+                    if (l_nextRefPtr)
                     {
+
+                        // Loop through all the input actions that are bound to this node
                         do
                         {
-                            v19 = v18->flag == v15;
-                            inputAction = v18->inputAction;
-                            l_activeNodeCount = v18->inputAction->m_activeNodeCount;
-                            if (v19)
-                                v22 = l_activeNodeCount + 1;
-                            else
-                                v22 = l_activeNodeCount - 1;
-                            inputAction->m_activeNodeCount = v22;
-                            if (!m_refTab2->Exists((u32)inputAction))
-                                m_refTab2->Add((UINT)inputAction);
+                            ZInputAction *l_inputAction = l_nextRefPtr->inputAction;
+                            i32 l_activeNodeCount = l_nextRefPtr->inputAction->m_activeNodeCount;
+                            i32 l_newNodeCount = 0;
 
-                            l_refTab4 = m_inputNodeList[v13].m_refTab;
-                            v18 = (ZInputActionBinding *)l_refTab4->RunNxtRefPtr(&v35);
-                        } while (v18);
-                        v12 = v31;
+                            // If the state of the next ref pointer is the same as the current state
+                            if (l_nextRefPtr->state == l_curState)
+                                l_newNodeCount = l_activeNodeCount + 1; // Increment the active node count
+                            else
+                                l_newNodeCount = l_activeNodeCount - 1; // Decrement the active node count
+
+                            l_inputAction->m_activeNodeCount = l_newNodeCount;
+
+                            // Add the action to the active actions list
+                            if (!m_activeActions->Exists((u32)l_inputAction))
+                                m_activeActions->Add((u32)l_inputAction);
+
+                            l_nextRefPtr = (ZInputActionBinding *)m_inputNodeList[l_curNodeIndex].m_refTab->RunNxtRefPtr(&l_refRun4);
+
+                        } while (l_nextRefPtr);
                     }
                 }
             }
-            ++v12;
-            ++v13;
-            v31 = v12;
-        } while (v12 != m_inputNodeCount);
+
+            ++l_curNodeIndex;
+
+        } while (l_curNodeIndex != m_inputNodeCount);
     }
-    l_refTab2_1 = m_refTab2;
-    if (l_refTab2_1)
+
+    if (m_activeActions)
     {
-        l_refTab2_1->RunInitNxtRef(&v35);
-        for (j = (ZInputAction *)m_refTab2->RunNxtRef(&v35);
-             v35.prev;
-             j = (ZInputAction *)m_refTab2->RunNxtRef(&v35))
+        m_activeActions->RunInitNxtRef(&l_refRun4);
+
+        // Loop through all the active actions
+        for (ZInputAction *l_activeAction = (ZInputAction *)m_activeActions->RunNxtRef(&l_refRun4); l_refRun4.prev; l_activeAction = (ZInputAction *)m_activeActions->RunNxtRef(&l_refRun4))
         {
-            l_unkByte2 = j->m_unkByte2;
-            if (j->m_totalNodeCount == j->m_activeNodeCount)
+            bool l_unkByte2 = l_activeAction->m_unkByte2;
+
+            // If the total node count is equal to the active node count
+            // e.g. all the nodes are active which means the action is true, execute the action
+            if (l_activeAction->m_totalNodeCount == l_activeAction->m_activeNodeCount)
             {
-                if (!l_unkByte2 && !j->m_unkByte1)
+                if (!l_unkByte2 && !l_activeAction->m_unkByte1)
                 {
-                    l_holdHandlers = j->m_holdHandlers;
-                    if (l_holdHandlers)
+                    if (l_activeAction->m_holdHandlers)
                     {
-                        l_holdHandlers->RunInitNxtRef(&v32);
-                        j->m_holdHandlers->RunNxtRef(&v32);
-                        while (v32.prev)
+                        l_activeAction->m_holdHandlers->RunInitNxtRef(&l_refRun1);
+                        l_activeAction->m_holdHandlers->RunNxtRef(&l_refRun1);
+
+                        while (l_refRun1.prev)
                         {
-                            j->m_holdHandlers->RunDelRef(&v32);
-                            j->m_holdHandlers->RunNxtRef(&v32);
+                            l_activeAction->m_holdHandlers->RunDelRef(&l_refRun1);
+                            l_activeAction->m_holdHandlers->RunNxtRef(&l_refRun1);
                         }
                     }
-                    j->m_unkByte1 = 1;
-                    j->m_unkFloat2 = g_pSysInterface->m_unkInt80;
-                    p_tab1->Add((UINT)j);
+
+                    l_activeAction->m_unkByte1 = true;
+                    l_activeAction->m_unkFloat2 = g_pSysInterface->m_unkInt80;
+
+                    p_tab1->Add((u32)l_activeAction);
                 }
             }
-            else if (l_unkByte2 && j->m_unkByte1)
+            else if (l_unkByte2 && l_activeAction->m_unkByte1)
             {
-                j->m_unkByte1 = 0;
-                j->m_unkFloat1 = g_pSysInterface->m_unkInt80;
-                p_tab1->Add((UINT)j);
-                l_pressHandlers = j->m_pressHandlers;
-                if (l_pressHandlers)
+                // input is no longer active
+
+                l_activeAction->m_unkByte1 = false;
+                l_activeAction->m_unkFloat1 = g_pSysInterface->m_unkInt80;
+
+                p_tab1->Add((u32)l_activeAction);
+
+                if (l_activeAction->m_pressHandlers)
                 {
-                    l_pressHandlers->RunInitNxtRef(&v33);
-                    j->m_pressHandlers->RunNxtRef(&v33);
-                    while (v33.prev)
+                    l_activeAction->m_pressHandlers->RunInitNxtRef(&l_refRun2);
+                    l_activeAction->m_pressHandlers->RunNxtRef(&l_refRun2);
+
+                    while (l_refRun2.prev)
                     {
-                        j->m_pressHandlers->RunDelRef(&v33);
-                        j->m_pressHandlers->RunNxtRef(&v33);
+                        l_activeAction->m_pressHandlers->RunDelRef(&l_refRun2);
+                        l_activeAction->m_pressHandlers->RunNxtRef(&l_refRun2);
                     }
                 }
-                l_releaseHandlers = j->m_releaseHandlers;
-                if (l_releaseHandlers)
+
+                if (l_activeAction->m_releaseHandlers)
                 {
-                    l_releaseHandlers->RunInitNxtRef(&v34);
-                    j->m_releaseHandlers->RunNxtRef(&v34);
-                    while (v34.prev)
+                    l_activeAction->m_releaseHandlers->RunInitNxtRef(&l_refRun3);
+                    l_activeAction->m_releaseHandlers->RunNxtRef(&l_refRun3);
+
+                    while (l_refRun3.prev)
                     {
-                        j->m_releaseHandlers->RunDelRef(&v34);
-                        j->m_releaseHandlers->RunNxtRef(&v34);
+                        l_activeAction->m_releaseHandlers->RunDelRef(&l_refRun3);
+                        l_activeAction->m_releaseHandlers->RunNxtRef(&l_refRun3);
                     }
                 }
             }
@@ -830,12 +783,12 @@ i32 ZInputActions::GetInputNode(char *p_vkName)
 
 void ZInputActions::EnableActions()
 {
-    --m_unkInt3;
+    --m_activeCount;
 }
 
 void ZInputActions::DisableActions()
 {
-    ++m_unkInt3;
+    ++m_activeCount;
 }
 
 void ZInputActions::ActivateMap(char *p_str)
@@ -903,27 +856,27 @@ void ZInputActions::RemoveOverrideList()
     }
 }
 
-void ZInputActions::UnkFunc20()
+void ZInputActions::RefreshMouseStates()
 {
     i32 l_totalCount = g_inputLists[1].totalCount;
 
     m_curStates[l_totalCount] = 0;
     m_curStates[l_totalCount + 1] = 0;
 
-    m_unkFloat3 = g_pSysInterface->m_unkInt70 - m_unkFloat1 + m_unkFloat3;
-    m_unkFloat1 = g_pSysInterface->m_unkInt70;
+    m_timeSinceLastUpdate = g_pSysInterface->m_unkInt70 - m_lastUpdateTime + m_timeSinceLastUpdate;
+    m_lastUpdateTime = g_pSysInterface->m_unkInt70;
 
-    f64 l_num1;
+    i32 l_num1;
 
     if (g_pSysInterface->m_unkInt67)
-        l_num1 = (m_unkFloat3 / g_pSysInterface->m_unkInt67);
+        l_num1 = (m_timeSinceLastUpdate / g_pSysInterface->m_unkInt67);
 
-    f32 num2 = m_unkFloat2;
-    m_unkFloat2 = l_num1;
+    i32 l_num2 = m_unkInt4;
+    m_unkInt4 = l_num1;
 
-    if (l_num1 - num2 <= 0)
+    if (l_num1 - l_num2 <= 0)
     {
-        if (l_num1 - num2 < 0)
+        if (l_num1 - l_num2 < 0)
             m_curStates[l_totalCount + 1] = 1;
     }
     else

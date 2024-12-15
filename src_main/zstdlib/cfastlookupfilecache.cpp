@@ -41,7 +41,7 @@ void CFastLookupFileCache::Add(const char *p_str, IOZip_LocalFileHeader *p_local
     m_refTab32.Add(l_refNum);
 }
 
-boolean CFastLookupFileCache::Lookup(const char *p_str, IOZip_LocalFileHeader *p_localFileHeader, u32 *p_result)
+bool CFastLookupFileCache::Lookup(const char *p_str, IOZip_LocalFileHeader *p_localFileHeader, u32 *p_result)
 {
     CFileCache *l_header = (CFileCache *)m_fastLookup.GetLowerCase(p_str);
 

@@ -141,7 +141,7 @@ void RefTab::DelRefPtr(u32 *p_refNum)
 }
 
 // MATCHED
-boolean RefTab::Exists(u32 p_refNum)
+bool RefTab::Exists(u32 p_refNum)
 {
     if (!this)
         return 0;
@@ -286,7 +286,7 @@ void RefTab::Remove(u32 p_refNum)
 }
 
 // MATCHED
-boolean RefTab::RemoveIfExists(u32 p_refNum)
+bool RefTab::RemoveIfExists(u32 p_refNum)
 {
     RefRun l_refRun;
 
@@ -331,7 +331,7 @@ void RefTab::RunDelRef(RefRun *p_refRun)
     {
         l_size = m_size;
 
-        boolean l_less0 = (i32)p_refRun->next - l_size < 0;
+        bool l_less0 = (i32)p_refRun->next - l_size < 0;
         p_refRun->next = (RefRun *)((char *)p_refRun->next - l_size);
 
         if (l_less0)
@@ -355,7 +355,7 @@ void RefTab::RunDelRef(RefRun *p_refRun)
     if (!l_tail2->usedUnits)
     {
         RefRun *l_prev = l_tail2->prev;
-        boolean l_flag3 = l_prev == 0;
+        bool l_flag3 = l_prev == 0;
         m_tail = l_prev;
 
         if (l_flag3)
@@ -482,7 +482,7 @@ u32 *RefTab::RunPrevRefPtr(RefRun *p_refRun)
 
     i32 l_size = m_size;
 
-    boolean l_flag = (i32)p_refRun->next - l_size < 0;
+    bool l_flag = (i32)p_refRun->next - l_size < 0;
     p_refRun->next = (RefRun *)((char *)p_refRun->next - l_size);
 
     if (l_flag)

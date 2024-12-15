@@ -14,7 +14,7 @@ public:
     SInputNode()
     {
         m_refTab = new RefTab(4, 1);
-        m_isToggleNode = 0;
+        m_nodeState = 0;
     }
 
     ~SInputNode()
@@ -25,7 +25,7 @@ public:
 
     ZInputActions *m_parent; // 0
     RefTab *m_refTab;        // 4
-    u8 m_isToggleNode;       // 8
+    bool m_nodeState;        // 8
 
 }; // 9 in size.
 

@@ -19,8 +19,8 @@ public:
 
     virtual ~AllocRefTab();
     virtual u32 NewRef();
-    virtual boolean FreeRef(u32 p_refNum);
-    virtual boolean CheckRefActive(u32 p_refNum);
+    virtual bool FreeRef(u32 p_refNum);
+    virtual bool CheckRefActive(u32 p_refNum);
     virtual void PrintRef(u32 p_refNum);
 };
 

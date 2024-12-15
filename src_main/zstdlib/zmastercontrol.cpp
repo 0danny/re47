@@ -19,7 +19,7 @@ ZMasterControl::~ZMasterControl()
         m_refTab->~RefTab();
 }
 
-void ZMasterControl::UnkFunc1(char *p_bankName, char *p_fileName, boolean p_flag)
+void ZMasterControl::UnkFunc1(char *p_bankName, char *p_fileName, bool p_flag)
 {
     printf("ZMasterControl::UnkFunc1(%s, %s, %d)\n", p_bankName, p_fileName, p_flag);
 
@@ -75,7 +75,7 @@ void ZMasterControl::UnkFunc1(char *p_bankName, char *p_fileName, boolean p_flag
     }
 }
 
-boolean ZMasterControl::UnkFunc2(i32 p_bankId, i32 p_objectId)
+bool ZMasterControl::UnkFunc2(i32 p_bankId, i32 p_objectId)
 {
     printf("ZMasterControl::UnkFunc2(%d, %d)\n", p_bankId, p_objectId);
 
@@ -87,7 +87,7 @@ boolean ZMasterControl::UnkFunc2(i32 p_bankId, i32 p_objectId)
     return TRUE;
 }
 
-boolean ZMasterControl::UnkFunc3(i32 p_masterBank, char *p_str)
+bool ZMasterControl::UnkFunc3(i32 p_masterBank, char *p_str)
 {
     printf("ZMasterControl::UnkFunc3(%d, %s)\n", p_masterBank, p_str);
 

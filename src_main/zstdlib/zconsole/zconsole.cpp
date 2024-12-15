@@ -44,7 +44,7 @@ ZConsole::ZConsole()
     m_autoCompleteHandler = new ZAutoCompleteHandler(m_autoComplete);
 }
 
-boolean ZConsole::UpdateConsoleVisibility()
+bool ZConsole::UpdateConsoleVisibility()
 {
     if (m_isVisible)
     {
@@ -468,7 +468,7 @@ void ZConsole::ToggleVisibility()
     m_isVisible = m_isVisible == 0;
 }
 
-void ZConsole::GoPrevCmd(boolean p_forwards)
+void ZConsole::GoPrevCmd(bool p_forwards)
 {
     if (m_commandHistory[0])
     {
@@ -518,7 +518,7 @@ void ZConsole::AddToHistory(const char *p_command)
     strcpy(m_commandHistory[m_historyIndex], p_command);
 
     i32 l_newCmdCount = m_historyIndex + 1;
-    boolean l_check = m_historyIndex - 19 < 0;
+    bool l_check = m_historyIndex - 19 < 0;
 
     m_historyIndex = l_newCmdCount;
 

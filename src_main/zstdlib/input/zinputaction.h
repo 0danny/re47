@@ -11,7 +11,7 @@
 struct ZInputActionBinding
 {
     ZInputAction *inputAction; // 0
-    boolean flag;              // 4
+    bool state;                // 4
 }; // 5 in size.
 
 class ZInputAction
@@ -23,14 +23,14 @@ public:
     char *m_actionName;        // 16
     i32 m_totalNodeCount;      // 20
     RefTab *m_nodeReferences;  // 24
-    u8 m_unkByte1;             // 28
-    u8 m_unkByte2;             // 29
+    bool m_unkByte1;           // 28
+    bool m_unkByte2;           // 29
     f32 m_unkFloat1;           // 30
     f32 m_unkFloat2;           // 34
     RefTab *m_pressHandlers;   // 38
     RefTab *m_holdHandlers;    // 42
     RefTab *m_releaseHandlers; // 46
-    u8 m_unkByte3;             // 50
+    bool m_unkByte3;           // 50
     RefTab *m_dependentNodes;  // 51
 
     ZInputAction(ZActionMap *p_actionMap, SActionOverride *p_actionOverride);
@@ -38,21 +38,21 @@ public:
 
     ~ZInputAction();
 
-    virtual void AddNode(char *p_vkKey, boolean p_flag);
-    virtual void AddNode(i32 p_refNum, boolean p_flag);
+    virtual void AddNode(char *p_vkKey, bool p_flag);
+    virtual void AddNode(i32 p_refNum, bool p_flag);
 
-    virtual void AddNodes(i32 *p_ref, boolean p_flag);
-    virtual void AddNodes(const char *p_str, boolean p_flag);
+    virtual void AddNodes(i32 *p_ref, bool p_flag);
+    virtual void AddNodes(const char *p_str, bool p_flag);
 
-    virtual void LockInputNode(char *p_vkKey, boolean p_flag, boolean p_localMapOnly);
-    virtual void UnlockInputNode(char *p_vkKey, boolean p_flag, boolean p_localMapOnly);
+    virtual void LockInputNode(char *p_vkKey, bool p_flag, bool p_localMapOnly);
+    virtual void UnlockInputNode(char *p_vkKey, bool p_flag, bool p_localMapOnly);
 
-    virtual void MakeActionExclusiveOwnerOfNodes(boolean p_lock);
+    virtual void MakeActionExclusiveOwnerOfNodes(bool p_lock);
 
-    void DependOnActionsNodes(const char *p_str, boolean p_flag);
-    void DependOnActionNodes(const char *p_str, boolean p_flag);
+    void DependOnActionsNodes(const char *p_str, bool p_flag);
+    void DependOnActionNodes(const char *p_str, bool p_flag);
 
-    boolean CheckDependencies();
+    bool CheckDependencies();
 
 }; // 55 in size.
 

@@ -112,7 +112,7 @@ int DirectPlay::EnumProxy()
     return DirectPlayEnumerateA(EnumCallback, &m_tcpGUID);
 }
 
-boolean DirectPlay::GetSessions()
+bool DirectPlay::GetSessions()
 {
     DPSESSIONDESC2 l_sessionDesc;
 
@@ -133,7 +133,7 @@ boolean DirectPlay::GetSessions()
     l_sessionDesc.guidInstance.Data4[7] = 0x81;
 
     l_sessionDesc.dwSize = 80;
-    boolean l_context = 0;
+    bool l_context = 0;
 
     m_lpDP->EnumSessions(&l_sessionDesc, 1000, EnumSessions, &l_context, 0);
 

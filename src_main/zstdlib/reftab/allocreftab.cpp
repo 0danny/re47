@@ -70,7 +70,7 @@ u32 AllocRefTab::NewRef()
     return l_result;
 }
 
-boolean AllocRefTab::FreeRef(u32 p_refNum)
+bool AllocRefTab::FreeRef(u32 p_refNum)
 {
     if ((p_refNum & 0xFFFC0000) != 0)
     {
@@ -100,7 +100,7 @@ boolean AllocRefTab::FreeRef(u32 p_refNum)
     }
 }
 
-boolean AllocRefTab::CheckRefActive(u32 p_refNum)
+bool AllocRefTab::CheckRefActive(u32 p_refNum)
 {
     return m_array[p_refNum & m_maxRefIndex] == p_refNum >> m_refShitAmount;
 }

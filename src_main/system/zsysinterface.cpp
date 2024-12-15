@@ -8,7 +8,7 @@ ZSysInterface::~ZSysInterface()
 {
 }
 
-boolean ZSysInterface::UnkFunc0()
+bool ZSysInterface::UnkFunc0()
 {
     return false;
 }
@@ -55,7 +55,7 @@ void ZSysInterface::UnkFunc13()
 {
 }
 
-boolean ZSysInterface::ProcessWindowMessages(HWND p_hWnd)
+bool ZSysInterface::ProcessWindowMessages(HWND p_hWnd)
 {
     struct tagMSG message;
 
@@ -103,7 +103,7 @@ char ZSysInterface::PrintStatus(char status)
     return 0;
 }
 
-boolean ZSysInterface::IsKeyPressed(i32 p_vKey)
+bool ZSysInterface::IsKeyPressed(i32 p_vKey)
 {
     return (GetAsyncKeyState(p_vKey) & 0x8000) != 0;
 }

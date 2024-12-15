@@ -10,13 +10,13 @@
 class DirectPlay
 {
 public:
-    boolean m_foundSession; // 4
-    char *m_sessionName;    // 5
-    char *m_str2;           // 9
-    char *m_str3;           // 13
-    i32 m_unused;           // 17
-    LPDIRECTPLAY2 m_lpDP;   // 21
-    GUID *m_tcpGUID;        // 25
+    bool m_foundSession;  // 4
+    char *m_sessionName;  // 5
+    char *m_str2;         // 9
+    char *m_str3;         // 13
+    i32 m_unused;         // 17
+    LPDIRECTPLAY2 m_lpDP; // 21
+    GUID *m_tcpGUID;      // 25
 
     DirectPlay();
     virtual ~DirectPlay();
@@ -24,7 +24,7 @@ public:
     virtual i32 FindSession();
     virtual inline void FreeData();
     virtual i32 EnumProxy();
-    virtual boolean GetSessions();
+    virtual bool GetSessions();
     virtual HRESULT OpenSessionName(DWORD p_maxPlayers);
     virtual HRESULT OpenSession();
 

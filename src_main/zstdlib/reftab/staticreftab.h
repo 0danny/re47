@@ -19,7 +19,7 @@ public:
     virtual void ClearThis() override;
 
     virtual void DelRefPtr(u32 *p_refNum) override;
-    virtual boolean Exists(u32 p_refNum) override;
+    virtual bool Exists(u32 p_refNum) override;
     virtual u32 *Find(u32 p_refNum) override;
 
     virtual u32 GetRefNr(i32 p_refIndex) override;
@@ -28,7 +28,7 @@ public:
     virtual void PrintStatus() override;
 
     virtual void Remove(u32 p_refNum) override;
-    virtual boolean RemoveIfExists(u32 p_refNum) override;
+    virtual bool RemoveIfExists(u32 p_refNum) override;
 
     virtual void RunDelRef(RefRun *p_refRun) override;
     virtual void RunInitNxtRef(RefRun *p_refRun) override;

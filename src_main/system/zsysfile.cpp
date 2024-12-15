@@ -40,7 +40,7 @@ HANDLE ZSysFile::Create(const char *p_fileName)
     return NULL;
 }
 
-boolean ZSysFile::CreateAlt(const char *p_fileName)
+bool ZSysFile::CreateAlt(const char *p_fileName)
 {
     return NULL;
 }
@@ -49,22 +49,22 @@ void ZSysFile::Close(HANDLE p_handle)
 {
 }
 
-boolean ZSysFile::GetFileTime(char *p_unkStr, LPFILETIME p_lastWriteTime, boolean p_unkFlag)
+bool ZSysFile::GetFileTime(char *p_unkStr, LPFILETIME p_lastWriteTime, bool p_unkFlag)
 {
     return NULL;
 }
 
-u32 ZSysFile::GetSize(const char *p_filePath, boolean p_unkFlag)
+u32 ZSysFile::GetSize(const char *p_filePath, bool p_unkFlag)
 {
     return NULL;
 }
 
-boolean ZSysFile::Exists(char *p_fileName, char p_unkFlag)
+bool ZSysFile::Exists(char *p_fileName, char p_unkFlag)
 {
     return NULL;
 }
 
-boolean ZSysFile::WriteTo(HANDLE p_fileHandle, const void *p_buffer, u32 p_bytesWritten)
+bool ZSysFile::WriteTo(HANDLE p_fileHandle, const void *p_buffer, u32 p_bytesWritten)
 {
     return NULL;
 }
@@ -90,12 +90,12 @@ void ZSysFile::Copy(const char *p_oldFileLoc, const char *p_newFileLoc)
 {
 }
 
-boolean ZSysFile::Delete(const char *p_fileName)
+bool ZSysFile::Delete(const char *p_fileName)
 {
     return NULL;
 }
 
-u32 ZSysFile::UnkFunc2(const char *p_unkStr, void *p_buffer, u32 p_elemCount, i32 p_offset, boolean p_unkFlag)
+u32 ZSysFile::UnkFunc2(const char *p_unkStr, void *p_buffer, u32 p_elemCount, i32 p_offset, bool p_unkFlag)
 {
     return NULL;
 }
@@ -136,17 +136,17 @@ void ZSysFile::UnkFunc10(char *p_unkStr)
 {
 }
 
-boolean ZSysFile::UnkFunc11(i32 p_unkInt)
+bool ZSysFile::UnkFunc11(i32 p_unkInt)
 {
     return NULL;
 }
 
-boolean ZSysFile::UnkFunc12(i32 p_unkInt)
+bool ZSysFile::UnkFunc12(i32 p_unkInt)
 {
     return NULL;
 }
 
-boolean ZSysFile::UnkFunc13(char *p_unkStr)
+bool ZSysFile::UnkFunc13(char *p_unkStr)
 {
     return NULL;
 }
@@ -159,12 +159,12 @@ void ZSysFile::UnkFunc15(char *p_unkStr)
 {
 }
 
-boolean ZSysFile::UnkFunc16(char *p_unkStr)
+bool ZSysFile::UnkFunc16(char *p_unkStr)
 {
     return NULL;
 }
 
-void ZSysFile::UnkFunc17(boolean p_unkFlag)
+void ZSysFile::UnkFunc17(bool p_unkFlag)
 {
 }
 
@@ -173,7 +173,7 @@ HMODULE ZSysFile::LoadLib(char *p_unkStr)
     return NULL;
 }
 
-boolean ZSysFile::FreeLib(HMODULE p_hModule)
+bool ZSysFile::FreeLib(HMODULE p_hModule)
 {
     return NULL;
 }
@@ -193,7 +193,7 @@ i32 ZSysFile::UnkFunc22(i32 p_unkInt1, i32 p_unkInt2)
     return NULL;
 }
 
-boolean ZSysFile::UnkFunc23(i32 p_unkInt1, const char *p_unkStr)
+bool ZSysFile::UnkFunc23(i32 p_unkInt1, const char *p_unkStr)
 {
     return NULL;
 }

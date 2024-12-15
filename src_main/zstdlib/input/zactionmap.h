@@ -19,9 +19,9 @@ public:
     ZActionMapDefinition *m_actionMapDef; // 12
     RefTab *m_refTab;                     // 16
     i32 m_unkInt1;                        // 20
-    u8 m_unkByte;                         // 24
+    bool m_unkByte;                       // 24
     CFastLookup2 *m_fastLookup;           // 25
-    i32 m_unkInt3;                        // 29
+    i32 m_activeCount;                    // 29
 
     ZActionMap(ZInputActions *p_inputActions, ZActionMapDefinition *p_actionMapDef, char *p_mapName);
 
@@ -33,13 +33,13 @@ public:
 
     virtual ZInputAction *GetActionBase(char *p_actionName);
 
-    virtual void LockActions(char *p_str, boolean p_flag);
-    virtual void UnlockActions(char *p_str, boolean p_flag);
+    virtual void LockActions(char *p_str, bool p_flag);
+    virtual void UnlockActions(char *p_str, bool p_flag);
 
     virtual void ActivateMap();
     virtual void DeactivateMap();
 
-    virtual boolean IsActivated();
+    virtual bool IsActivated();
 
 }; // 33 in size.
 

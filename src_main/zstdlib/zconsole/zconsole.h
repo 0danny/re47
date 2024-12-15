@@ -65,7 +65,7 @@ public:
 
     ZConsole();
 
-    virtual boolean UpdateConsoleVisibility();
+    virtual bool UpdateConsoleVisibility();
 
     virtual void AddCmdText(const char *p_format, ...);
     virtual char *GetOutputLine(i32 p_offset);
@@ -82,7 +82,7 @@ public:
     virtual void ExecuteCommandString(const char *p_cmd);
     virtual void ToggleVisibility();
 
-    virtual void GoPrevCmd(boolean p_forwards);
+    virtual void GoPrevCmd(bool p_forwards);
     virtual void AddToHistory(const char *p_command);
     virtual double GetVisibilityProgress();
 

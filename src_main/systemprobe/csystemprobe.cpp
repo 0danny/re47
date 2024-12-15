@@ -576,9 +576,9 @@ i32 CSystemProbe::CalculateAverageSettings()
     else
         m_settings.renderer = DEVICE_DIRECTX;
 
-    float l_resFloat = 0.0;
-    float l_resCount = 0;
-    float l_resResult = 0.0;
+    f32 l_resFloat = 0.0;
+    f32 l_resCount = 0;
+    f32 l_resResult = 0.0;
 
     if (l_arrayIndex > 0)
     {
@@ -588,7 +588,7 @@ i32 CSystemProbe::CalculateAverageSettings()
         {
             if (*l_resPtr != RES_UNSELECTED)
             {
-                l_resFloat = l_resFloat + (float)*l_resPtr;
+                l_resFloat = l_resFloat + (f32)*l_resPtr;
                 ++l_resCount;
             }
 
@@ -602,9 +602,9 @@ i32 CSystemProbe::CalculateAverageSettings()
 
     i32 l_resSetting = IntDivide(l_resResult, l_resCount);
 
-    float l_colorFloat = 0.0;
+    f32 l_colorFloat = 0.0;
     i32 l_colorIndex = m_arrayIndex;
-    float l_colorResult = 0.0;
+    f32 l_colorResult = 0.0;
     i32 l_colorCount = 0;
 
     m_settings.resolution = (Resolution)l_resSetting;
@@ -617,7 +617,7 @@ i32 CSystemProbe::CalculateAverageSettings()
         {
             if (*l_colorPtr != COLOR_UNSELECTED)
             {
-                l_colorFloat = l_colorFloat + (float)*l_colorPtr;
+                l_colorFloat = l_colorFloat + (f32)*l_colorPtr;
                 ++l_colorCount;
             }
 
@@ -631,9 +631,9 @@ i32 CSystemProbe::CalculateAverageSettings()
 
     i32 l_colorSetting = IntDivide(l_colorResult, l_colorCount);
 
-    float l_textureFloat = 0.0;
+    f32 l_textureFloat = 0.0;
     i32 l_textureIndex = m_arrayIndex;
-    float l_textureResult = 0.0;
+    f32 l_textureResult = 0.0;
     i32 l_textureCount = 0;
 
     m_settings.colorDepth = (ColorDepth)l_colorSetting;
@@ -646,7 +646,7 @@ i32 CSystemProbe::CalculateAverageSettings()
         {
             if (*l_texturePtr != TEXTURE_UNSELECTED)
             {
-                l_textureFloat = l_textureFloat + (float)*l_texturePtr;
+                l_textureFloat = l_textureFloat + (f32)*l_texturePtr;
                 ++l_textureCount;
             }
 
@@ -660,9 +660,9 @@ i32 CSystemProbe::CalculateAverageSettings()
 
     i32 l_textureSetting = IntDivide(l_textureResult, l_textureCount);
 
-    float l_unkSettingFloat = 0.0;
+    f32 l_unkSettingFloat = 0.0;
     i32 l_unkSettingIndex = m_arrayIndex;
-    float l_unkSettingResult = 0.0;
+    f32 l_unkSettingResult = 0.0;
     i32 l_unkSettingCount = 0;
 
     m_settings.textureQuality = (TextureQuality)l_textureSetting;
@@ -675,7 +675,7 @@ i32 CSystemProbe::CalculateAverageSettings()
         {
             if (*l_unkSettingPtr != SETTING_UNSELECTED)
             {
-                l_unkSettingFloat = l_unkSettingFloat + (float)*l_unkSettingPtr;
+                l_unkSettingFloat = l_unkSettingFloat + (f32)*l_unkSettingPtr;
                 ++l_unkSettingCount;
             }
 
@@ -689,9 +689,9 @@ i32 CSystemProbe::CalculateAverageSettings()
 
     i32 l_unkSetting = IntDivide(l_unkSettingResult, l_unkSettingCount);
 
-    float l_shadowFloat = 0.0;
+    f32 l_shadowFloat = 0.0;
     i32 l_shadowIndex = m_arrayIndex;
-    float l_shadowResult = 0.0;
+    f32 l_shadowResult = 0.0;
     i32 l_shadowCount = 0;
 
     m_settings.unkSetting = (GenericSetting)l_unkSetting;
@@ -704,7 +704,7 @@ i32 CSystemProbe::CalculateAverageSettings()
         {
             if (*l_shadowPtr != SETTING_UNSELECTED)
             {
-                l_shadowFloat = l_shadowFloat + (float)*l_shadowPtr;
+                l_shadowFloat = l_shadowFloat + (f32)*l_shadowPtr;
                 ++l_shadowCount;
             }
 
@@ -903,7 +903,7 @@ i32 CSystemProbe::SetUnkInt4()
 
 void CSystemProbe::ClassifyCPU()
 {
-    float l_cpuSpeed = GetCPUSpeed();
+    f32 l_cpuSpeed = GetCPUSpeed();
 
     m_cyclesPerSec = l_cpuSpeed;
 
@@ -1233,7 +1233,7 @@ i32 CSystemProbe::ClassifyVideoMem(u32 p_vidMemKB)
     }
 }
 
-i32 CSystemProbe::IntDivide(float p_float, i32 p_int)
+i32 CSystemProbe::IntDivide(f32 p_float, i32 p_int)
 {
     if (p_int != 0)
     {
@@ -1245,7 +1245,7 @@ i32 CSystemProbe::IntDivide(float p_float, i32 p_int)
     }
 }
 
-float CSystemProbe::GetCPUSpeed()
+f32 CSystemProbe::GetCPUSpeed()
 {
     if (g_pSysInterface)
         return g_pSysInterface->m_unkInt55;
@@ -1254,5 +1254,5 @@ float CSystemProbe::GetCPUSpeed()
 
     Sleep(1000u);
 
-    return (float)(i64)(GetRDTSC() - l_cycles);
+    return (f32)(i64)(GetRDTSC() - l_cycles);
 }

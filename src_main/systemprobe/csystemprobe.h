@@ -168,7 +168,7 @@ public:
     i32 m_unkInt4;
     i32 m_arrayIndex;
     CSettings m_settingsList[9];
-    float m_cyclesPerSec;
+    f32 m_cyclesPerSec;
     i32 m_cpuLevel;
     i32 m_sysMem;
     i32 m_videoMem;
@@ -227,8 +227,8 @@ public:
     void GetSysMem();
     void MemTest();
 
-    i32 IntDivide(float p_float, i32 p_int);
-    float GetCPUSpeed();
+    i32 IntDivide(f32 p_float, i32 p_int);
+    f32 GetCPUSpeed();
 
     HRESULT EnumDevices();
     static BOOL CALLBACK EnumDDCallback(GUID FAR *p_lpGUID, LPSTR p_lpDriverDescription, LPSTR p_lpDriverName, LPVOID p_lpContext, HMONITOR p_hMonitor);

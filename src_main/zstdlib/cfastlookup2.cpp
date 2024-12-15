@@ -84,11 +84,11 @@ void CFastLookup2::Remove(const char *p_str, i32 p_size)
 
     if (l_strSize >> 2)
     {
-        char *l_strPtr = (char *)p_str;
+        const char *l_strPtr = p_str;
 
         do
         {
-            l_key += *(i32 *)l_strPtr;
+            l_key += *(u32 *)l_strPtr;
             l_strPtr += 4;
             --l_count;
         } while (l_count);
@@ -101,7 +101,7 @@ void CFastLookup2::Remove(const char *p_str, i32 p_size)
 
     if (l_searchResult)
     {
-        LinkRefTab *l_data = (LinkRefTab *)l_searchResult->data;
+        LinkRefTab *l_data = (LinkRefTab *)l_searchResult->data[0];
 
         if (l_data)
         {
@@ -111,7 +111,6 @@ void CFastLookup2::Remove(const char *p_str, i32 p_size)
             {
                 if (l_item->stringLength == l_strSize)
                 {
-
                     if (!memcmp(l_item->stringPtr, l_str, l_strSize))
                     {
                         if (l_item->isAllocated)
@@ -126,6 +125,7 @@ void CFastLookup2::Remove(const char *p_str, i32 p_size)
                             l_data->~LinkRefTab();
                             m_valTree->Delete(l_searchResult);
                         }
+
                         return;
                     }
 
@@ -180,7 +180,7 @@ inline u32 CFastLookup2::Get(const char *p_str)
 
         do
         {
-            l_key += *l_ptrIncrement;
+            l_key += *(u32 *)l_ptrIncrement;
             l_ptrIncrement += 4;
             --l_count;
         } while (l_count);
@@ -219,7 +219,6 @@ void CFastLookup2::RemoveLowerCase(const char *p_str, u32 p_size)
     if (!p_size)
         l_size = strlen(p_str);
 
-    // This is an inlined constructor, inferred from debug symbols of Hitman 2.
     MyStr l_myStr(p_str);
 
     const char *l_pointer = *l_myStr;

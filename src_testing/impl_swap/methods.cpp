@@ -6,12 +6,17 @@ namespace Methods
     {
         printf("[METHOD HOOK]: Creating method hooks...\n");
 
+        if (MH_CreateHook(zInputActions_Dtor, (LPVOID)&Methods::ZInputActions_DtorHook, NULL) != MH_OK)
+        {
+            printf("[METHOD HOOK]: Could not hook ZInputActions_Dtor method.\n");
+        }
+
+        /*
         if (MH_CreateHook(zInputActions_OverrideAction, (LPVOID)&Methods::ZInputActions_OverrideActionHook, reinterpret_cast<LPVOID *>(&originalZInputActions_OverrideAction)) != MH_OK)
         {
             printf("[METHOD HOOK]: Could not hook ZInputActions_OverrideAction method.\n");
         }
 
-        /*
         if (MH_CreateHook(cFastLookup_RemoveLowerCase, (LPVOID)&Methods::CFastLookup_RemoveLowerCaseHook, NULL) != MH_OK)
         {
             printf("[METHOD HOOK]: Could not hook CFastLookup_RemoveLowerCase method.\n");
@@ -93,5 +98,12 @@ namespace Methods
 
         printf("[METHOD HOOK]: Address of this %p\n", _this);
         // originalZInputActions_OverrideAction(_this, _EDX, p_actionOverride);
+    }
+
+    void __fastcall ZInputActions_DtorHook(ZInputActions *_this, void *_EDX)
+    {
+        printf("[METHOD HOOK]: ZInputActions_DtorHook called.\n");
+
+        _this->~ZInputActions();
     }
 }

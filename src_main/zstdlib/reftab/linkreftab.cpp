@@ -108,23 +108,7 @@ void LinkRefTab::DelRefPtr(u32 *p_refPtr)
     RefRun *l_data = (RefRun *)&p_refPtr[m_size - 2];
 
     if (!m_refTab)
-    {
-        m_refTab = new RefTab(0, 0);
-
-        if (m_refTab)
-        {
-            m_refTab->m_blockCapacity = 8;
-            m_refTab->m_count = 0;
-            m_refTab->m_size = 1;
-            m_refTab->m_poolSize = 8;
-            m_refTab->m_head = 0;
-            m_refTab->m_tail = 0;
-        }
-        else
-        {
-            m_refTab = 0;
-        }
-    }
+        m_refTab = new RefTab(8, 0);
 
     m_refTab->Add((u32)l_data);
 

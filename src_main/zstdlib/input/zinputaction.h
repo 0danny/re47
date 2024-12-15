@@ -25,8 +25,8 @@ public:
     RefTab *m_nodeReferences;  // 24
     u8 m_unkByte1;             // 28
     u8 m_unkByte2;             // 29
-    float m_unkFloat1;         // 30
-    float m_unkFloat2;         // 34
+    f32 m_unkFloat1;           // 30
+    f32 m_unkFloat2;           // 34
     RefTab *m_pressHandlers;   // 38
     RefTab *m_holdHandlers;    // 42
     RefTab *m_releaseHandlers; // 46

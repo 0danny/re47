@@ -140,7 +140,6 @@ void ZActionMap::RemoveAction(char *p_actionName)
             if (l_nextRef)
             {
                 l_nextRef->~ZInputAction();
-                delete l_nextRef;
             }
         }
     }
@@ -164,7 +163,6 @@ void ZActionMap::RemoveActions()
             if (l_item)
             {
                 l_item->~ZInputAction();
-                delete l_item;
             }
         }
     }

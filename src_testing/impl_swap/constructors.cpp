@@ -232,9 +232,35 @@ namespace Constructors
 
     ZInputActions *__fastcall ZInputActionsConstructorHook(ZInputActions *_this, void *_EDX)
     {
-        printf("[CONSTRUCTOR HOOK]: ZInputActions called\n");
+        printf("[CONSTRUCTOR HOOK]: ZInputActions called, sizeof -> %d\n", sizeof(ZInputActions));
 
-        return new (_this) ZInputActions();
+        void *l_malloc = operator new(sizeof(ZInputActions));
+
+        // ZInputActions *og = originalZInputActions((ZInputActions *)l_malloc, _EDX);
+
+        ZInputActions *newest = new (_this) ZInputActions();
+
+        // set newest vtable to original vtable
+        //*(void ***)newest = *(void ***)og;
+
+        /*
+        newest->m_inputNodeList = og->m_inputNodeList;
+        newest->m_unkInt2 = og->m_unkInt2;
+        newest->m_unkInt3 = og->m_unkInt3;
+        newest->m_inputNodeCount = og->m_inputNodeCount;
+        newest->m_actionMapDefinitions = og->m_actionMapDefinitions;
+        newest->m_refTab2 = og->m_refTab2;
+        newest->m_curStates = og->m_curStates;
+        newest->m_unkFloat1 = og->m_unkFloat1;
+        newest->m_unkFloat2 = og->m_unkFloat2;
+        newest->m_unkFloat3 = og->m_unkFloat3;
+        newest->m_fastLookup = og->m_fastLookup;
+        newest->m_actionMap = og->m_actionMap;
+        newest->m_overrideList = og->m_overrideList;*/
+
+        printf("[CONSTRUCTOR HOOK]: Node Count -> %d\n", newest->m_inputNodeCount);
+
+        return newest;
     }
 
     ZMasterControl *__fastcall ZMasterControlConstructorHook(ZMasterControl *_this, void *_EDX)

@@ -25,23 +25,6 @@ public:
 
     ZActionMap(ZInputActions *p_inputActions, ZActionMapDefinition *p_actionMapDef, char *p_mapName);
 
-    inline ~ZActionMap()
-    {
-        if (m_mapName)
-            delete m_mapName;
-
-        RemoveActions();
-
-        if (m_refTab)
-            m_refTab->~RefTab();
-
-        if (m_fastLookup)
-            m_fastLookup->~CFastLookup2();
-
-        if (m_inputActions->m_actionMap == this)
-            m_inputActions->m_actionMap = 0;
-    }
-
     virtual ZInputAction *AddAction(SActionOverride *p_actionOverride);
     virtual ZInputAction *AddAction(SInputActionDefinition *p_actionDefinition);
 

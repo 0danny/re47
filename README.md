@@ -20,6 +20,10 @@ Join the discord server using the badge above to track the progress or if you ju
 
 Below each of the files in the decomp is discussed along with a percentage indicator of the progress.
 
+**Lines Decompiled** -> 8890
+
+<br>
+
 ### Completed ✅
 
 **hitman.exe** [45kb]
@@ -36,7 +40,7 @@ Below each of the files in the decomp is discussed along with a percentage indic
 ### Being Decompiled 📝
 
 **system.dll** [272kb]
-**20%** Completed - **525** out of **552** functions named.
+**35%** Completed - **542** out of **552** functions named.
 
 **systemprobedll.dll** [68kb]
 **99%** Completed - **53** out of **53** functions named.

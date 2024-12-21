@@ -84,6 +84,15 @@ namespace Menu
                 glEnd();
             }
 
+            if (menuItems[0].selected)
+            {
+                printf("Selected\n");
+
+                g_pSysFile->UnkFunc16("Setup/locale.zip");
+
+                menuItems[0].selected = false;
+            }
+
             glColor3f(1.0f, 1.0f, 1.0f);
 
             glRasterPos2i(70, yPos);

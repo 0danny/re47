@@ -5,7 +5,7 @@
 #include "zstdlib/trees/zvaltree.h"
 #include "zstdlib/reftab/linkreftab.h"
 #include "system/zsyscom.h"
-#include "zstdlib/mystr.h"
+#include "zstdlib/utilities/mystr.h"
 
 // "isAllocated" is padded to 4 bytes as per (0x0FFBE7C6 system.dll)
 struct CFastLink

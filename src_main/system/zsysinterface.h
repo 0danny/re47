@@ -3,7 +3,7 @@
 
 #include "zstdlib/zconsole/zconsole.h"
 #include "zstdlib/zdynamicloader.h"
-#include "zstdlib/mystr.h"
+#include "zstdlib/utilities/mystr.h"
 #include "zstdlib/reftab/reftab.h"
 #include "zstdlib/input/zinputactions.h"
 #include "zstdlib/zmastercontrol.h"

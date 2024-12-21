@@ -13,6 +13,7 @@
 #include "zstdlib/input/zinputaction.h"
 #include "zstdlib/input/zinputactions.h"
 #include "zstdlib/input/zactionmap.h"
+#include "zstdlib/fszip.h"
 
 #include "zstdlib/zmastercontrol.h"
 
@@ -54,6 +55,8 @@ namespace Constructors
     static LPVOID zActionMapAddress = (LPVOID)0x0FFA2640;
     static LPVOID zInputActionsCtor = (LPVOID)0x0FFA1000;
 
+    static LPVOID fsZipCtor = (LPVOID)0x0FFC3490;
+
     // Typedefs
     typedef RefTab *(__fastcall *RefTabConstructor)(RefTab *_this, int p_poolSize, int p_size);
     typedef RefTab32 *(__fastcall *RefTab32Constructor)(RefTab32 *_this);
@@ -80,6 +83,8 @@ namespace Constructors
     typedef ZActionMap *(__fastcall *ZActionMapConstructor)(ZActionMap *_this, void *_EDX, ZInputActions *p_inputActions, ZActionMapDefinition *p_actionMapDef, char *p_mapName);
     typedef ZInputActions *(__fastcall *ZInputActionsConstructor)(ZInputActions *_this, void *_EDX);
     typedef ZMasterControl *(__fastcall *ZMasterControlConstructor)(ZMasterControl *_this);
+
+    typedef FSZip *(__fastcall *FSZipConstructor)(FSZip *_this);
 
     static ZConsoleConstructor originalZConsole = 0;
     static RefTab32Constructor originalRefTab32 = 0;
@@ -115,6 +120,7 @@ namespace Constructors
     ZActionMap *__fastcall ZActionMapConstructorHook(ZActionMap *_this, void *_EDX, ZInputActions *p_inputActions, ZActionMapDefinition *p_actionMapDef, char *p_mapName);
     ZInputActions *__fastcall ZInputActionsConstructorHook(ZInputActions *_this, void *_EDX);
     ZMasterControl *__fastcall ZMasterControlConstructorHook(ZMasterControl *_this, void *_EDX);
+    FSZip *__fastcall FSZipConstructorHook(FSZip *_this, void *_EDX);
 
     void CreateHooks();
     void CreateRenderingHooks();

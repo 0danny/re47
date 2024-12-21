@@ -6,10 +6,16 @@ namespace Methods
     {
         printf("[METHOD HOOK]: Creating method hooks...\n");
 
-        if (MH_CreateHook(zInputActions_Dtor, (LPVOID)&Methods::ZInputActions_DtorHook, NULL) != MH_OK)
-        {
-            printf("[METHOD HOOK]: Could not hook ZInputActions_Dtor method.\n");
-        }
+        /*
+            if (MH_CreateHook(zInputActions_Dtor, (LPVOID)&Methods::ZInputActions_DtorHook, NULL) != MH_OK)
+            {
+                printf("[METHOD HOOK]: Could not hook ZInputActions_Dtor method.\n");
+            }
+
+            if (MH_CreateHook(zSysCom_LogMessage, (LPVOID)&Methods::ZSysCom_LogMessageHook, NULL) != MH_OK)
+            {
+                printf("[METHOD HOOK]: Could not hook ZSysCom_LogMessage method.\n");
+            }*/
 
         /*
         if (MH_CreateHook(zInputActions_OverrideAction, (LPVOID)&Methods::ZInputActions_OverrideActionHook, reinterpret_cast<LPVOID *>(&originalZInputActions_OverrideAction)) != MH_OK)
@@ -105,5 +111,56 @@ namespace Methods
         printf("[METHOD HOOK]: ZInputActions_DtorHook called.\n");
 
         _this->~ZInputActions();
+    }
+
+    void __fastcall ZSysCom_LogMessageHook(ZSysCom *_this, void *_EDX, char *p_format, ...)
+    {
+        char *l_bufferPtr;    // edi
+        ZConsole *l_console;  // eax
+        HWND l_unkHwnd;       // edx
+        COPYDATASTRUCT l_cds; // [esp+4h] [ebp-100Ch] BYREF
+        char l_buffer[4096];  // [esp+10h] [ebp-1000h] BYREF
+        va_list l_argList;    // [esp+101Ch] [ebp+Ch] BYREF
+
+        va_start(l_argList, p_format);
+        if ((!g_pSysInterface || g_pSysInterface->m_isMessagingEnabled || g_pSysInterface->m_enableDebugOptions != 0.0) && _this->m_debugWndReady)
+        {
+            while (_this->m_sendingZMessage)
+                ;
+            _this->m_sendingZMessage = 1;
+
+            _this->FormatString(l_buffer, "(%s:%d)", _this->m_filePath, _this->m_lineNum);
+
+            l_bufferPtr = &l_buffer[strlen(l_buffer)];
+
+            vsprintf(l_bufferPtr, p_format, l_argList);
+
+            if (*l_bufferPtr == '(')
+                strcpy(l_buffer, l_bufferPtr);
+
+            if (!l_buffer[0] || *((char *)&l_cds.lpData + strlen(l_buffer) + 3) != '\n')
+                strcat(l_buffer, "\n");
+
+            printf("[METHOD HOOK]: LogMessage -> %s\n", l_buffer);
+
+            if (g_pSysMem->unkByte1 && g_pSysInterface && g_pSysInterface->GetConsole())
+            {
+                l_console = g_pSysInterface->GetConsole();
+                l_console->AddCmdText(l_buffer);
+            }
+
+            l_unkHwnd = _this->m_mainHwnd;
+
+            if (l_unkHwnd)
+            {
+                l_cds.cbData = strlen(l_buffer) + 1;
+                l_cds.dwData = 0;
+                l_cds.lpData = l_buffer;
+
+                SendMessageA(l_unkHwnd, 74u, 0, (LPARAM)&l_cds);
+            }
+
+            _this->m_sendingZMessage = 0;
+        }
     }
 }

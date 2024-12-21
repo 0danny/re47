@@ -3,7 +3,6 @@
 
 #include <windows.h>
 #include <stdio.h>
-#include <iostream>
 
 #include <minhook.h>
 #include <gl/GL.h>

@@ -2,7 +2,7 @@
 #define ZMASTERCONTROL_H
 
 #include "common.h"
-#include "zstdlib/mystr.h"
+#include "zstdlib/utilities/mystr.h"
 #include "zstdlib/reftab/equreftab.h"
 #include "system/zsysfile.h"
 

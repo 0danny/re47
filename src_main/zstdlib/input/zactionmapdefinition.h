@@ -2,7 +2,7 @@
 #define ZACTIONMAPDEFINITION_H
 
 #include "common.h"
-#include "zstdlib/mystr.h"
+#include "zstdlib/utilities/mystr.h"
 
 #pragma pack(push, 1)
 

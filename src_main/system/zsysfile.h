@@ -16,7 +16,7 @@ public:
 
     ZSysFile();
 
-    virtual void UnkFunc1(char *p_unkStr);
+    virtual void UnkFunc1();
     virtual void Restart();
     virtual void PrintStatus();
     virtual HANDLE Open(const char *p_fileName);

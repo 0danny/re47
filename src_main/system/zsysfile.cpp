@@ -8,7 +8,7 @@ ZSysFile::~ZSysFile()
 {
 }
 
-void ZSysFile::UnkFunc1(char *p_unkStr)
+void ZSysFile::UnkFunc1()
 {
 }
 

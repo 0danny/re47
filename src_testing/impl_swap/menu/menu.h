@@ -7,6 +7,8 @@
 #include "impl_swap/utilities.h"
 #include "mods/freecam.h"
 
+#include "system/zsysfile.h"
+
 namespace Menu
 {
     struct MenuItem

@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "zstdlib/reftab/reftab.h"
-#include "zstdlib/mystr.h"
+#include "zstdlib/utilities/mystr.h"
 #include "zstdlib/input/zactionmap.h"
 
 #pragma pack(push, 1)

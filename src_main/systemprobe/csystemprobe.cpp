@@ -272,7 +272,7 @@ void CSystemProbe::PrintSystemInfo()
 
 void CSystemProbe::WriteSystemInfoToFile(char *p_fileName)
 {
-    FILE *l_file = LockedFileOpen(p_fileName, "w");
+    FILE *l_file = fopen(p_fileName, "w");
 
     if (m_deviceCount)
     {

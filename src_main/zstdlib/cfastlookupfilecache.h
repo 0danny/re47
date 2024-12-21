@@ -9,16 +9,17 @@
 
 struct IOZip_LocalFileHeader
 {
-    u32 unkInt1;
-    u16 unkInt2;
-    u16 unkInt3;
-    u16 unkInt4;
-    u32 unkInt5;
-    u32 unkInt6;
-    u32 unkInt7;
-    u16 unkInt8;
-    u16 unkInt9;
-};
+    u16 versionNeeded;     // 0
+    u16 generalPurpose;    // 2
+    u16 compressionMethod; // 4
+    u16 lastModTime;       // 6
+    u16 lastModDate;       // 8
+    u32 crc32;             // 10
+    u32 compressedSize;    // 14
+    u32 uncompressedSize;  // 18
+    u16 filenameLength;    // 22
+    u16 extraFieldLength;  // 24
+}; // 26 in size.
 
 struct CFileCache
 {
@@ -35,8 +36,8 @@ public:
     inline CFastLookupFileCache() : m_fastLookup(32), m_refTab32() {}
 
     virtual ~CFastLookupFileCache();
-    virtual void Add(const char *p_str, IOZip_LocalFileHeader *p_localFileHeader, u32 p_data);
-    virtual bool Lookup(const char *p_str, IOZip_LocalFileHeader *p_localFileHeader, u32 *p_result);
+    virtual void Add(const char *p_str, IOZip_LocalFileHeader *p_localFileHeader, i32 p_data);
+    virtual bool Lookup(const char *p_str, IOZip_LocalFileHeader *p_localFileHeader, i32 *p_result);
     virtual void Invalidate(const char *p_str);
     virtual void Flush();
 

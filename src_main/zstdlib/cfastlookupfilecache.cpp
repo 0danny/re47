@@ -27,7 +27,9 @@ void CFastLookupFileCache::Destroy()
     m_fastLookup.Destroy();
 }
 
-void CFastLookupFileCache::Add(const char *p_str, IOZip_LocalFileHeader *p_localFileHeader, u32 p_data)
+long test = 0;
+
+void CFastLookupFileCache::Add(const char *p_str, IOZip_LocalFileHeader *p_localFileHeader, i32 p_data)
 {
     CFileCache *l_alloc = new CFileCache;
 
@@ -41,7 +43,7 @@ void CFastLookupFileCache::Add(const char *p_str, IOZip_LocalFileHeader *p_local
     m_refTab32.Add(l_refNum);
 }
 
-bool CFastLookupFileCache::Lookup(const char *p_str, IOZip_LocalFileHeader *p_localFileHeader, u32 *p_result)
+bool CFastLookupFileCache::Lookup(const char *p_str, IOZip_LocalFileHeader *p_localFileHeader, i32 *p_result)
 {
     CFileCache *l_header = (CFileCache *)m_fastLookup.GetLowerCase(p_str);
 

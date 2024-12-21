@@ -35,12 +35,17 @@ namespace Constructors
     {
         printf("[CONSTRUCTOR HOOK]: Creating constructor hooks...\n");
 
+        if (MH_CreateHook(fsZipCtor, (LPVOID)&Constructors::FSZipConstructorHook, NULL) != MH_OK)
+        {
+            printf("[CONSTRUCTOR HOOK]: Could not hook FSZip constructor.\n");
+        }
+
+        /*
         if (MH_CreateHook(zInputActionsCtor, (LPVOID)&Constructors::ZInputActionsConstructorHook, reinterpret_cast<LPVOID *>(&originalZInputActions)) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook ZInputActions constructor.\n");
         }
 
-        /*
         if (MH_CreateHook(zMasterControlAddress, (LPVOID)&Constructors::ZMasterControlConstructorHook, NULL) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook ZMasterControl constructor.\n");
@@ -268,5 +273,12 @@ namespace Constructors
         printf("[CONSTRUCTOR HOOK]: ZMasterControl called\n");
 
         return new (_this) ZMasterControl();
+    }
+
+    FSZip *__fastcall FSZipConstructorHook(FSZip *_this, void *_EDX)
+    {
+        printf("[CONSTRUCTOR HOOK]: FSZip called\n");
+
+        return new (_this) FSZip();
     }
 }

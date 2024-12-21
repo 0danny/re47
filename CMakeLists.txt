@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 3.5.0)
+
+cmake_policy(SET CMP0091 NEW)
+
 project(HitmanC47 C CXX RC)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
@@ -48,7 +51,11 @@ add_library(zlib STATIC
     external/include/zlib/zutil.c
 )
 
-set_target_properties(zlib PROPERTIES LINKER_LANGUAGE C)
+set_target_properties(zlib PROPERTIES
+    LINKER_LANGUAGE C
+    COMPILE_FLAGS "/MT"
+    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+)
 
 # Add drawing library (drawing)
 add_library(drawing STATIC
@@ -107,9 +114,6 @@ add_library(common STATIC
     src_main/zstdlib/trees/zvaltree.cpp
     src_main/zstdlib/trees/zvaltree.h
 
-    # MyStr
-    src_main/zstdlib/mystr.h
-
     # CFastLookup2
     src_main/zstdlib/cfastlookup2.cpp
     src_main/zstdlib/cfastlookup2.h
@@ -134,6 +138,14 @@ add_library(common STATIC
     # Master Control
     src_main/zstdlib/zmastercontrol.cpp
     src_main/zstdlib/zmastercontrol.h
+
+    # FSZip
+    src_main/zstdlib/fszip.cpp
+    src_main/zstdlib/fszip.h
+
+    # Utilities
+    src_main/zstdlib/utilities/dynamicarray.h
+    src_main/zstdlib/utilities/mystr.h
 )
 
 # Add System DLL
@@ -223,6 +235,4 @@ add_library(impl_swap SHARED
 )
 
 target_link_directories(impl_swap PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
-target_link_libraries(impl_swap PRIVATE system minhook_x86 globals kernel32 common drawing opengl32)
-#set_target_properties(impl_swap PROPERTIES LINK_FLAGS "/BASE:0x0230000")
-
+target_link_libraries(impl_swap PRIVATE system minhook_x86 globals common drawing opengl32 zlib)

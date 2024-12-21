@@ -552,6 +552,7 @@ void ZInputActions::RefreshKeyStates(RefTab *p_tab1, RefTab *p_unused)
         {
             // TODO: Reverse this struct
             // Its presuably a struct that contains the input states
+            // modified at 0x0FB99880 in renderopengl.dll
             m_curStates[l_totalCount++] = (bool)g_pSysInterface->m_unkPad23[15 * l_keysList->list[l_stateIndex++].index + 6];
             --l_keysListSize;
 

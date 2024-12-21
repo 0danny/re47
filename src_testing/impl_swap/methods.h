@@ -18,12 +18,14 @@ namespace Methods
     static LPVOID cFastLookup_GetLowerCase = (LPVOID)0x0FFBEB80;
     static LPVOID zInputActions_OverrideAction = (LPVOID)0x0FFA14A0;
     static LPVOID zInputActions_Dtor = (LPVOID)0x0FFA1250;
+    static LPVOID zSysCom_LogMessage = (LPVOID)0x0FFA47C0;
 
     typedef void(__fastcall *ZSysMem_NewRef)(ZSysMem *_this, void *p_link);
     typedef void(__fastcall *ZMalloc_RemoveFreeHeaderFromBins)(ZMalloc *_this, void *_EDX, SMallocFreeHeader *p_freeHeader, SBinTreeNode *p_mallocBin);
     typedef void(__fastcall *CFastLookup_RemoveLowerCase)(CFastLookup2 *_this, void *_EDX, const char *p_str, u32 p_size);
     typedef void(__fastcall *CFastLookup_GetLowerCase)(CFastLookup2 *_this, void *_EDX, const char *p_str);
     typedef void(__fastcall *ZInputActions_OverrideAction)(ZInputActions *_this, void *_EDX, SActionOverride *p_actionOverride);
+    typedef void(__fastcall *ZSysCom_LogMessage)(ZSysCom *_this, void *_EDX, char *p_format, ...);
 
     typedef void(__fastcall *ZInputActions_Dtor)(ZInputActions *_this, void *_EDX);
 
@@ -36,6 +38,7 @@ namespace Methods
     void __fastcall CFastLookup_GetLowerCaseHook(CFastLookup2 *_this, void *_EDX, const char *p_str);
     void __fastcall ZInputActions_OverrideActionHook(ZInputActions *_this, void *_EDX, SActionOverride *p_actionOverride);
     void __fastcall ZInputActions_DtorHook(ZInputActions *_this, void *_EDX);
+    void __fastcall ZSysCom_LogMessageHook(ZSysCom *_this, void *_EDX, char *p_format, ...);
 
     void CreateHooks();
     void CreateRenderingHooks();

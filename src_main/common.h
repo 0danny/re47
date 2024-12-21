@@ -3,9 +3,7 @@
 
 #define WINVER 0x0500
 #include <windows.h>
-
 #include <new>
-#include <cstdlib>
 #include <stdio.h>
 
 // Typedefs
@@ -26,10 +24,6 @@ static char *g_emptyArray = new char[264];
 static char *g_emptyDelimiter = new char[4];
 
 // Static Helper Functions
-static FILE *LockedFileOpen(const char *p_fileName, const char *p_mode)
-{
-    return _fsopen(p_fileName, p_mode, 64);
-}
 
 // We don't have x86intrin.h, so we have to inline the rdtsc ASM syscall manually.
 static inline u64 GetRDTSC(void)
@@ -44,7 +38,7 @@ static inline u64 GetRDTSC(void)
     return cycles;
 }
 
-static __inline u32 GetReturnAddress()
+static inline u32 GetReturnAddress()
 {
     __asm {
         mov eax, [ebp+4]

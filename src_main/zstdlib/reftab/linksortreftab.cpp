@@ -15,7 +15,7 @@ void LinkSortRefTab::Clear()
     m_curElement = 0;
 
     if (l_refTab)
-        l_refTab->~RefTab();
+        delete l_refTab;
 
     RefRun *l_head = m_head;
     i32 p_poolSize = m_poolSize | 0x80000000;

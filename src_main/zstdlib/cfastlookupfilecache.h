@@ -30,8 +30,8 @@ struct CFileCache
 class CFastLookupFileCache
 {
 public:
-    CFastLookup2 m_fastLookup;
-    RefTab32 m_refTab32;
+    CFastLookup2 m_fastLookup; // 4
+    RefTab32 m_refTab32;       // 8
 
     inline CFastLookupFileCache() : m_fastLookup(32), m_refTab32() {}
 
@@ -42,7 +42,8 @@ public:
     virtual void Flush();
 
     void Destroy();
-};
+
+}; // 176 in size.
 
 #pragma pack(pop)
 

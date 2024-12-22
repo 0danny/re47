@@ -15,10 +15,7 @@ void CFastLookup2::Destroy()
     Clear();
 
     if (m_valTree)
-    {
-        m_valTree->~ZValTree();
         delete m_valTree;
-    }
 }
 
 void CFastLookup2::Clear()
@@ -32,7 +29,7 @@ void CFastLookup2::Clear()
         if (l_binNode == m_valTree->m_nullNode || !l_binNode)
             break;
 
-        LinkRefTab *l_link = (LinkRefTab *)l_binNode->data;
+        LinkRefTab *l_link = *(LinkRefTab **)l_binNode->data;
 
         if (l_link)
         {
@@ -41,13 +38,10 @@ void CFastLookup2::Clear()
             for (CFastLink *l_item = (CFastLink *)l_link->RunNxtRefPtr(&l_refRun); l_item; l_item = (CFastLink *)l_link->RunNxtRefPtr(&l_refRun))
             {
                 if (l_item->isAllocated)
-                {
                     delete l_item->stringPtr;
-                }
             }
 
-            l_link->~LinkRefTab();
-
+            delete l_link;
             m_valTree->Delete(l_binNode);
         }
         else
@@ -122,7 +116,7 @@ void CFastLookup2::Remove(const char *p_str, i32 p_size)
 
                         if (!l_data->GetCount())
                         {
-                            l_data->~LinkRefTab();
+                            delete l_data;
                             m_valTree->Delete(l_searchResult);
                         }
 

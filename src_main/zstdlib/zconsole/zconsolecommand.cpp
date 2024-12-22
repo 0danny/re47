@@ -243,7 +243,7 @@ void ZConsoleCommand::Destroy()
     UnregisterCommand(m_helpCommand);
 
     if (m_helpCommand)
-        m_helpCommand->~ZHelpCommand();
+        delete m_helpCommand;
 
     for (ZCmdNode *l_curNode = m_cmdNodeRoot; l_curNode; l_curNode = m_cmdNodeRoot)
     {
@@ -280,17 +280,11 @@ void ZConsoleCommand::Destroy()
 
 ZHelpCommand::~ZHelpCommand()
 {
-    Destroy();
 }
 
 void ZHelpCommand::ExecuteCommand(char *p_cmdValue)
 {
     m_consoleCommand->PrintStatus(p_cmdValue);
-}
-
-void ZHelpCommand::Destroy()
-{
-    ZCmdHandler::~ZCmdHandler();
 }
 
 /* ------------ ZCmdHandler ------------ */

@@ -13,10 +13,10 @@ ZMasterControl::~ZMasterControl()
     UnkFunc8();
 
     if (m_equTab)
-        m_equTab->~EquRefTab();
+        delete m_equTab;
 
     if (m_refTab)
-        m_refTab->~RefTab();
+        delete m_refTab;
 }
 
 void ZMasterControl::UnkFunc1(char *p_bankName, char *p_fileName, bool p_flag)

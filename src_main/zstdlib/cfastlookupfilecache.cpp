@@ -22,12 +22,7 @@ void CFastLookupFileCache::Destroy()
             delete (u32 *)l_item;
         }
     }
-
-    m_refTab32.Destroy();
-    m_fastLookup.Destroy();
 }
-
-long test = 0;
 
 void CFastLookupFileCache::Add(const char *p_str, IOZip_LocalFileHeader *p_localFileHeader, i32 p_data)
 {

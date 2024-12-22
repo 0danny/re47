@@ -161,9 +161,7 @@ void ZActionMap::RemoveActions()
             m_fastLookup->RemoveLowerCase(l_item->m_actionName, 0);
 
             if (l_item)
-            {
-                l_item->~ZInputAction();
-            }
+                delete l_item;
         }
     }
 }

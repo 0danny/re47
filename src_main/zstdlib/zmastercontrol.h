@@ -13,7 +13,7 @@
 // So the GetSize method returns -1 and nothing happens.
 // Looks like maybe this was used during testing but then never again?
 
-// TODO: Fully implement this class.
+// TODO: Fully implement this class. (not a priority as it doesnt do anything)
 
 class ZMasterControl
 {

@@ -42,7 +42,7 @@ void RefTab32::DeleteBlock(void *p_lpMem)
 RefRun *RefTab32::NewBlock()
 {
     if (!m_head)
-        return &m_refRun;
+        return (RefRun *)&m_refRun;
 
     int l_blockSize = 4 * m_blockCapacity + 12;
 

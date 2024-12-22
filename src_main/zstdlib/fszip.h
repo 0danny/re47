@@ -48,8 +48,8 @@ struct IOFSHandleZip
 {
     i32 access;                       // 0
     IOZip_LocalFileHeader fileHeader; // 4
-    i32 unkInt1;                      // 30
-    i32 unkInt2;                      // 34
+    i32 currentOffset;                // 30
+    i32 initialOffset;                // 34
     z_stream zlibStream;              // 38
     i32 size;                         // 94
     u8 buffer[1024];                  // 98
@@ -59,8 +59,6 @@ struct IOFSHandleZip
 class IOZip
 {
 public:
-    i32 m_status;                                       // 4
-    char *m_fileName;                                   // 8
     i32 m_FSStatus;                                     // 12
     u8 m_FSInit;                                        // 16
     FILE *m_fileStream;                                 // 17
@@ -87,10 +85,12 @@ public:
     virtual i32 Load(char *p_fileName, u8 *p_nextOut, i32 p_size, i32 p_unused);
     virtual void GetDirectory(StrRefTab *p_strTab);
 
-    void UnkFunc21(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, u32 p_len);
-    bool FindFile(char *p_fileName, IOZip_LocalFileHeader *p_fileHeader, i32 *p_unk);
-    u8 *ExtractData(IOZip_LocalFileHeader *p_header, u8 *p_nextOut, bool p_unused, i32 p_elemCount);
+    void AddCompressedFile(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, u32 p_len);
     void Zip(IOZip_CentralDirStructure *p_centralDir, u8 *p_nextIn);
+
+    bool FindFile(char *p_fileName, IOZip_LocalFileHeader *p_fileHeader, i32 *p_unk);
+
+    u8 *ExtractData(IOZip_LocalFileHeader *p_header, u8 *p_nextOut, bool p_unused, i32 p_elemCount);
     i32 RegexMatch(char *p_str1, char *p_str2);
 
 }; // 98 in size.
@@ -98,7 +98,9 @@ public:
 class FSZip
 {
 public:
-    IOZip m_ioZip; // 4
+    i32 m_status;     // 4
+    char *m_fileName; // 8
+    IOZip m_ioZip;    // 12
 
     FSZip();
     ~FSZip();
@@ -107,7 +109,7 @@ public:
 
     virtual inline void UnloadFS()
     {
-        if (m_ioZip.m_fileName)
+        if (m_fileName)
         {
             WriteCDirs();
             WriteEOCD();
@@ -115,47 +117,45 @@ public:
             m_ioZip.m_dirList1.Cleanup();
             m_ioZip.m_dirList2.Cleanup();
 
-            delete[] m_ioZip.m_fileName;
+            delete[] m_fileName;
 
-            m_ioZip.m_fileName = 0;
+            m_fileName = 0;
 
             fclose(m_ioZip.m_fileStream);
 
             m_ioZip.m_FSInit = 0;
-            m_ioZip.m_status = 0;
+            m_status = 0;
 
             if (m_ioZip.m_fastLookupCache)
-            {
-                m_ioZip.m_fastLookupCache->~CFastLookupFileCache();
-                m_ioZip.m_fastLookupCache = 0;
-            }
+                delete m_ioZip.m_fastLookupCache;
         }
     }
 
     virtual IOFSHandleZip *Open(char *p_fileName, i32 p_ioFSAccess);
-    virtual u32 Read(IOFSHandleZip *p_fsHandle, u8 *p_buffer, u32 p_unkInt);
-    virtual i32 Write(IOFSHandleZip *p_fsHandle, u8 *p_buffer, u32 p_unkInt);
+    virtual u32 Read(IOFSHandleZip *p_fsHandle, u8 *p_buffer, u32 p_bytesToRead);
+    virtual i32 Write(IOFSHandleZip *p_fsHandle, u8 *p_buffer, u32 p_bytesToWrite);
     virtual void Close(IOFSHandleZip *p_fsHandle);
 
     virtual bool EndOfFile(IOFSHandleZip *p_fsHandle);
     virtual bool Compare(char *p_fileName1, char *p_fileName2);
     virtual bool InvalidateFile(char *p_fileName);
 
-    virtual void UnkFunc9(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, u32 p_len);
+    virtual void AddFileWithTimestamp(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, u32 p_len);
     virtual bool GetFileTime(char *p_fileName, FILETIME *p_fileTime);
     virtual void SetCompressionLevel(i32 p_compressionLevel);
     virtual void FreeMemory();
-    virtual bool InitFS();
+    virtual bool InitFSCurrent();
 
     virtual void UsePrimaryArchive();
     virtual void UseSecondaryArchive();
 
-    virtual void UnkFunc16(FSZip *p_zip);
-    virtual bool UnkFunc17(char *p_fileName);
+    virtual void MergeArchive(FSZip *p_zip);
+    virtual bool ImportFromArchive(char *p_fileName);
 
-    i32 FindEOCDOffset();
     void InitalizeFileCache();
     void WriteCDirs();
+
+    i32 FindEOCDOffset();
 
     inline void WriteEOCD()
     {

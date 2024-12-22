@@ -13,7 +13,5 @@ void DirectPlayDll::Init()
 void DirectPlayDll::End()
 {
     if (m_directPlay)
-    {
-        m_directPlay->~DirectPlay();
-    }
+        delete m_directPlay;
 }

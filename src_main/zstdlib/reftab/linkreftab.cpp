@@ -40,12 +40,7 @@ u32 *LinkRefTab::Add(u32 p_refNum)
         *l_nextRefNum = p_refNum;
 
         if (!m_refTab->GetCount())
-        {
-            if (m_refTab)
-                m_refTab->~RefTab();
-
-            m_refTab = 0;
-        }
+            delete m_refTab;
     }
     else
     {
@@ -75,20 +70,18 @@ u32 *LinkRefTab::Add(u32 p_refNum)
 void LinkRefTab::Clear()
 {
     if (m_refTab)
-        m_refTab->~RefTab();
+        delete m_refTab;
 
     m_refTab = 0;
     m_next = 0;
     m_prev = 0;
     m_poolSize = m_poolSize | 0x80000000;
-
-    RefTab::~RefTab();
 }
 
 void LinkRefTab::ClearThis()
 {
     if (m_refTab)
-        m_refTab->~RefTab();
+        delete m_refTab;
 
     m_refTab = 0;
     m_next = 0;
@@ -339,12 +332,7 @@ u32 *LinkRefTab::AddStart(u32 p_refNum)
         *l_nextRefNum = p_refNum;
 
         if (!m_refTab->GetCount())
-        {
-            if (m_refTab)
-                m_refTab->~RefTab();
-
-            m_refTab = 0;
-        }
+            delete m_refTab;
     }
     else
     {
@@ -399,12 +387,7 @@ u32 *LinkRefTab::InsertBefore(u32 *p_uintPtr, u32 p_refNum)
         *l_nextRefNum = p_refNum;
 
         if (!m_refTab->GetCount())
-        {
-            if (m_refTab)
-                m_refTab->~RefTab();
-
-            m_refTab = 0;
-        }
+            delete m_refTab;
     }
     else
     {

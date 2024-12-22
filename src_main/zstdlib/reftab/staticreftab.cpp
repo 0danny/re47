@@ -36,7 +36,7 @@ void StaticRefTab::Destroy()
     RefRun *l_head;
 
     if (m_refTab)
-        m_refTab->~RefTab();
+        delete m_refTab;
 
     m_poolSize = m_poolSize | 0x80000000;
 
@@ -129,10 +129,7 @@ u32 *StaticRefTab::AddUnique(u32 p_refNum)
 void StaticRefTab::Clear()
 {
     if (m_refTab)
-    {
-        m_refTab->~RefTab();
-        m_refTab = 0;
-    }
+        delete m_refTab;
 
     m_poolSize |= 0x80000000;
 
@@ -152,10 +149,7 @@ void StaticRefTab::Clear()
 void StaticRefTab::ClearThis()
 {
     if (m_refTab)
-    {
-        m_refTab->~RefTab();
-        m_refTab = 0;
-    }
+        delete m_refTab;
 }
 
 void StaticRefTab::DelRefPtr(u32 *p_refNum)

@@ -5,9 +5,9 @@
 
 struct RefRun
 {
-    RefRun *prev;
-    RefRun *next;
-    i32 usedUnits;
+    RefRun *prev;  // 0
+    RefRun *next;  // 4
+    i32 usedUnits; // 8
     u32 data[];
 };
 

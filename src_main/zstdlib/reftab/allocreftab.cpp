@@ -23,9 +23,7 @@ AllocRefTab::~AllocRefTab()
     delete[] m_array;
 
     if (m_refTab)
-    {
         delete m_refTab;
-    }
 }
 
 u32 AllocRefTab::NewRef()

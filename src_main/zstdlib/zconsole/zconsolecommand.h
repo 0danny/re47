@@ -65,8 +65,6 @@ public:
     virtual ~ZHelpCommand();
     virtual void ExecuteCommand(char *p_cmdValue) override;
 
-    void Destroy();
-
     ZConsoleCommand *m_consoleCommand;
 };
 

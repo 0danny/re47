@@ -15,7 +15,7 @@ ZCounter::ZCounter()
 ZCounter::~ZCounter()
 {
     if (m_linkTab)
-        m_linkTab->~LinkRefTab();
+        delete m_linkTab;
 }
 
 void ZCounter::BeginCounter(char *p_counterName, u64 p_startTime)
@@ -127,7 +127,7 @@ void ZCounter::UpdateCounters()
         l_sysCom->LogMessage("ERROR: Time Counters not pairing correctly -> Disabling Counters");
 
         if (m_linkTab)
-            m_linkTab->~LinkRefTab();
+            delete m_linkTab;
 
         i32 l_unused = 0;
 

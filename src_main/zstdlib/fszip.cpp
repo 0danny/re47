@@ -6,10 +6,10 @@
 
 FSZip::FSZip() : m_ioZip()
 {
-    m_ioZip.m_fileName = 0;
+    m_fileName = 0;
     m_ioZip.m_FSInit = 0;
 
-    m_ioZip.m_status = 0;
+    m_status = 0;
 
     m_ioZip.m_compressionLevel = -1;
     m_ioZip.m_archiveType = 0;
@@ -28,7 +28,7 @@ FSZip::~FSZip()
 
 bool FSZip::InitFS(char *p_fileName, i32 p_mode)
 {
-    if (m_ioZip.m_fileName)
+    if (m_fileName)
         UnloadFS();
 
     char *l_mode = "wb+";
@@ -36,16 +36,15 @@ bool FSZip::InitFS(char *p_fileName, i32 p_mode)
     if (p_mode != 1)
         l_mode = "rb";
 
-    FILE *l_fileStream = fopen(p_fileName, l_mode);
-    m_ioZip.m_fileStream = l_fileStream;
+    m_ioZip.m_fileStream = fopen(p_fileName, l_mode);
 
-    if (l_fileStream)
+    if (m_ioZip.m_fileStream)
     {
-        m_ioZip.m_fileName = new char[strlen(p_fileName) + 1];
-        strcpy(m_ioZip.m_fileName, p_fileName);
+        m_fileName = new char[strlen(p_fileName) + 1];
+        strcpy(m_fileName, p_fileName);
 
         m_ioZip.m_FSInit = 1;
-        m_ioZip.m_status = p_mode;
+        m_status = p_mode;
 
         m_ioZip.m_dirList1.Init(256);
         m_ioZip.m_dirList2.Init(8);
@@ -74,7 +73,7 @@ bool FSZip::InitFS(char *p_fileName, i32 p_mode)
     else
     {
         printf("ZIPFS: Cannot initialize archive\n");
-        m_ioZip.m_status = 0;
+        m_status = 0;
 
         return false;
     }
@@ -90,7 +89,7 @@ IOFSHandleZip *FSZip::Open(char *p_fileName, i32 p_ioFSAccess)
     if (!l_IOFSHandle)
         return 0;
 
-    l_IOFSHandle->unkInt1 = 0;
+    l_IOFSHandle->currentOffset = 0;
     l_IOFSHandle->access = p_ioFSAccess;
 
     if (p_ioFSAccess != 3)
@@ -103,8 +102,8 @@ IOFSHandleZip *FSZip::Open(char *p_fileName, i32 p_ioFSAccess)
 
     l_compSize = l_IOFSHandle->fileHeader.compressedSize;
 
-    l_IOFSHandle->unkInt1 = l_offset;
-    l_IOFSHandle->unkInt2 = l_offset;
+    l_IOFSHandle->currentOffset = l_offset;
+    l_IOFSHandle->initialOffset = l_offset;
     l_IOFSHandle->size = l_compSize;
     l_IOFSHandle->zlibStream.zalloc = 0;
     l_IOFSHandle->zlibStream.zfree = 0;
@@ -123,10 +122,10 @@ IOFSHandleZip *FSZip::Open(char *p_fileName, i32 p_ioFSAccess)
     return l_IOFSHandle;
 }
 
-u32 FSZip::Read(IOFSHandleZip *p_fsHandle, u8 *p_buffer, u32 p_unkInt)
+u32 FSZip::Read(IOFSHandleZip *p_fsHandle, u8 *p_buffer, u32 p_bytesToRead)
 {
     FSZip *l_this = this;
-    fseek(m_ioZip.m_fileStream, p_fsHandle->unkInt1, 0);
+    fseek(m_ioZip.m_fileStream, p_fsHandle->currentOffset, 0);
 
     if (p_fsHandle->fileHeader.compressionMethod)
     {
@@ -143,7 +142,7 @@ u32 FSZip::Read(IOFSHandleZip *p_fsHandle, u8 *p_buffer, u32 p_unkInt)
             {
                 p_fsHandle->zlibStream.next_out = p_buffer;
 
-                for (p_fsHandle->zlibStream.avail_out = p_unkInt; p_fsHandle->zlibStream.avail_out; l_this = this)
+                for (p_fsHandle->zlibStream.avail_out = p_bytesToRead; p_fsHandle->zlibStream.avail_out; l_this = this)
                 {
                     if (p_fsHandle->status)
                         break;
@@ -152,8 +151,8 @@ u32 FSZip::Read(IOFSHandleZip *p_fsHandle, u8 *p_buffer, u32 p_unkInt)
 
                     memcpy(p_fsHandle->buffer, &p_fsHandle->buffer[l_index], p_fsHandle->zlibStream.avail_in);
 
-                    if (p_fsHandle->fileHeader.compressedSize - p_fsHandle->unkInt1 < l_index)
-                        l_index = p_fsHandle->fileHeader.compressedSize - p_fsHandle->unkInt1;
+                    if (p_fsHandle->fileHeader.compressedSize - p_fsHandle->currentOffset < l_index)
+                        l_index = p_fsHandle->fileHeader.compressedSize - p_fsHandle->currentOffset;
 
                     if (l_index)
                         p_fsHandle->zlibStream.avail_in = fread(p_fsHandle->buffer, 1u, l_index, m_ioZip.m_fileStream);
@@ -174,25 +173,25 @@ u32 FSZip::Read(IOFSHandleZip *p_fsHandle, u8 *p_buffer, u32 p_unkInt)
                 }
 
                 u32 l_availOut = p_fsHandle->zlibStream.avail_out;
-                p_fsHandle->unkInt1 = ftell(l_this->m_ioZip.m_fileStream);
+                p_fsHandle->currentOffset = ftell(l_this->m_ioZip.m_fileStream);
 
-                return p_unkInt - l_availOut;
+                return p_bytesToRead - l_availOut;
             }
         }
         else
         {
             printf("ZIPFS: unsupported compression method\n");
-            return p_unkInt - p_fsHandle->zlibStream.avail_out;
+            return p_bytesToRead - p_fsHandle->zlibStream.avail_out;
         }
     }
     else
     {
-        fseek(l_this->m_ioZip.m_fileStream, p_fsHandle->unkInt1, 0);
-        return fread(p_buffer, 1u, p_unkInt, l_this->m_ioZip.m_fileStream);
+        fseek(l_this->m_ioZip.m_fileStream, p_fsHandle->currentOffset, 0);
+        return fread(p_buffer, 1u, p_bytesToRead, l_this->m_ioZip.m_fileStream);
     }
 }
 
-i32 FSZip::Write(IOFSHandleZip *p_fsHandle, u8 *p_buffer, u32 p_unkInt)
+i32 FSZip::Write(IOFSHandleZip *p_fsHandle, u8 *p_buffer, u32 p_bytesToWrite)
 {
     printf("ZIPFS: Stream write not implemented yet\n");
     return -1;
@@ -242,9 +241,9 @@ bool FSZip::InvalidateFile(char *p_fileName)
     return l_foundFile;
 }
 
-void FSZip::UnkFunc9(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, u32 p_len)
+void FSZip::AddFileWithTimestamp(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, u32 p_len)
 {
-    m_ioZip.UnkFunc21(p_data, p_fileTime, p_nextIn, p_len);
+    m_ioZip.AddCompressedFile(p_data, p_fileTime, p_nextIn, p_len);
 }
 
 bool FSZip::GetFileTime(char *p_fileName, FILETIME *p_fileTime)
@@ -275,25 +274,21 @@ void FSZip::FreeMemory()
     m_ioZip.m_FSInit = 0;
 
     if (m_ioZip.m_fastLookupCache)
-    {
-        m_ioZip.m_fastLookupCache->~CFastLookupFileCache();
-        m_ioZip.m_fastLookupCache = 0;
-    }
+        delete m_ioZip.m_fastLookupCache;
 }
 
-// TODO: CRASH on strncpy.
-bool FSZip::InitFS()
+bool FSZip::InitFSCurrent()
 {
     char l_buffer[264];
 
-    strncpy(l_buffer, m_ioZip.m_fileName, 260u);
+    strncpy(l_buffer, m_fileName, 260u);
     l_buffer[260] = '\0';
 
-    delete[] m_ioZip.m_fileName;
+    delete[] m_fileName;
 
-    m_ioZip.m_fileName = 0;
+    m_fileName = 0;
 
-    return InitFS(l_buffer, m_ioZip.m_status);
+    return InitFS(l_buffer, m_status);
 }
 
 void FSZip::UsePrimaryArchive()
@@ -306,7 +301,7 @@ void FSZip::UseSecondaryArchive()
     m_ioZip.m_archiveType = 1;
 }
 
-void FSZip::UnkFunc16(FSZip *p_zip)
+void FSZip::MergeArchive(FSZip *p_zip)
 {
     IOZip_CentralDirStructure l_centralDir;
     IOZip_LocalFileHeader l_fileHeader;
@@ -363,7 +358,7 @@ void FSZip::UnkFunc16(FSZip *p_zip)
     }
 }
 
-bool FSZip::UnkFunc17(char *p_fileName)
+bool FSZip::ImportFromArchive(char *p_fileName)
 {
     FILETIME l_fileTime;
     IOZip_CentralDirStructure l_centralDir;
@@ -417,7 +412,7 @@ bool FSZip::UnkFunc17(char *p_fileName)
 
                     fseek(l_zipFS.m_ioZip.m_fileStream, l_offset, '\0');
                     DosDateTimeToFileTime(l_centralDir.lastModDate, l_centralDir.lastModTime, &l_fileTime);
-                    m_ioZip.UnkFunc21(l_fileNameBuffer, &l_fileTime, l_alloc, l_centralDir.uncompressedSize);
+                    m_ioZip.AddCompressedFile(l_fileNameBuffer, &l_fileTime, l_alloc, l_centralDir.uncompressedSize);
 
                     delete[] l_alloc;
                 }
@@ -647,7 +642,10 @@ void IOZip::PrintStatus()
     {
         i32 l_offset = ftell(m_fileStream);
 
-        printf("fs: '%s' Offset = %i, status = %i\n", m_fileName, l_offset, m_FSStatus);
+        // i don't see another way to implement this?
+        char *l_fileName = (char *)(this - 4);
+
+        printf("fs: '%s' Offset = %i, status = %i\n", l_fileName, l_offset, m_FSStatus);
     }
     else
         printf("fs not initialized\n");
@@ -655,7 +653,8 @@ void IOZip::PrintStatus()
 
 bool IOZip::Add(char *p_fileName, char *p_data)
 {
-    if (m_status != 1)
+    // i don't see another way to implement this, part2 ?
+    if (((i32)(this - 8)) != 1)
     {
         printf("IOZIP: Cannot add file - filesystem not writable\n");
         return false;
@@ -684,7 +683,7 @@ bool IOZip::Add(char *p_fileName, char *p_data)
         fseek(l_streamPtr, 0, SEEK_SET);
         fread(l_bufferPtr, 1u, l_offset, l_streamPtr);
 
-        UnkFunc21(p_data, 0, l_bufferPtr, l_offset);
+        AddCompressedFile(p_data, 0, l_bufferPtr, l_offset);
 
         if (g_pSysMem)
         {
@@ -798,7 +797,7 @@ void IOZip::GetDirectory(StrRefTab *p_strTab)
     }
 }
 
-void IOZip::UnkFunc21(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, u32 p_len)
+void IOZip::AddCompressedFile(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, u32 p_len)
 {
     IOZip_CentralDirStructure *l_centralDir;
     time_t *l_timeStruct;
@@ -835,6 +834,7 @@ void IOZip::UnkFunc21(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, u32 p_le
                 u16 l_mDay = l_localTime->tm_mday;
                 *l_lastModDate = l_mDay;
                 u16 l_dayCalc = l_mDay | (32 * (l_localTime->tm_mon + 1));
+
                 *l_lastModDate = l_dayCalc;
                 *l_lastModDate = l_dayCalc | ((l_localTime->tm_year + 48) << 9);
             }
@@ -844,6 +844,7 @@ void IOZip::UnkFunc21(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, u32 p_le
                 u16 l_secCalc = l_localTime->tm_sec / 2;
                 *l_lastModTime = l_secCalc;
                 u16 l_hourCalc = l_secCalc | (32 * l_localTime->tm_min);
+
                 *l_lastModTime = l_hourCalc;
                 *l_lastModTime = l_hourCalc | (l_localTime->tm_hour << 11);
             }
@@ -861,6 +862,7 @@ void IOZip::UnkFunc21(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, u32 p_le
             u16 l_mDay2 = l_localTime2->tm_mday;
             *l_lastModDate2 = l_mDay2;
             u16 l_dayCalc2 = l_mDay2 | (32 * (l_localTime2->tm_mon + 1));
+
             *l_lastModDate2 = l_dayCalc2;
             *l_lastModDate2 = l_dayCalc2 | ((l_localTime2->tm_year + 48) << 9);
         }
@@ -870,6 +872,7 @@ void IOZip::UnkFunc21(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, u32 p_le
             u16 l_secCalc2 = l_localTime2->tm_sec / 2;
             l_centralDir->lastModTime = l_secCalc2;
             u16 l_hourCalc2 = l_secCalc2 | (32 * l_localTime2->tm_min);
+
             l_centralDir->lastModTime = l_hourCalc2;
             l_centralDir->lastModTime = l_hourCalc2 | (l_localTime2->tm_hour << 11);
         }
@@ -965,7 +968,7 @@ bool IOZip::FindFile(char *p_fileName, IOZip_LocalFileHeader *p_fileHeader, i32 
             return false;
 
         printf("ZIPFS: Broken .zip archive\n");
-    LABEL_37:
+    CHECK_EOF_LBL:
 
         if (feof(m_fileStream) != FALSE)
             return false;
@@ -985,22 +988,22 @@ bool IOZip::FindFile(char *p_fileName, IOZip_LocalFileHeader *p_fileHeader, i32 
 
         if (!l_curSize)
         {
-        LABEL_25:
+        CHECK_EXTRA_LBL:
             if (l_starLoc)
             {
                 if (RegexMatch(l_buffer1, l_buffer2))
-                    goto LABEL_31;
+                    goto END_CHECKS_LBL;
             }
             else if (strlen(l_buffer2) != l_centralDir.filenameLength || _strcmpi(l_buffer1, l_buffer2))
             {
-                goto LABEL_31;
+                goto END_CHECKS_LBL;
             }
 
             memcpy(p_fileHeader, &l_centralDir.versionNeeded, 24u);
             p_fileHeader->extraFieldLength = l_centralDir.extraFieldLength;
 
             l_flag = true;
-            goto LABEL_31;
+            goto END_CHECKS_LBL;
         }
 
         i32 *l_data = m_longList.m_data;
@@ -1011,10 +1014,10 @@ bool IOZip::FindFile(char *p_fileName, IOZip_LocalFileHeader *p_fileHeader, i32 
             ++l_data;
 
             if (l_count2 >= l_curSize)
-                goto LABEL_25;
+                goto CHECK_EXTRA_LBL;
         }
     }
-LABEL_31:
+END_CHECKS_LBL:
 
     if (l_centralDir.extraFieldLength)
         fread(l_buffer3, 1u, l_centralDir.extraFieldLength, m_fileStream);
@@ -1025,7 +1028,7 @@ LABEL_31:
     if (!l_flag)
     {
         l_starLoc = (char *)l_starLocPtr;
-        goto LABEL_37;
+        goto CHECK_EOF_LBL;
     }
 
     if (p_unk)

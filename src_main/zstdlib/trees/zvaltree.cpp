@@ -14,12 +14,13 @@ ZValTree::~ZValTree()
 
         SBinTreeNode *l_nodeDeleted = ZRBTree::Delete(m_rootNode);
 
+        // forcing it to crash on purpose?
         m_refTab->DelRefPtr((u32 *)l_nodeDeleted);
         m_refTab->DelRefPtr(0);
     }
 
     if (m_refTab)
-        m_refTab->Destroy();
+        delete m_refTab;
 }
 
 SBinTreeNode *ZValTree::Delete(SBinTreeNode *p_binNode)

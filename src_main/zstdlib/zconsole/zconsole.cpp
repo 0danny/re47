@@ -546,9 +546,7 @@ void ZConsole::Destroy()
     }
 
     if (m_autoCompleteHandler)
-    {
-        m_autoCompleteHandler->~ZAutoCompleteHandler();
-    }
+        delete m_autoCompleteHandler;
 
     if (m_autoComplete)
     {

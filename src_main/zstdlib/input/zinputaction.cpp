@@ -165,25 +165,21 @@ ZInputAction::~ZInputAction()
             char *l_nodeName = l_i->nodeName;
 
             if (l_nodeName)
-            {
                 delete l_nodeName;
-            }
         }
 
         if (m_dependentNodes)
-            m_dependentNodes->~RefTab();
-
-        m_dependentNodes = 0;
+            delete m_dependentNodes;
     }
 
     if (m_pressHandlers)
-        m_pressHandlers->~RefTab();
+        delete m_pressHandlers;
 
     if (m_holdHandlers)
-        m_holdHandlers->~RefTab();
+        delete m_holdHandlers;
 
     if (m_releaseHandlers)
-        m_releaseHandlers->~RefTab();
+        delete m_releaseHandlers;
 
     if (m_actionName)
         delete m_actionName;
@@ -210,7 +206,7 @@ ZInputAction::~ZInputAction()
     }
 
     if (m_nodeReferences)
-        m_nodeReferences->~RefTab();
+        delete m_nodeReferences;
 }
 
 void ZInputAction::AddNode(char *p_vkKey, bool p_flag)

@@ -79,7 +79,7 @@ ZInputActions::~ZInputActions()
     RemoveOverrideList();
 
     if (m_activeActions)
-        m_activeActions->~RefTab();
+        delete m_activeActions;
 
     if (m_actionMapDefinitions)
     {
@@ -89,20 +89,18 @@ ZInputActions::~ZInputActions()
             m_actionMapDefinitions->RunDelRef(&l_refRun);
 
             if (l_item)
-            {
-                l_item->~ZActionMap();
-            }
+                delete l_item;
         }
     }
 
     if (m_actionMapDefinitions)
-        m_actionMapDefinitions->~RefTab();
+        delete m_actionMapDefinitions;
 
     if (m_inputNodeList)
     {
         for (i32 i = 0; i < m_inputNodeCount; ++i)
         {
-            m_inputNodeList[i].~SInputNode();
+            delete &m_inputNodeList[i];
         }
 
         delete[] m_inputNodeList;
@@ -112,7 +110,7 @@ ZInputActions::~ZInputActions()
         delete m_curStates;
 
     if (m_fastLookup)
-        m_fastLookup->~CFastLookup2();
+        delete m_fastLookup;
 }
 
 void ZInputActions::OverrideActions(RefTab *l_actionsList)
@@ -306,10 +304,10 @@ void ZInputActions::RemoveActionMap(ZActionMap *p_actionMap)
             p_actionMap->RemoveActions();
 
             if (p_actionMap->m_refTab)
-                p_actionMap->m_refTab->~RefTab();
+                delete p_actionMap->m_refTab;
 
             if (p_actionMap->m_fastLookup)
-                p_actionMap->m_fastLookup->~CFastLookup2();
+                delete p_actionMap->m_fastLookup;
 
             ZInputActions *l_actions = p_actionMap->m_inputActions;
 
@@ -357,10 +355,10 @@ void ZInputActions::RemoveActionMaps()
                 l_item->RemoveActions();
 
                 if (l_item->m_refTab)
-                    l_item->m_refTab->~RefTab();
+                    delete l_item->m_refTab;
 
                 if (l_item->m_fastLookup)
-                    l_item->m_fastLookup->~CFastLookup2();
+                    delete l_item->m_fastLookup;
 
                 ZInputActions *l_actions = l_item->m_inputActions;
 
@@ -851,7 +849,7 @@ void ZInputActions::RemoveOverrideList()
         }
 
         if (m_overrideList)
-            m_overrideList->~RefTab();
+            delete m_overrideList;
 
         m_overrideList = 0;
     }

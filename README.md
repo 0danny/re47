@@ -20,14 +20,16 @@ Join the discord server using the badge above to track the progress or if you ju
 
 Below each of the files in the decomp is discussed along with a percentage indicator of the progress.
 
-**Lines Decompiled** -> 8890
+<br>
+
+**Lines Decompiled** -> 10,055
 
 <br>
 
 ### Completed ✅
 
 **hitman.exe** [45kb]
-**99%** Completed - **3** out of **3** functions named.
+**100%** Completed - **3** out of **3** functions named.
 
 **directplay.dll** [48kb]
 **100%** Completed - **22** out of **22** functions named.
@@ -40,7 +42,7 @@ Below each of the files in the decomp is discussed along with a percentage indic
 ### Being Decompiled 📝
 
 **system.dll** [272kb]
-**35%** Completed - **542** out of **552** functions named.
+**50%** Completed - **544** out of **552** functions named.
 
 **systemprobedll.dll** [68kb]
 **99%** Completed - **53** out of **53** functions named.
@@ -51,12 +53,12 @@ Below each of the files in the decomp is discussed along with a percentage indic
 **enginedata.dll** [244kb]
 **0%** Completed - **147** out of **565** functions named.
 
+**hitmandlc.dlc** [2,496kb]
+**0%** Completed - **1,860** out of **5,835** functions named.
+
 <br>
 
 ### Untouched ❌
-
-**hitmandlc.dlc** [2,496kb]
-**0%** Completed
 
 **locale.dll** [92kb]
 **0%** Completed

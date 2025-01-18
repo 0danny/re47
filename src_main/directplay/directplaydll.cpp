@@ -2,7 +2,6 @@
 
 DirectPlayDll::~DirectPlayDll()
 {
-    ZDynamicLoader::~ZDynamicLoader();
 }
 
 void DirectPlayDll::Init()

@@ -13,7 +13,12 @@
 
 class CFastLookupFileCache;
 
-struct IOZip_CentralDirStructure
+#define EOCD_SIGNATURE 0x6054B50     // End of Central Directory signature
+#define CDIR_SIGNATURE 0x2014B50     // Central Directory Header signature
+#define LFHEADER_SIGNATURE 0x4034B50 // Local File Header signature
+#define EOCD2_SIGNATURE 0x52756E65   // Secondary End of Central Directory signature
+
+struct IOZip_CentralDir
 {
     u16 versionMade;       // 0
     u16 versionNeeded;     // 2
@@ -59,18 +64,18 @@ struct IOFSHandleZip
 class IOZip
 {
 public:
-    i32 m_FSStatus;                                     // 12
-    u8 m_FSInit;                                        // 16
-    FILE *m_fileStream;                                 // 17
-    i32 m_eocdOffset;                                   // 21
-    i32 m_compressionLevel;                             // 25
-    u8 m_archiveType;                                   // 29
-    IOZip_EOCD m_ecod1;                                 // 30
-    IOZip_EOCD m_ecod2;                                 // 48
-    DynamicArray<IOZip_CentralDirStructure> m_dirList1; // 66
-    DynamicArray<IOZip_CentralDirStructure> m_dirList2; // 78
-    DynamicArray<i32> m_longList;                       // 90
-    CFastLookupFileCache *m_fastLookupCache;            // 102
+    i32 m_FSStatus;                            // 12
+    u8 m_FSInit;                               // 16
+    FILE *m_fileStream;                        // 17
+    i32 m_eocdOffset;                          // 21
+    i32 m_compressionLevel;                    // 25
+    u8 m_archiveType;                          // 29
+    IOZip_EOCD m_ecod1;                        // 30
+    IOZip_EOCD m_ecod2;                        // 48
+    DynamicArray<IOZip_CentralDir> m_dirList1; // 66
+    DynamicArray<IOZip_CentralDir> m_dirList2; // 78
+    DynamicArray<i32> m_longList;              // 90
+    CFastLookupFileCache *m_fastLookupCache;   // 102
 
     inline IOZip() : m_dirList1(), m_dirList2(), m_longList()
     {
@@ -86,9 +91,9 @@ public:
     virtual void GetDirectory(StrRefTab *p_strTab);
 
     void AddCompressedFile(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, u32 p_len);
-    void Zip(IOZip_CentralDirStructure *p_centralDir, u8 *p_nextIn);
+    void Zip(IOZip_CentralDir *p_centralDir, u8 *p_nextIn);
 
-    bool FindFile(char *p_fileName, IOZip_LocalFileHeader *p_fileHeader, i32 *p_unk);
+    bool FindFile(char *p_fileName, IOZip_LocalFileHeader *p_fileHeader, i32 *p_centralDirOffset);
 
     u8 *ExtractData(IOZip_LocalFileHeader *p_header, u8 *p_nextOut, bool p_unused, i32 p_elemCount);
     i32 RegexMatch(char *p_str1, char *p_str2);
@@ -149,7 +154,7 @@ public:
     virtual void UsePrimaryArchive();
     virtual void UseSecondaryArchive();
 
-    virtual void MergeArchive(FSZip *p_zip);
+    virtual void InvalidateRedundantFiles(FSZip *p_zip);
     virtual bool ImportFromArchive(char *p_fileName);
 
     void InitalizeFileCache();
@@ -159,12 +164,12 @@ public:
 
     inline void WriteEOCD()
     {
-        i32 l_signature = 0x6054B50;
+        i32 l_signature = EOCD_SIGNATURE;
 
         fwrite(&l_signature, 1u, 4u, m_ioZip.m_fileStream);
         fwrite(&m_ioZip.m_ecod1, 1u, 18u, m_ioZip.m_fileStream);
 
-        l_signature = 0x52756E65;
+        l_signature = EOCD2_SIGNATURE;
 
         fwrite(&l_signature, 1u, 4u, m_ioZip.m_fileStream);
         fwrite(&m_ioZip.m_ecod2, 1u, 18u, m_ioZip.m_fileStream);
@@ -177,10 +182,12 @@ public:
         char *l_targetPtr;
 
         l_index = 0;
+
         if (*p_sourcePath)
         {
             l_sourcePtr = p_sourcePath;
             l_targetPtr = p_targetPath;
+
             do
             {
                 if (*l_sourcePtr == '\\')
@@ -190,6 +197,7 @@ public:
 
                 l_sourcePtr = &p_sourcePath[++l_index];
                 ++l_targetPtr;
+
             } while (p_sourcePath[l_index]);
         }
 

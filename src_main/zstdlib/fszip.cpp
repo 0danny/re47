@@ -301,9 +301,9 @@ void FSZip::UseSecondaryArchive()
     m_ioZip.m_archiveType = 1;
 }
 
-void FSZip::MergeArchive(FSZip *p_zip)
+void FSZip::InvalidateRedundantFiles(FSZip *p_zip)
 {
-    IOZip_CentralDirStructure l_centralDir;
+    IOZip_CentralDir l_centralDir;
     IOZip_LocalFileHeader l_fileHeader;
 
     char l_buffer1[65540];
@@ -323,9 +323,9 @@ void FSZip::MergeArchive(FSZip *p_zip)
         fread(&l_signature, 1u, 4u, p_zip->m_ioZip.m_fileStream);
         ftell(p_zip->m_ioZip.m_fileStream);
 
-        if (l_signature == 0x2014B50)
+        if (l_signature == CDIR_SIGNATURE)
         {
-            fread(&l_centralDir, 42u, 1u, p_zip->m_ioZip.m_fileStream);
+            fread(&l_centralDir, sizeof(IOZip_CentralDir), 1u, p_zip->m_ioZip.m_fileStream);
 
             if (l_centralDir.filenameLength)
             {
@@ -351,7 +351,7 @@ void FSZip::MergeArchive(FSZip *p_zip)
             if (l_centralDir.commentLength)
                 fread(l_buffer2, 1u, l_centralDir.commentLength, p_zip->m_ioZip.m_fileStream);
         }
-        else if (l_signature == 0x6054B50 || l_signature == 0x52756E65)
+        else if (l_signature == EOCD_SIGNATURE || l_signature == EOCD2_SIGNATURE)
             l_flag = 1;
         else
             printf("ZIPFS: Broken .zip archive\n");
@@ -361,7 +361,7 @@ void FSZip::MergeArchive(FSZip *p_zip)
 bool FSZip::ImportFromArchive(char *p_fileName)
 {
     FILETIME l_fileTime;
-    IOZip_CentralDirStructure l_centralDir;
+    IOZip_CentralDir l_centralDir;
     IOZip_LocalFileHeader l_fileHeader;
 
     char l_fileNameBuffer[65540];
@@ -372,7 +372,7 @@ bool FSZip::ImportFromArchive(char *p_fileName)
 
     if (l_zipFS.InitFS(p_fileName, 3))
     {
-        fseek(l_zipFS.m_ioZip.m_fileStream, l_zipFS.m_ioZip.m_ecod1.centralDirOffset, '\0');
+        fseek(l_zipFS.m_ioZip.m_fileStream, l_zipFS.m_ioZip.m_ecod1.centralDirOffset, SEEK_SET);
 
         for (FILE *l_item = l_zipFS.m_ioZip.m_fileStream; feof(l_zipFS.m_ioZip.m_fileStream) == 0; l_item = l_zipFS.m_ioZip.m_fileStream)
         {
@@ -386,9 +386,9 @@ bool FSZip::ImportFromArchive(char *p_fileName)
 
             ftell(l_zipFS.m_ioZip.m_fileStream);
 
-            if (l_signature == 0x2014B50)
+            if (l_signature == CDIR_SIGNATURE)
             {
-                fread(&l_centralDir, 42u, 1u, l_zipFS.m_ioZip.m_fileStream);
+                fread(&l_centralDir, sizeof(IOZip_CentralDir), 1u, l_zipFS.m_ioZip.m_fileStream);
 
                 if (l_centralDir.filenameLength)
                 {
@@ -402,15 +402,15 @@ bool FSZip::ImportFromArchive(char *p_fileName)
                     i32 l_uncompSize = l_centralDir.uncompressedSize;
                     u8 *l_alloc = new u8[l_newUncompSize];
 
-                    if (l_zipFS.m_ioZip.FindFile(l_fileNameBuffer, &l_fileHeader, '\0'))
+                    if (l_zipFS.m_ioZip.FindFile(l_fileNameBuffer, &l_fileHeader, 0))
                     {
                         if (!l_uncompSize)
                             l_uncompSize = l_fileHeader.uncompressedSize;
 
-                        l_zipFS.m_ioZip.ExtractData(&l_fileHeader, l_alloc, '\0', l_uncompSize);
+                        l_zipFS.m_ioZip.ExtractData(&l_fileHeader, l_alloc, 0, l_uncompSize);
                     }
 
-                    fseek(l_zipFS.m_ioZip.m_fileStream, l_offset, '\0');
+                    fseek(l_zipFS.m_ioZip.m_fileStream, l_offset, SEEK_SET);
                     DosDateTimeToFileTime(l_centralDir.lastModDate, l_centralDir.lastModTime, &l_fileTime);
                     m_ioZip.AddCompressedFile(l_fileNameBuffer, &l_fileTime, l_alloc, l_centralDir.uncompressedSize);
 
@@ -423,7 +423,7 @@ bool FSZip::ImportFromArchive(char *p_fileName)
                 if (l_centralDir.commentLength)
                     fread(l_extraBuffer, 1u, l_centralDir.commentLength, l_zipFS.m_ioZip.m_fileStream);
             }
-            else if (l_signature == 0x6054B50 || l_signature == 0x52756E65)
+            else if (l_signature == EOCD_SIGNATURE || l_signature == EOCD2_SIGNATURE)
                 l_flag = true;
             else
                 printf("ZIPFS: Broken .zip archive\n");
@@ -452,7 +452,7 @@ i32 FSZip::FindEOCDOffset()
     {
         fread(&l_signature, 1u, 4u, m_ioZip.m_fileStream);
 
-        if (l_signature != 0x52756E65)
+        if (l_signature != EOCD2_SIGNATURE)
             break;
 
         fread(&m_ioZip.m_ecod2, 1u, 18u, m_ioZip.m_fileStream);
@@ -468,7 +468,7 @@ i32 FSZip::FindEOCDOffset()
             return -1;
     }
 
-    if (l_signature != 0x6054B50)
+    if (l_signature != EOCD_SIGNATURE)
         goto GO_LOOP;
 
     m_ioZip.m_eocdOffset = ftell(m_ioZip.m_fileStream);
@@ -482,7 +482,7 @@ void FSZip::InitalizeFileCache()
 {
     u16 l_filenameLen;
     i32 l_signature;
-    IOZip_CentralDirStructure l_centralDir;
+    IOZip_CentralDir l_centralDir;
     IOZip_LocalFileHeader l_header;
 
     char l_buffer[65540];
@@ -498,10 +498,10 @@ void FSZip::InitalizeFileCache()
         bool l_flag = 0;
         fread(&l_signature, 1u, 4u, l_item);
 
-        if (l_signature == 0x2014B50)
+        if (l_signature == CDIR_SIGNATURE)
         {
             i32 l_offset = ftell(m_ioZip.m_fileStream);
-            fread(&l_centralDir, 1u, 42u, m_ioZip.m_fileStream);
+            fread(&l_centralDir, 1u, sizeof(IOZip_CentralDir), m_ioZip.m_fileStream);
 
             l_filenameLen = l_centralDir.filenameLength;
 
@@ -552,7 +552,7 @@ void FSZip::InitalizeFileCache()
         }
         else
         {
-            if (l_signature == 0x6054B50 || l_signature == 0x52756E65)
+            if (l_signature == EOCD_SIGNATURE || l_signature == EOCD2_SIGNATURE)
                 return;
 
             ZSysCom *l_sysCom = g_pSysCom->SetPathAndLine("Z:\\Engine\\ZStdLib\\Source\\IOZip.cpp", 491);
@@ -564,12 +564,12 @@ void FSZip::InitalizeFileCache()
 void FSZip::WriteCDirs()
 {
     char l_buffer[65540];
-    i32 l_signature = 0x2014B50;
+    i32 l_signature = CDIR_SIGNATURE;
 
     m_ioZip.m_ecod2.centralDirOffset = ftell(m_ioZip.m_fileStream);
 
     i32 l_count = 0;
-    l_signature = 0x2014B50;
+    l_signature = CDIR_SIGNATURE;
 
     if (m_ioZip.m_dirList2.m_currentSize)
     {
@@ -577,9 +577,9 @@ void FSZip::WriteCDirs()
 
         do
         {
-            IOZip_CentralDirStructure *l_data = &m_ioZip.m_dirList2.m_data[l_index];
+            IOZip_CentralDir *l_data = &m_ioZip.m_dirList2.m_data[l_index];
             fwrite(&l_signature, 1u, 4u, m_ioZip.m_fileStream);
-            fwrite(l_data, 1u, 42u, m_ioZip.m_fileStream);
+            fwrite(l_data, 1u, sizeof(IOZip_CentralDir), m_ioZip.m_fileStream);
 
             i32 l_offset1 = ftell(m_ioZip.m_fileStream);
 
@@ -610,9 +610,9 @@ void FSZip::WriteCDirs()
 
         do
         {
-            IOZip_CentralDirStructure *l_data2 = &m_ioZip.m_dirList1.m_data[l_index2];
+            IOZip_CentralDir *l_data2 = &m_ioZip.m_dirList1.m_data[l_index2];
             fwrite(&l_signature, 1u, 4u, m_ioZip.m_fileStream);
-            fwrite(l_data2, 1u, 42u, m_ioZip.m_fileStream);
+            fwrite(l_data2, 1u, sizeof(IOZip_CentralDir), m_ioZip.m_fileStream);
 
             i32 l_offset3 = ftell(m_ioZip.m_fileStream);
 
@@ -742,7 +742,7 @@ i32 IOZip::Load(char *p_fileName, u8 *p_nextOut, i32 p_size, i32 p_unused)
 
 void IOZip::GetDirectory(StrRefTab *p_strTab)
 {
-    IOZip_CentralDirStructure l_centralDir;
+    IOZip_CentralDir l_centralDir;
     char l_buffer[65540];
 
     if (m_ecod2.centralDirSize)
@@ -755,11 +755,11 @@ void IOZip::GetDirectory(StrRefTab *p_strTab)
         i32 l_signature;
         fread(&l_signature, 1u, 4u, l_item);
 
-        if (l_signature == 0x2014B50)
+        if (l_signature == CDIR_SIGNATURE)
         {
             i32 l_offset = ftell(m_fileStream);
 
-            fread(&l_centralDir, 1u, 42u, m_fileStream);
+            fread(&l_centralDir, 1u, sizeof(IOZip_CentralDir), m_fileStream);
 
             if (l_centralDir.filenameLength)
             {
@@ -789,7 +789,7 @@ void IOZip::GetDirectory(StrRefTab *p_strTab)
         }
         else
         {
-            if (l_signature == 0x6054B50 || l_signature == 0x52756E65)
+            if (l_signature == EOCD_SIGNATURE || l_signature == EOCD2_SIGNATURE)
                 return;
 
             printf("ZIPFS: Broken .zip archive\n");
@@ -799,7 +799,7 @@ void IOZip::GetDirectory(StrRefTab *p_strTab)
 
 void IOZip::AddCompressedFile(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, u32 p_len)
 {
-    IOZip_CentralDirStructure *l_centralDir;
+    IOZip_CentralDir *l_centralDir;
     time_t *l_timeStruct;
     char l_buffer[65540];
 
@@ -883,7 +883,7 @@ void IOZip::AddCompressedFile(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, 
     l_centralDir->crc32 = crc32(l_crc1, p_nextIn, p_len);
 
     i32 l_offset2 = ftell(m_fileStream);
-    i32 l_signature = 0x4034B50;
+    i32 l_signature = LFHEADER_SIGNATURE;
 
     fwrite(&l_signature, 1u, 4u, m_fileStream);
     fwrite(&l_centralDir->versionNeeded, 1u, 26u, m_fileStream);
@@ -915,10 +915,10 @@ void IOZip::AddCompressedFile(char *p_data, FILETIME *p_fileTime, u8 *p_nextIn, 
     l_centralDir->externalAttrs = 0;
 }
 
-bool IOZip::FindFile(char *p_fileName, IOZip_LocalFileHeader *p_fileHeader, i32 *p_unk)
+bool IOZip::FindFile(char *p_fileName, IOZip_LocalFileHeader *p_fileHeader, i32 *p_centralDirOffset)
 {
     i32 l_signature;
-    IOZip_CentralDirStructure l_centralDir;
+    IOZip_CentralDir l_centralDir;
     char l_buffer1[65540];
     char l_buffer2[65540];
     char l_buffer3[65540];
@@ -934,7 +934,7 @@ bool IOZip::FindFile(char *p_fileName, IOZip_LocalFileHeader *p_fileHeader, i32 
     {
         if (m_fastLookupCache)
         {
-            if (!p_unk)
+            if (!p_centralDirOffset)
             {
                 l_starLocPtr = -1;
 
@@ -961,10 +961,10 @@ bool IOZip::FindFile(char *p_fileName, IOZip_LocalFileHeader *p_fileHeader, i32 
     {
         fread(&l_signature, 1u, 4u, m_fileStream);
 
-        if (l_signature == 0x2014B50)
+        if (l_signature == CDIR_SIGNATURE)
             break;
 
-        if (l_signature == 0x6054B50 || l_signature == 0x52756E65)
+        if (l_signature == EOCD_SIGNATURE || l_signature == EOCD2_SIGNATURE)
             return false;
 
         printf("ZIPFS: Broken .zip archive\n");
@@ -975,7 +975,7 @@ bool IOZip::FindFile(char *p_fileName, IOZip_LocalFileHeader *p_fileHeader, i32 
     }
 
     i32 l_offset = ftell(m_fileStream);
-    fread(&l_centralDir, 1u, 42u, m_fileStream);
+    fread(&l_centralDir, 1u, sizeof(IOZip_CentralDir), m_fileStream);
 
     if (l_centralDir.filenameLength)
     {
@@ -1031,8 +1031,8 @@ END_CHECKS_LBL:
         goto CHECK_EOF_LBL;
     }
 
-    if (p_unk)
-        *p_unk = l_offset;
+    if (p_centralDirOffset)
+        *p_centralDirOffset = l_offset;
 
     fseek(m_fileStream, l_centralDir.filenameLength + l_centralDir.relativeOffset + 30, SEEK_SET);
 
@@ -1170,7 +1170,7 @@ u8 *IOZip::ExtractData(IOZip_LocalFileHeader *p_header, u8 *p_nextOut, bool p_un
     return l_nextOut;
 }
 
-void IOZip::Zip(IOZip_CentralDirStructure *p_centralDir, u8 *p_nextIn)
+void IOZip::Zip(IOZip_CentralDir *p_centralDir, u8 *p_nextIn)
 {
     i32 l_errCode;
     z_stream l_strm;

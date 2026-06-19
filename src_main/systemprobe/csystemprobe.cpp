@@ -1140,7 +1140,21 @@ i32 CSystemProbe::InitOpenGL()
 
 i32 CSystemProbe::LoadGlide()
 {
-    // TODO: Add ZRender VT call, see original function.
+    if (g_pSysInterface && g_pSysInterface->m_zRender)
+    {
+        class DummyZRender {};
+        typedef const char* (DummyZRender::*GetRendererName_t)();
+        DummyZRender* zRender = reinterpret_cast<DummyZRender*>(g_pSysInterface->m_zRender);
+        void** vtable = *reinterpret_cast<void***>(zRender);
+        GetRendererName_t GetRendererName;
+        *reinterpret_cast<void**>(&GetRendererName) = vtable[82];
+        const char* rendererName = (zRender->*GetRendererName)();
+        if (rendererName && _stricmp(rendererName, "GLIDE3") == 0)
+        {
+            m_flags |= 4;
+            return 0;
+        }
+    }
 
     i32 l_numBoards = 0;
     bool l_glideLoaded = 0;

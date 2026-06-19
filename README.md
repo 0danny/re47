@@ -37,15 +37,15 @@ Below each of the files in the decomp is discussed along with a percentage indic
 **globals.dll** [20kb]
 **100%** Completed - **1** out of **1** functions named.
 
+**systemprobedll.dll** [68kb]
+**100%** Completed - **53** out of **53** functions named.
+
 <br>
 
 ### Being Decompiled 📝
 
 **system.dll** [272kb]
 **50%** Completed - **544** out of **552** functions named.
-
-**systemprobedll.dll** [68kb]
-**99%** Completed - **53** out of **53** functions named.
 
 **renderopengl.dll** [248kb]
 **0%** Completed - **240** out of **464** functions named.

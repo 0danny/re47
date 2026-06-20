@@ -72,3 +72,13 @@ inline void ZMalloc::MarkFree(void *p_marked)
 
     free(deleted);
 }
+
+void *ZMalloc::Alloc(u32 p_size)
+{
+    return malloc(p_size);
+}
+
+void ZMalloc::Free(void *p_ptr)
+{
+    free(p_ptr);
+}

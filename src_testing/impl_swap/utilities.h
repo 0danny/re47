@@ -11,6 +11,18 @@ namespace Utilities
 {
     static const char *TITLE = "Implementation Swap - 0.0.1";
 
+    static LPVOID RebaseAddress(LPVOID p_address)
+    {
+        static HMODULE hSystem = GetModuleHandleA("System.dll");
+        if (!hSystem)
+            return p_address;
+
+        DWORD base = (DWORD)hSystem;
+        DWORD preferredBase = 0x0FFA0000;
+
+        return (LPVOID)(base + ((DWORD)p_address - preferredBase));
+    }
+
     static char *GetFileName(LPCSTR filePath)
     {
         const char *lastSlash = strrchr(filePath, '\\');

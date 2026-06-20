@@ -33,16 +33,15 @@ public:
     virtual ~ZSysMem();
     virtual void UnkFunc0(i32 param1, i32 param2);
     virtual char *UnkFunc1();
-    virtual i32 UnkFunc2(const char *param1, u32 param2);
     virtual void AllocCheck();
+    virtual void AllocCheck(SMallocBlockHeader *p_header);
     virtual char UnkFunc4(u32 *param);
     virtual i32 UnkFunc5();
     virtual void NullSub1();
     virtual void NullSub2();
-    virtual i32 UnkFunc6(i32 param1, char *param2, i32 param3);
-    virtual i32 UnkFunc7(i32 param);
+    virtual void *NewRef(void *p_link);
+    virtual void *NewNoChecksum(u32 allocSize);
     virtual void *New(u32 allocSize);
-    virtual void *NewWithRef(u32 allocSize);
     virtual bool Delete(void *p_mem);
     virtual u32 UnkFunc10(const void *param1, i32 param2, i32 param3);
     virtual u32 UnkFunc11(const void **param);
@@ -58,7 +57,9 @@ public:
     virtual u32 FindEqu(i32 value, bool flag);
     virtual void AddEqu(u32 refNum, i32 refValue, bool flag);
     virtual i32 UnkFunc23(u32 param);
-    virtual u32 *UnkFunc24(u32 *param1, u32 *param2);
+
+    void *NewWithRef(u32 allocSize);
+    u32 *UnkFunc24(u32 *param1, u32 *param2);
 };
 
 #pragma pack(pop)

@@ -41,6 +41,9 @@ public:
     void RemoveFreeHeaderFromBins(SMallocFreeHeader *p_freeHeader, SBinTreeNode *p_mallocBin);
     inline void FreeMallocBin(SBinTreeNode *p_mallocBin);
     inline void MarkFree(void *p_marked);
+
+    void *Alloc(u32 p_size);
+    void Free(void *p_ptr);
 }; // 540 in size
 
 #pragma pack(pop)

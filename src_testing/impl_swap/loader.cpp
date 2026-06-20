@@ -23,6 +23,9 @@ namespace Loader
     {
         printf("[LOADER]: Injecting hooks...\n");
 
+        HMODULE hSystem = GetModuleHandleA("System.dll");
+        printf("[LOADER]: System.dll base address: %p\n", hSystem);
+
         if (g_enableSwaps)
         {
             Constructors::CreateHooks();

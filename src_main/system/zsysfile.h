@@ -15,6 +15,7 @@ public:
     RefTab *m_refTab;          // 16
 
     ZSysFile();
+    const char *GetRelativePath(const char *p_path);
 
     virtual void UnkFunc1();
     virtual void Restart();
@@ -53,7 +54,7 @@ public:
     virtual bool UnkFunc16(char *p_unkStr);
     virtual void UnkFunc17(bool p_unkFlag);
     virtual HMODULE LoadLib(char *p_unkStr);
-    virtual bool FreeLib(HMODULE p_hModule);
+    virtual bool FreeLib(bool p_freeAll);
     virtual i32 UnkFunc20(char *p_unkStr, i32 *p_unkInt1, i32 *p_unkInt2);
 
     virtual ~ZSysFile();

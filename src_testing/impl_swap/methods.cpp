@@ -31,14 +31,15 @@ namespace Methods
         if (MH_CreateHook(cFastLookup_GetLowerCase, (LPVOID)&Methods::CFastLookup_GetLowerCaseHook, NULL) != MH_OK)
         {
             printf("[METHOD HOOK]: Could not hook CFastLookup_GetLowerCase method.\n");
-        }
+        }*/
 
-        if (MH_CreateHook(zMalloc_RemoveFreeHeaderFromBins, (LPVOID)&Methods::ZMalloc_RemoveFreeHeaderFromBinsHook, NULL) != MH_OK)
+        /*
+        if (MH_CreateHook(Utilities::RebaseAddress(zMalloc_RemoveFreeHeaderFromBins), (LPVOID)&Methods::ZMalloc_RemoveFreeHeaderFromBinsHook, NULL) != MH_OK)
         {
             printf("[METHOD HOOK]: Could not hook ZMalloc_RemoveFreeHeaderFromBins method.\n");
         }
 
-        if (MH_CreateHook(zSysMem_NewRef, (LPVOID)&Methods::ZSysMem_NewRefHook, reinterpret_cast<LPVOID *>(&originalZSysMem_NewRef)) != MH_OK)
+        if (MH_CreateHook(Utilities::RebaseAddress(zSysMem_NewRef), (LPVOID)&Methods::ZSysMem_NewRefHook, reinterpret_cast<LPVOID *>(&originalZSysMem_NewRef)) != MH_OK)
         {
             printf("[METHOD HOOK]: Could not hook ZSysMem_NewRef method.\n");
         }*/
@@ -48,7 +49,7 @@ namespace Methods
     {
     }
 
-    void __fastcall ZSysMem_NewRefHook(ZSysMem *_this, void *_EDX, void *p_link)
+    void* __fastcall ZSysMem_NewRefHook(ZSysMem *_this, void *_EDX, void *p_link)
     {
         printf("[METHOD HOOK]: ZSysMem_NewRefHook called.\n");
 
@@ -77,10 +78,13 @@ namespace Methods
 
             header->checksum = l_local;
         }
+
+        return p_link;
     }
 
     void __fastcall ZMalloc_RemoveFreeHeaderFromBinsHook(ZMalloc *_this, void *_EDX, SMallocFreeHeader *p_freeHeader, SBinTreeNode *p_mallocBin)
     {
+        printf("[METHOD HOOK]: ZMalloc_RemoveFreeHeaderFromBinsHook called.\n");
         _this->RemoveFreeHeaderFromBins(p_freeHeader, p_mallocBin);
     }
 

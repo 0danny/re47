@@ -35,10 +35,11 @@ namespace Constructors
     {
         printf("[CONSTRUCTOR HOOK]: Creating constructor hooks...\n");
 
-        if (MH_CreateHook(fsZipCtor, (LPVOID)&Constructors::FSZipConstructorHook, NULL) != MH_OK)
+        /*
+        if (MH_CreateHook(Utilities::RebaseAddress(fsZipCtor), (LPVOID)&Constructors::FSZipConstructorHook, NULL) != MH_OK)
         {
             printf("[CONSTRUCTOR HOOK]: Could not hook FSZip constructor.\n");
-        }
+        }*/
 
         /*
         if (MH_CreateHook(zInputActionsCtor, (LPVOID)&Constructors::ZInputActionsConstructorHook, reinterpret_cast<LPVOID *>(&originalZInputActions)) != MH_OK)
